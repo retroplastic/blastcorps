@@ -1,0 +1,449 @@
+Blast Corps (U) (V1.1) hacking docs
+Updated: 2016 Jan 28
+
+The Blast Corps ROM contains 738 gzipped files. See the Blast Corps n64split config for the full list:
+https://github.com/queueRAM/sm64tools/blob/master/configs/bc.config
+A majority of the assembly code is also gzipped and the startup code mostly just initializes the OS, DMAs the gzipped asm, inflates it, and then jumps to it.
+
+gzip assembly and data blocks:
+-------------------------------------------------------
+787FD0-7D73B4  hd_code_text.raw       main asm code
+7D73B4-7E3AD0  hd_code_data.raw       data for main asm
+7E3AD0-7F63A1  hd_front_end_text.raw  UI asm code
+7F63A1-7F9BD5  hd_front_end_data.raw  data for UI asm
+
+gzip level blocks
+This list is provided from Kazepedia thanks to SunakazeKun:
+https://sites.google.com/site/kazepedia/blast-corps/file-structure
+-------------------------------------------------------
+4A5660-4ABF91  lagp.raw          Angel City?
+4ABF91-4ACC10  lagp_dl.raw
+4ACC10-4B71AB  chimp.raw         Simian Acres
+4B71AB-4B8960  chimp_dl.raw
+4B8960-4BEDE5  valley.raw        Outland Farm
+4BEDE5-4BFD60  valley_dl.raw
+4BFD60-4C3247  fact.raw          Blackridge Works
+4C3247-4C3AC0  fact_dl.raw
+4C3AC0-4D3B76  dip.raw           Glory Crossing
+4D3B76-4D5F90  dip_dl.raw
+4D5F90-4E1838  beetle.raw        Shuttle Gully
+4E1838-4E2F70  beetle_dl.raw
+4E2F70-4E48E4  bonus1.raw        Salvage Wharf
+4E48E4-4E4E80  bonus1_dl.raw
+4E4E80-4E7458  bonus2.raw        Skyfall
+4E7458-4E7C00  bonus2_dl.raw
+4E7C00-4E8BF7  bonus3.raw        Twilight Foundry
+4E8BF7-4E8F70  bonus3_dl.raw
+4E8F70-4F441E  level9.raw        Crystal Rift
+4F441E-4F5C10  level9_dl.raw
+4F5C10-4FF4C1  level10.raw       Argent Towers
+4FF4C1-500520  level10_dl.raw
+500520-506D73  level11.raw       Skerries
+506D73-507E80  level11_dl.raw
+507E80-51014A  level12.raw       Diamond Sands
+51014A-511340  level12_dl.raw
+511340-5213B7  level13.raw       Ebony Coast
+5213B7-523080  level13_dl.raw
+523080-52B974  level14.raw       Oyster Harbor
+52B974-52CD00  level14_dl.raw
+52CD00-531885  level15.raw       Carrick Point
+531885-532700  level15_dl.raw
+532700-53D32E  level16.raw       Havoc District
+53D32E-53E9B0  level16_dl.raw
+53E9B0-54909A  level17.raw       Ironstone Mine
+54909A-54A820  level17_dl.raw
+54A820-551DAA  level18.raw       Beeton Tracks
+551DAA-552DE0  level18_dl.raw
+552DE0-554A33  level19.raw       J-Bomb
+554A33-555000  level19_dl.raw
+555000-55F205  level20.raw       Jade Plateau
+55F205-560E90  level20_dl.raw
+560E90-5646CB  level21.raw       Marine Quarter
+5646CB-5652D0  level21_dl.raw
+5652D0-56E0F7  level22.raw       Cooter Creek
+56E0F7-56F3F0  level22_dl.raw
+56F3F0-571E88  level23.raw       Gibbon's Gate
+571E88-5721E0  level23_dl.raw
+5721E0-573354  level24.raw       Baboon Catacomb
+573354-5736E0  level24_dl.raw
+5736E0-5795B8  level25.raw       Sleek Streets
+5795B8-57A2C0  level25_dl.raw
+57A2C0-58005F  level26.raw       Obsidian Mile
+58005F-580B60  level26_dl.raw
+580B60-587CA0  level27.raw       Corvine Bluff
+587CA0-588CE0  level27_dl.raw
+588CE0-58B53D  level28.raw       Sideswipe
+58B53D-58BE80  level28_dl.raw
+58BE80-596201  level29.raw       Echo Marches
+596201-597B80  level29_dl.raw
+597B80-59AEC7  level30.raw       Kipling Plant
+59AEC7-59B7D0  level30_dl.raw
+59B7D0-5A4451  level31.raw       Falchion Field
+5A4451-5A5840  level31_dl.raw
+5A5840-5AF6C1  level32.raw       Morgan Hall
+5AF6C1-5B0B10  level32_dl.raw
+5B0B10-5B4E60  level33.raw       Tempest City
+5B4E60-5B5A30  level33_dl.raw
+5B5A30-5B850E  level34.raw       Orion Plaza
+5B850E-5B8BB0  level34_dl.raw
+5B8BB0-5C366C  level35.raw       Glander's Ranch
+5C366C-5C4C80  level35_dl.raw
+5C4C80-5C9D2D  level36.raw       Dagger Pass
+5C9D2D-5CA9C0  level36_dl.raw
+5CA9C0-5CC86E  level37.raw       Geode Square
+5CC86E-5CCF50  level37_dl.raw
+5CCF50-5D07B8  level38.raw       Shuttle Island
+5D07B8-5D1060  level38_dl.raw
+5D1060-5DB0FC  level39.raw       Mica Park
+5DB0FC-5DC830  level39_dl.raw
+5DC830-5E5B29  level40.raw       Moon
+5E5B29-5E6EE0  level40_dl.raw
+5E6EE0-5EB4C8  level41.raw       Cobalt Quarry
+5EB4C8-5EC800  level41_dl.raw
+5EC800-5F2C67  level42.raw       Moraine Chase
+5F2C67-5F3A80  level42_dl.raw
+5F3A80-5FFF79  level43.raw       Mercury
+5FFF79-6014B0  level43_dl.raw
+6014B0-6095C1  level44.raw       Venus
+6095C1-60A710  level44_dl.raw
+60A710-6126C5  level45.raw       Mars
+6126C5-613AA0  level45_dl.raw
+613AA0-61C88C  level46.raw       Neptune
+61C88C-61DD70  level46_dl.raw
+61DD70-6211ED  level47.raw       CMO Intro
+6211ED-621AF0  level47_dl.raw
+621AF0-625CAC  level48.raw       Silver Junction
+625CAC-6269E0  level48_dl.raw
+6269E0-62F871  level49.raw       End Sequence
+62F871-630C30  level49_dl.raw
+630C30-634D35  level50.raw       Shuttle Clear
+634D35-635700  level50_dl.raw
+635700-63BD00  level51.raw       Dark Heartland
+63BD00-63CA10  level51_dl.raw
+63CA10-6416D6  level52.raw       Magma Peak
+6416D6-641F30  level52_dl.raw
+641F30-6440CC  level53.raw       Thunderfist
+6440CC-644810  level53_dl.raw
+644810-645D55  level54.raw       Saline Watch
+645D55-646080  level54_dl.raw
+646080-6470B7  level55.raw       Backlash
+6470B7-647550  level55_dl.raw
+647550-65362E  level56.raw       Bison Ridge
+65362E-654FC0  level56_dl.raw
+654FC0-65F329  level57.raw       Ember Hamlet
+65F329-660950  level57_dl.raw
+660950-66550A  level58.raw       Cromlech Court
+66550A-665F80  level58_dl.raw
+665F80-66BB49  level59.raw       Lizard Island
+66BB49-66C900  level59_dl.raw
+
+Level Data:
+-------------------------------------------------
+Levels are contained in two gzip blocks.  e.g.:
+chimp.raw: level data for Simian Acres
+chimp_dl.raw: display lists for Simian Acres
+
+The level data first contains a list or table that is NULL terminated.
+After the rest of the data is set to segment 08 which contains vertices 
+and other data used by the display list.
+
+The display list contains mostly raw F3D commands. The exception is 0xFD 
+G_SETTIMG which contain indexes to a texture table. After the display list 
+is copied to RAM, these G_SETTIMG are populated with texture offsets in 
+segment 0x00. These offsets are used to index into the texture table at
+ROM offset 0x4CE0. Each entry is 8 bytes (see "Texture Compression" below),
+so computing the entry in the table is 0x4CE0+8*index.
+
+Example of the bridge in Simian Acres chimp_dl.raw:
+Offset: ROM F3D Command      RAM F3D Command   ROM    Entry  Offset Size   Description
+00120:  FD100000 00000437 -> FD100000 000ABC90 0E7210 0E2530 6E98   128x16 bridge railing
+003B8:  FD100000 00000435 -> FD100000 000ACC90 0E6340 0E1660 6E88   16x96  bridge walk
+
+Texture Compression:
+---------------------------------------------------------------------------
+Some large textures (e.g. title screen) are just contained in gzip blocks.
+However, most of the game textures are compressed using one of seven custom 
+lossy compression methods. All the texture offsets and compression types are 
+stored at a table at 0x4CE0-0xCCE0. The table structure is:
+   [RR RR RR RR] [LL LL] [TT TT]
+    * R = ROM offset - 4CE0 (e.g. ROM CDE0 is 8100 in table)
+    * L = compressed length
+    * T = compression type (see below)
+
+There are 7 different compression types, each tailored to the data format for 
+a specific texture encoding. n64split contains C implementation of a decoder
+for each: https://github.com/queueRAM/sm64tools/blob/master/blast.c
+   
+Type 0 (802A5E10): uncompressed, just memcpy the data
+
+Type 1 (802A5AE0): 16-bit data with lookback, RGBA16
+   +--+-------+-------+-------+---+  +--+----------------+-------------+
+   |15| 14-10 | 9 - 6 | 5 - 1 | 0 |  |15|     14 - 5     |    4 - 0    |
+   +--+-------+-------+-------+---+  +--+----------------+-------------+
+   | 0|  Red  | Green | Blue  | A |  | 1| Offset (bytes) | Length (16) |
+   +--+-------+-------+-------+---+  +--+----------------+-------------+
+
+   if MSB is 0:
+     DataOut = ((DataIn & 0xFFC0) << 1) | (DataIn & 0x3F);
+     this implies that the 7th bit (lsb of green) is always 0
+   if MSB is 1: copy 'length' 16-bit values from -offset
+      length16 = DataIn & 0x1F;
+      offset8  = (DataIn & 0x7FFF) >> 5;
+
+Type 2 (802A5B90): 32-bit data with lookback, RGBA32
+   +--+-------+-------+-------+-------+  +--+-------------+-------------+
+   |15| 14-11 | 10- 7 | 6 - 3 | 2 - 0 |  |15|    14 - 5   |    4 - 0    |
+   +--+-------+-------+-------+-------+  +--+-------------+-------------+
+   | 0|  Red  | Green | Blue  | Alpha |  | 1| Offset (16) | Length (32) |
+   +--+-------+-------+-------+-------+  +--+-------------+-------------+
+
+   if MSB is 0:
+     DataOut = ((DataIn & 0x7800) << 17) | ((DataIn & 0x780) << 13) | 
+               ((DataIn & 0x78) << 9)    | ((DataIn & 0x7) << 5);
+     Implies that four LSBs of R,G,B are 0, five LSBs of A are 0
+   if MSB is 1: copy 'length' 32-bit values from -offset
+      length32 = DataIn & 0x1F;
+      offset16 = (DataIn & 0x7FE0) >> 4;
+
+Type 3 (802A5A2C): IA16
+   +--+--------+---+-----------+  +--+----------------+-------------+
+   |15| 14 - 8 | 7 |   6 - 0   |  |15|     14 - 5     |    4 - 0    |
+   +--+--------+---+-----------+  +--+----------------+-------------+
+   | 0| Alpha  | X | Intensity |  | 1| Offset (bytes) | Length (16) |
+   +--+--------+---+-----------+  +--+----------------+-------------+
+
+   if MSB is 0:
+     ByteOut0 = ((DataIn >> 8) << 1);
+     ByteOut1 = ((DataIn) & 0xFF) << 1);
+     Implies that the LSBs I and A are 0
+   if MSB is 1: copy 'length' 16-bit values from -offset
+      length16 = DataIn & 0x1F;
+      offset8  = (DataIn & 0x7FFF) >> 5;
+
+Type 4 (802A5C5C): 2x 16-bit LUT with 32-bit lookback - used for explosions? RGBA32?
+   +--+---------+---+---------+---+  +--+-------------+-------------+
+   |15| 14 - 9  | 8 |  7 - 1  | 0 |  |15|    14 - 5   |    4 - 0    |
+   +--+---------+---+---------+---+  +--+-------------+-------------+
+   | 0| Offset1 |LB1| Offset2 |LB2|  | 1| Offset (16) | Length (32) |
+   +--+---------+---+---------+---+  +--+-------------+-------------+
+
+   LUT passed through T4, assigned from a0->0xC in 802A57DC(), set from FP
+   if MSB is 0:
+     U16Out1 = (LUT[((DataIn >> 8) & 0xFE)] << 1) | ((DataIn >> 8) & 0x1);
+     U16Out2 = (LUT[(DataIn & 0xFE)] << 1) | (DataIn& 0x1);
+   if MSB is 1: copy 'length' 32-bit values from -offset
+      length32 = DataIn & 0x1F;
+      offset16 = (DataIn & 0x7FE0) >> 4;
+
+   Reg T4 (used as global register) points to LUT
+     Values observed for T4:
+     T4 (RAM)     ROM     Values
+     803EA870 -> 047480 : 00 00 00 00 00 00 00 00 04 21 14 83 20 C5 29 06 ...
+
+Type 5 (802A5D34): 32-bit LUT with lookback - maybe used for some text?
+   +--+--------+-------+  +--+-------------+-------------+
+   |15| 14 - 4 | 3 - 0 |  |15|    14 - 5   |    4 - 0    |
+   +--+--------+-------+  +--+-------------+-------------+
+   | 0| Offset | LSBs  |  | 1| Offset (16) | Length (32) |
+   +--+--------+-------+  +--+-------------+-------------+
+
+   Similar to Type 4, T4 passed in as LUT
+   if MSB is 0:
+     Offset = (DataIn >> 4) << 1;
+     Tmp16 = (LUT[Offset] << 1) | ((DataIn >> 8) & 0x1);
+     U32Out = ((Tmp16 & 0x7C00) << 17) | ((Tmp16 & 0x3E0) << 14) | 
+              ((Tmp16 & 0x1F) << 11) | ((DataIn & 0xF) << 4);
+   if MSB is 1: copy 'length' 32-bit values from -offset
+      length32 = DataIn & 0x1F;
+      offset16 = (DataIn & 0x7FE0) >> 4;
+      
+   Reg T4 (used as global register) points to LUT
+     Values observed for T4:
+     T4 (RAM)    ROM      Values
+     803EA770 -> 152970 : 08 00 10 20 28 60 38 C1 71 85 7E EB 4C 80 7F F0 ...
+     803EB070 -> 0998E0 : 00 00 00 00 04 21 1C C4 31 8C 5E F5 5A 6D 2D 45 ...
+     803EA870 -> 1E2C00 : 00 00 00 00 24 25 2C CF 0C 01 4C AC 70 24 18 02 ...
+
+Type 6 (802A5958): Primarily Fonts. Unsure of encoding. IA8? IA4?
+   +--+--+-----+----+---+---+---+  +--+----------------+-------------+
+   |15|14|13-11|10-8|7-6|5-3|2-0|  |15|      14 - 5    |    4 - 0    |
+   +--+--+-----+----+---+---+---+  +--+----------------+-------------+
+   |0 |X | I1  | A1 | X |I2 |A2 |  | 1| Offset (bytes) | Length (16) |
+   +--+--+-----+----+---+---+---+  +--+----------------+-------------+
+  
+   if MSB is 0:
+     ByteOut0 = (((DataIn >> 8) & 0x38) << 2) | (((DataIn >> 8) & 0x7) << 1);
+     ByteOut1 = ((DataIn & 0x38) << 2) | ((DataIn & 0x7) << 1);
+     Implies that the LSBs I and A are 0
+   if MSB is 1: copy 'length' 16-bit values from -offset
+      length = DataIn & 0x1F;
+      offset = (DataIn & 0x7FFF) >> 5;
+
+Boot sequence:
+  // 0x787fd0 is hd_code_text.raw
+  DmaCopy(0, 0x787fd0, 0x80000400, 0x7e3ad0-0x787fd0); // 0x5BB00
+  while(DmaStatus() == 1);
+  // probably gzip inflate method
+  proc_80220998(0x80000400, 0x802447c0, 0x801e7000, 0xd);
+  proc_80220998(0x80000400, 0x802447c0, 0x801e7000, 0xa);
+
+Functions in ROM:
+--------------------
+8021ED00, EntryPoint
+80220730, Main
+80220BA0, bzero
+80220C40, osInitialize
+80220E70, DmaCopy
+80220F50, GetDmaStatus
+80220F70, __osGetSR
+80220F80, __osSetFpcCsr
+80220F90, __osSiRawReadIo
+80220FE0, __osSiRawWriteIo
+802218A0, osWriteBackDCache
+80221920, osInvalCache
+80221A00, osEPiRawReadIo
+80221AC8, __ull_div
+80221BC8, __ll_mul
+80221DE0, __osSiDeviceBusy
+
+Functions in hd_code_text.raw:
+------------------------------
+802447C0, MainJump
+80244870, Thread1
+80244930, Thread3
+80267A9C, Thread4
+80270F7C, Thread5
+80271C14, PoolAvailable
+802A57DC, DecodeTexture
+802A5E10, DecodeTexture0
+802A5AE0, DecodeTexture1
+802A5B90, DecodeTexture2
+802A5A2C, DecodeTexture3
+802A5C5C, DecodeTexture4
+802A5D34, DecodeTexture5
+802A5958, DecodeTexture6
+802D6A60, proutSprintf
+802D6ACC, sprintf
+802D64E0, osCreateMesgQueue
+802DA9E0, osSetEventMsg
+802DAA50, osViSetEventMsg
+802D42B0, osCreateThread
+802D4910, osRecvMesg
+802DAD00, osSpTaskDunno
+802DAE1C, osSpTaskLoad
+802DAF7C, osSpTaskStartGo
+802DAFC0, osSpTaskYield
+802D47C0, osSendMesg
+802D4400, osStartThread
+802D6710, osWriteBackDCacheAll
+802DA610, osCreateViManager
+802DA794, __osViDevMgrMain
+802DA970, osViSetMode
+802D4A50, osViBlack
+802D6550, osViSetSpecialFeatures
+802D4560, osCreatePiManager
+802D46E0, osSetThreadPri
+802D4020, osInitialize
+802DAB50, osViSwapBuffer
+802D5FE0, sqrtf
+802DB4D0, osContStartReadData
+802DB594, osContGetReadData
+802DB0A0, osContInit
+802DB29C, __osContGetInitData
+802DB36C, __osPackRequestData
+802D4B50, __ull_rshift
+802D4B7C, __ull_rem
+802D4BB8, __ull_div
+802D4BF4, __ll_lshift
+802D4C20, __ll_rem
+802D4C5C, __ll_div
+802D4CB8, __ll_mul
+802D4CE8, __ull_divremi
+802D4D48, __ll_mod
+802D4DE4, __ll_rshift
+802D6740, osInvalDCache
+802DA2F0, osPiStartDma
+802DB7B0, bzero
+802DB730, osInvalCache
+802E2340, bcopy
+802D4FC0, guOrthoF
+802D5114, guFrustum
+802D5180, guPerspectiveF
+802D53B0, guPerspective
+802D4AC0, osGetTime
+802D68F0, cosf
+802D6320, sinf
+802D5A80, guRotateRPYF
+802D5AD4, guRotateRPY
+802D9A00, osAiSetFrequency
+802D8464, alBnkfNew
+802D8568, alSetFileNew
+802D4EA0, osWriteBackDCache
+802D9C10, osAiGetLength
+802D9B60, osAiSetNextBuffer
+802DC6F0, __osTimerServicesInit
+802DC77C, __osTimerInterrupt
+802DC8F4, __osSetTimerIntr
+802DC968, __osInsertTimer
+802DCBB0, _Printf
+802DDD40, memcpy
+802DC330, __osDisableInt
+802DC350, __osRestoreInt
+802D98D0, __osViInit
+802DBA60, __osExceptionPreamble
+802DBA70, __osExceptionHandler
+802DC0A0, __osEnqueueAndYield
+802DC130, __osEnqueueThread
+802DC178, __osPopThread
+802DC188, __osDispatchThread
+802DC2C8, __osCleanupThread", 0x802DC2D0),
+802D4E20, osVirtualToPhysical
+802E2650, __osSpSetStatus
+802E2660, __osSpSetPc
+802E26A0, __osSpRawStartDma
+802E2730, __osSpDeviceBusy
+802E2330, __osSpGetStatus
+802DC470, osGetThreadPri
+802D9820, osGetCount
+802DC3B0, __osPiCreateAccessQueue
+802DC400, __osPiGetAccess
+802DC444, __osPiRelAccess
+802DC490, osPiRawStartDma
+802DC570, __osDevMgrMain
+802DB9A0, __osGetSR
+802DB9B0, __osSetFpcCsr
+802DB9C0, __osSiRawReadIo
+802DBA10, __osSiRawWriteIo
+802D4250, osEPiRawReadIo
+802E2810, __osSiCreateAccessQueue
+802E2860, __osSiGetAccess
+802E28A4, __osSiRelAccess
+802E2760, __osSiRawStartDma
+802DABA0, osSetTimer
+802E21A0, osJamMesg
+802D5810, guMtxF2L
+802D5910, guMtxIdentF
+802DFC00, __osAiDeviceBusy
+802E2EB0, __osSetCompare
+802DCAF0, __osProbeTLB
+802E2D80, __osSyncPutChars
+802D7660, osSetIntMask
+802D67F0, osDestroyThread
+802E28D0, __osSiDeviceBusy
+802E5200, __osAtomicDec
+
+Tools:
+n64split (git version supports Blast Corps): http://origami64.net/showthread.php?tid=126
+Universal N64 Compressor (to manually decompress gzip files): http://www.goldeneyevault.com/viewfile.php?id=213
+BlastTool (GUI wrapper for general N64 tools): http://kuribo64.net/board/thread.php?pid=50055
+
+Other Notes:
+The Cutting Room Floor Wiki: https://tcrf.net/Blast_Corps
+Kazepedia: https://sites.google.com/site/kazepedia/blast-corps
+Blast Corps Hacking thread: http://kuribo64.net/board/thread.php?id=1984 (trashed by StapleButter)
+
+Special Thanks:
+SubDrag for putting together the Universal N64 Compressor and notes.
+"Rookie Wrecker" for sharing notes and support.
+SunakazeKun for assembling some Blast Corps notes on his Kazepedia:
+https://sites.google.com/site/kazepedia/blast-corps

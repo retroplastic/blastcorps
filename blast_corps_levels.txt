@@ -1,0 +1,195 @@
+Simian Acres / chimp.raw
+------------------------
+Header
+00: 0003 0006 05DC 05DC 0004 0007 04B0 04B0 
+10: 0003 0006 05DC 05DC FFFF FFFC 0000 0001 
+20: 0001 0258 0001 0258 0001 0258 0001 0258 
+30: 0001 0258 0001 B6B4 0001 B90C 0001 B924 
+40: 0001 B924 0001 BA14 0001 BA46 0001 BA8E 
+50: 0001 BA96 0001 BABA 0001 BAC4 0001 BAC4 
+60: 0001 BCD8 0001 BD24 0001 BD24 0001 BD9D 
+70: 0001 E6E3 0001 E72C 0001 F420 0001 F470 
+80: 0001 F948 0002 9E18 0001 F420 0001 F468 
+90: 0002 9C88 0002 9D18 0002 9DA0 0002 9DA8 
+A0: 0001 F41C 0001 F41C 0001 F41C 0001 F41C 
+B0: 0001 F41C 0001 F41C 0001 F41C 0001 F41C 
+C0: 0001 F41C 0000 0000
+
+Copied to 80081E70
+
+Reads of 80081E70
+80298A20: LBU T4, 0x0000(T8) - before full level loaded?
+
+802A2DC4: LHU T1, 0x0000(T0)
+802A2DCC: LHU T1, 0x0002(T0)
+
+802A4730: LHU S2, 0x0000(A0)
+802A4734: LHU S3, 0x0002(A0)
+
+802A480C: LHU S4, 0x0000(A0)
+
+802A2DC4/802A2DCC
+Thread3/proc_80285814 -> proc_80256A34 -> proc_802A1674 -> proc_802A2D68
+
+
+void proc_802A2D68(T0:8009F5F0)
+{
+   t1 = t0->w18;
+   t2 = 0x80364458;
+   f0 = (float) t1;
+   t3 = -1;
+   t1 = 0x803EBBF0;
+   *t1 = f0;
+   
+   t1 = t0 + 0xC8;
+   *t2 = t1;
+   t1 = t0->w24;
+   t2 = 0x803BE714;
+   t1 += t0;
+   at = 0x803BDAF4;
+   *at = t1;
+   t1 = t0->w28;
+   t1 += t0;
+   at = 0x803BDAF8;
+   *at = t1;
+
+   t1 = *t0; // u16
+
+
+
+proc_802A2D68: # begin 802A2D68 (05E5A8)
+  lhu   $t1, ($t0)
+  sh    $t1, ($t2)
+  lhu   $t1, 2($t0)
+  la    $t2, 0x803BE716 # lui $t2, 0x803c/addiu $t2, $t2, -0x18ea
+  sh    $t1, ($t2)
+  lhu   $t1, 4($t0)
+  la    $t2, 0x803BE70C # lui $t2, 0x803c/addiu $t2, $t2, -0x18f4
+  sll   $t1, $t1, 5
+  sw    $t1, ($t2)
+  lhu   $t1, 6($t0)
+  la    $t2, 0x803BE710 # lui $t2, 0x803c/addiu $t2, $t2, -0x18f0
+  sll   $t1, $t1, 5
+  sw    $t1, ($t2)
+  lhu   $t1, 8($t0)
+  la    $t2, 0x803BE720 # lui $t2, 0x803c/addiu $t2, $t2, -0x18e0
+  sh    $t1, ($t2)
+  lhu   $t1, 0xa($t0)
+  la    $t2, 0x803BE722 # lui $t2, 0x803c/addiu $t2, $t2, -0x18de
+  sh    $t1, ($t2)
+  lhu   $t1, 0xc($t0)
+  la    $t2, 0x803BE718 # lui $t2, 0x803c/addiu $t2, $t2, -0x18e8
+  sll   $t1, $t1, 5
+  sw    $t1, ($t2)
+  lhu   $t1, 0xe($t0)
+  la    $t2, 0x803BE71C # lui $t2, 0x803c/addiu $t2, $t2, -0x18e4
+  sll   $t1, $t1, 5
+  sw    $t1, ($t2)
+  lhu   $t1, 0x10($t0)
+  la    $t2, 0x803BE72C # lui $t2, 0x803c/addiu $t2, $t2, -0x18d4
+  sh    $t1, ($t2)
+  lhu   $t1, 0x12($t0)
+  la    $t2, 0x803BE72E # lui $t2, 0x803c/addiu $t2, $t2, -0x18d2
+  sh    $t1, ($t2)
+  lhu   $t1, 0x14($t0)
+  la    $t2, 0x803BE724 # lui $t2, 0x803c/addiu $t2, $t2, -0x18dc
+  sll   $t1, $t1, 5
+  sw    $t1, ($t2)
+  lhu   $t1, 0x16($t0)
+  la    $t2, 0x803BE728 # lui $t2, 0x803c/addiu $t2, $t2, -0x18d8
+  sll   $t1, $t1, 5
+  sw    $t1, ($t2)
+  lui   $t1, 0x803f
+  lui   $t2, 0x803f
+  addiu $t1, $t1, -0x4414
+  addiu $t2, $t2, -0x4250
+  sw    $t2, ($t1)
+  la    $t1, 0x803A6B30 # lui $t1, 0x803a/addiu $t1, $t1, 0x6b30
+  addiu $t2, $zero, 0x64
+.Lproc_802A2D68_14C: # 802A2EB4
+  addi  $t2, $t2, -1
+  sb    $t3, %lo(0x803A0013)($t1) # $t3, 0x13($t1)
+  bnez  $t2, .Lproc_802A2D68_14C
+  addi  $t1, $t1, 0x14
+  la    $t1, 0x803A7300 # lui $t1, 0x803a/addiu $t1, $t1, 0x7300
+  addiu $t2, $zero, 0xc
+.Lproc_802A2D68_168: # 802A2ED0
+  addi  $t2, $t2, -1
+  sb    $t3, %lo(0x803A0011)($t1) # $t3, 0x11($t1)
+  bnez  $t2, .Lproc_802A2D68_168
+  addi  $t1, $t1, 0x14
+  la    $t1, 0x803ED3B8 # lui $t1, 0x803f/addiu $t1, $t1, -0x2c48
+  addiu $t2, $zero, 0xc
+.Lproc_802A2D68_184: # 802A2EEC
+  addi  $t2, $t2, -1
+  sb    $t3, ($t1)
+  sb    $t3, %lo(0x803F0001)($t1) # $t3, 1($t1)
+  sb    $t3, %lo(0x803F0002)($t1) # $t3, 2($t1)
+  sb    $t3, %lo(0x803F0003)($t1) # $t3, 3($t1)
+  bnez  $t2, .Lproc_802A2D68_184
+  addi  $t1, $t1, 4
+  la    $t1, 0x803EBC10 # lui $t1, 0x803f/addiu $t1, $t1, -0x43f0
+  addiu $t2, $zero, 0x1a
+.Lproc_802A2D68_1AC: # 802A2F14
+  addi  $t2, $t2, -1
+  sw    $t3, ($t1)
+  bnez  $t2, .Lproc_802A2D68_1AC
+  addi  $t1, $t1, 0x10
+  lw    $t1, 0x50($t0)
+  lui   $at, 0x803c
+  addu  $t1, $t1, $t0
+  sw    $t1, %lo(0x803BE6F8)($at) # $t1, -0x1908($at)
+  lw    $t1, 0x4c($t0)
+  lui   $at, 0x803c
+  addu  $t1, $t1, $t0
+  lh    $t2, ($t1)
+  sh    $t2, %lo(0x803BE730)($at) # $t2, -0x18d0($at)
+  lh    $t2, 2($t1)
+  lui   $at, 0x803c
+  sh    $t2, %lo(0x803BE734)($at) # $t2, -0x18cc($at)
+  lh    $t2, 4($t1)
+  lui   $at, 0x803c
+  sh    $t2, %lo(0x803BE732)($at) # $t2, -0x18ce($at)
+  lh    $t2, 6($t1)
+  lui   $at, 0x803c
+  lui   $t1, 0x803a
+  sh    $t2, %lo(0x803BE736)($at) # $t2, -0x18ca($at)
+  addiu $t1, $t1, 0x7426
+  sb    $zero, ($t1)
+  lui   $at, 0x803f
+  sh    $zero, %lo(0x803ED400)($at) # $zero, -0x2c00($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803F7805)($at) # $zero, 0x7805($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803F7806)($at) # $zero, 0x7806($at)
+  lui   $at, 0x803c
+  sb    $zero, %lo(0x803BE738)($at) # $zero, -0x18c8($at)
+  lw    $t1, 0x1c($t0)
+  lui   $at, 0x803c
+  ld    $ra, ($sp)
+  sb    $t1, %lo(0x803BE739)($at) # $t1, -0x18c7($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803EFECB)($at) # $zero, -0x135($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803EF6FF)($at) # $zero, -0x901($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803ED40C)($at) # $zero, -0x2bf4($at)
+  lui   $at, 0x803a
+  sw    $zero, %lo(0x803A740C)($at) # $zero, 0x740c($at)
+  lui   $at, 0x803f
+  sw    $zero, %lo(0x803F77F8)($at) # $zero, 0x77f8($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803F780A)($at) # $zero, 0x780a($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803F780B)($at) # $zero, 0x780b($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803F780C)($at) # $zero, 0x780c($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803F7810)($at) # $zero, 0x7810($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803F7804)($at) # $zero, 0x7804($at)
+  lui   $at, 0x803f
+  sb    $zero, %lo(0x803F7812)($at) # $zero, 0x7812($at)
+  jr    $ra
+  addiu $sp, $sp, 8
+# end proc_802A2D68
