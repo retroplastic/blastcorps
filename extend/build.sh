@@ -6,24 +6,21 @@ BASS=~/git/bass/bass/bass
 CODE=./bin/hd_code_text.raw
 ROM=bc.u.z64
 
-# copy clean ROM
+# copy clean ROM and code
 cp $ROM.bak $ROM
 cp $CODE.bak $CODE
 
-# apply LUT patch
-dd if=lut.bin of=$ROM conv=notrunc bs=1 seek=$((0x7FA000))
-
-# apply source patch
-$BASS -o $CODE use_lut.s
+# apply source patch to main code
+$BASS -o $CODE hd_code_text.asm
 
 # gzip code block
 gzip -c $CODE > $CODE.gz
 
-# TODO: assert new gzip size is <= old gzip
-
-# overwrite code
-dd if=/dev/zero of=$ROM conv=notrunc bs=1 seek=$((0x787FD0)) count=$((0x7D73B4-0x787FD0))
-dd if=$CODE.gz of=$ROM conv=notrunc bs=1 seek=$((0x787FD0))
+# apply LUT patch and include new code in ROM
+$BASS -o $ROM blast_corps_rom.asm
 
 # update checksum
 ../../sm64tools/n64cksum $ROM
+
+# run ROM
+#mupen64plus $ROM
