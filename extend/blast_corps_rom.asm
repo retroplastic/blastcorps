@@ -10,11 +10,12 @@ include "N64.INC"
 // new code
 origin 0x787FD0
 insert "bin/hd_code_text.raw.gz"
-if pc() > 0x7D73B4 {
-   error "Code > 0x7D73B4"
+insert "bin/hd_code_data.raw.gz"
+if pc() > 0x7E3AD0 {
+   error "code + data > 0x7E3AD0"
 }
 
-fill 0x7D73B4-pc()
+fill 0x7E3AD0-pc()
 
 // LUT
 origin 0x7FA000

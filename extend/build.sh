@@ -1,5 +1,6 @@
 #!/bin/sh
-set -x #echo on
+set -x # echo on
+set -e # stop shell script if any commands error
 
 BASS=~/git/bass/bass/bass
 
