@@ -67,8 +67,19 @@ ID: JmpTable  Start   End     Name gzip    Level Name
 59: 802569E0  665F80  66C900  level59.raw  Lizard Island
 
 // load level
-// T6 = level ID number
-proc_8025615C(T6)
+// A0 = level ID number
+// A1 = pointer to something (pool?) passed directly to proc_8028B4C4
+// A2 = word pointer to store level length (end - start)
+proc_8025615C(A0, A1, A2)
+
+// some sort of DMA function
+// A0 = start of block
+// A1 = passed directly to proc_8028B4C4
+// A2 = pointer to level length (end - start)
+// A3 = 0xC
+// SP10 = 0xA
+// SP14 = 1
+proc_8028B4C4(A0, A1, A2, A3, SP10, SP14)
 
 Simian Acres / chimp.raw
 ------------------------
