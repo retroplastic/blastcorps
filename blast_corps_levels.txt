@@ -1,3 +1,75 @@
+Level Loading
+------------------------
+Levels loaded from proc_8025615C
+Jump table at 80308B98/(hd_code_data:1FFC8):
+
+ID: JmpTable  Start   End     Name gzip    Level Name
+----------------------------------------------------
+ 0: 802561B8  4ACC10  4B8960  chimp.raw    Simian Acres
+ 1: 80256194  4A5660  4ACC10  lagp.raw     Angel City
+ 2: 802561DC  4B8960  4BFD60  valley.raw   Outland Farm
+ 3: 80256200  4BFD60  4C3AC0  fact.raw     Blackridge Works
+ 4: 80256224  4C3AC0  4D5F90  dip.raw      Glory Crossing
+ 5: 80256248  4D5F90  4E2F70  beetle.raw   Shuttle Gully
+ 6: 8025626C  4E2F70  4E4E80  bonus1.raw   Salvage Wharf
+ 7: 80256290  4E4E80  4E7C00  bonus2.raw   Skyfall
+ 8: 802562B4  4E7C00  4E8F70  bonus3.raw   Twilight Foundry
+ 9: 802562D8  4E8F70  4F5C10  level9.raw   Crystal Rift
+10: 802562FC  4F5C10  500520  level10.raw  Argent Towers
+11: 80256320  500520  507E80  level11.raw  Skerries
+12: 80256344  507E80  511340  level12.raw  Diamond Sands
+13: 80256368  511340  523080  level13.raw  Ebony Coast
+14: 8025638C  523080  52CD00  level14.raw  Oyster Harbor
+15: 802563B0  52CD00  532700  level15.raw  Carrick Point
+16: 802563D4  532700  53E9B0  level16.raw  Havoc District
+17: 802563F8  53E9B0  54A820  level17.raw  Ironstone Mine
+18: 8025641C  54A820  552DE0  level18.raw  Beeton Tracks
+19: 80256440  552DE0  555000  level19.raw  J-Bomb
+20: 80256464  555000  560E90  level20.raw  Jade Plateau
+21: 80256488  560E90  5652D0  level21.raw  Marine Quarter
+22: 802564AC  5652D0  56F3F0  level22.raw  Cooter Creek
+23: 802564D0  56F3F0  5721E0  level23.raw  Gibbon's Gate
+24: 802564F4  5721E0  5736E0  level24.raw  Baboon Catacomb
+25: 80256518  5736E0  57A2C0  level25.raw  Sleek Streets
+26: 8025653C  57A2C0  580B60  level26.raw  Obsidian Mile
+27: 80256560  580B60  588CE0  level27.raw  Corvine Bluff
+28: 80256584  588CE0  58BE80  level28.raw  Sideswipe
+29: 802565A8  58BE80  597B80  level29.raw  Echo Marches
+30: 802565CC  597B80  59B7D0  level30.raw  Kipling Plant
+31: 802565F0  59B7D0  5A5840  level31.raw  Falchion Field
+32: 80256614  5A5840  5B0B10  level32.raw  Morgan Hall
+33: 80256638  5B0B10  5B5A30  level33.raw  Tempest City
+34: 8025665C  5B5A30  5B8BB0  level34.raw  Orion Plaza
+35: 80256680  5B8BB0  5C4C80  level35.raw  Glander's Ranch
+36: 802566A4  5C4C80  5CA9C0  level36.raw  Dagger Pass
+37: 802566C8  5CA9C0  5CCF50  level37.raw  Geode Square
+38: 802566EC  5CCF50  5D1060  level38.raw  Shuttle Island
+39: 80256710  5D1060  5DC830  level39.raw  Mica Park
+40: 80256734  5DC830  5E6EE0  level40.raw  Moon
+41: 80256758  5E6EE0  5EC800  level41.raw  Cobalt Quarry
+42: 8025677C  5EC800  5F3A80  level42.raw  Moraine Chase
+43: 802567A0  5F3A80  6014B0  level43.raw  Mercury
+44: 802567C4  6014B0  60A710  level44.raw  Venus
+45: 802567E8  60A710  613AA0  level45.raw  Mars
+46: 8025680C  613AA0  61DD70  level46.raw  Neptune
+47: 80256830  61DD70  621AF0  level47.raw  CMO Intro
+48: 80256854  621AF0  6269E0  level48.raw  Silver Junction
+49: 80256878  6269E0  630C30  level49.raw  End Sequence
+50: 8025689C  630C30  635700  level50.raw  Shuttle Clear
+51: 802568C0  635700  63CA10  level51.raw  Dark Heartland
+52: 802568E4  63CA10  641F30  level52.raw  Magma Peak
+53: 80256908  641F30  644810  level53.raw  Thunderfist
+54: 8025692C  644810  646080  level54.raw  Saline Watch
+55: 80256950  646080  647550  level55.raw  Backlash
+56: 80256974  647550  654FC0  level56.raw  Bison Ridge
+57: 80256998  654FC0  660950  level57.raw  Ember Hamlet
+58: 802569BC  660950  665F80  level58.raw  Cromlech Court
+59: 802569E0  665F80  66C900  level59.raw  Lizard Island
+
+// load level
+// T6 = level ID number
+proc_8025615C(T6)
+
 Simian Acres / chimp.raw
 ------------------------
 Header
