@@ -7,6 +7,10 @@ include "N64.INC"
 // origin 0x2A4C
 // addiu a3, a3, 0x3acc
 
+// overwrite old chimp level
+origin 0x4ACC10
+fill 0x4B8960-0x4ACC10
+
 // new code
 origin 0x787FD0
 insert "bin/hd_code_text.raw.gz"
@@ -19,7 +23,8 @@ fill 0x7E3AD0-pc()
 
 // LUT
 origin 0x7FA000
-dd 0x4ACC10, 0x4B8960
+//dd 0x4ACC10, 0x4B8960
+dd chimp_start, chimp_end
 dd 0x4A5660, 0x4ACC10
 dd 0x4B8960, 0x4BFD60
 dd 0x4BFD60, 0x4C3AC0
@@ -79,3 +84,10 @@ dd 0x647550, 0x654FC0
 dd 0x654FC0, 0x660950
 dd 0x660950, 0x665F80
 dd 0x665F80, 0x66C900
+
+// append level at end
+origin 0x800000
+chimp_start:
+insert "bin/chimp.raw.gz"
+insert "bin/chimp_dl.raw.gz"
+chimp_end:

@@ -16,6 +16,9 @@ $BASS -o $CODE hd_code_text.asm
 
 # gzip code block
 gzip -c $CODE > $CODE.gz
+# gzip level block
+gzip -c bin/chimp.raw > bin/chimp.raw.gz
+gzip -c bin/chimp_dl.raw > bin/chimp_dl.raw.gz
 
 # apply LUT patch and include new code in ROM
 $BASS -o $ROM blast_corps_rom.asm
