@@ -4,7 +4,7 @@ Header
 00: 0003 0006 05DC 05DC 0004 0007 04B0 04B0 
 10: 0003 0006 05DC 05DC FFFFFFFC  00000001 
 20: 0001 0258 00010258  00010258  0001 0258 
-30: 0001 0258 0001 B6B4 0001 B90C 0001 B924 
+30: 0001 0258 0001B6B4  0001B90C  0001 B924 
 40: 0001 B924 0001 BA14 0001 BA46 0001BA8E 
 50: 0001BA96  0001 BABA 0001 BAC4 0001 BAC4 
 60: 0001 BCD8 0001 BD24 0001 BD24 0001 BD9D 
@@ -33,7 +33,7 @@ fact.raw
 00: 0003 0003 05DC 09C4 0004 0007 03E8 03E8
 10: 0003 0005 05DC 05DC FFFFFFFC  00000001
 20: 0000 5D08 00005D08  00005D08  0000 5D18
-30: 0000 5D40 0000 9F64 0000 A1BC 0000 A1BC
+30: 0000 5D40 00009F64  0000A1BC  0000 A1BC
 40: 0000 A1BC 0000 A34C 0000 A446 0000A46A
 50: 0000A472  0000 A48D 0000 A496 0000 A496
 60: 0000 A61E 0000 A61F 0000 A61F 0000 A61F
@@ -71,7 +71,10 @@ struct
    // 20-23
    u32 w24; // added to t0, stored to 0x803BDAF4
    u32 w28; // added to t0, stored to 0x803BDAF8
-   // 2C-47
+   // 2C-33
+   u32 w34; // added to s0, passed through a0 to proc_8026FBB0, 6-bytes each
+   u32 w38; // added to s0, passed through a1 to proc_8026FBB0
+   // 3C-47
    u32 w48; // added to a0, passed through s6 to proc_802A484C->proc_802A49A8
    u32 w4C; // added to t0=p, *0x803BE730 = p->h00;
             //                *0x803BE734 = p->h02;
@@ -93,3 +96,18 @@ Thread3 -> proc_802475D8 -> proc_8024B8F4 -> proc_802A467C -> proc_802A470C
 
 proc_802A470C(A0:)
 
+----------------------------------------------------------------
+Offset 0x34:
+802A1864: LW A0, 0x0034(S0)
+
+proc_802A1674()
+
+  lw    $a0, 0x34($s0)
+  lw    $a1, 0x38($s0)
+  addu  $a0, $a0, $s0
+  jal   proc_8026FBB0
+  addu  $a1, $a1, $s0
+
+proc_8026FBB0()
+  six halfwords copied out to struct array at 801DC508
+  *0x8036bed8 + (halfword at 0x8036eb90 * 0x88) 
