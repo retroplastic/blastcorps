@@ -86,17 +86,17 @@ Simian Acres / chimp.raw
 Header
 00: 0003 0006 05DC 05DC 0004 0007 04B0 04B0 
 10: 0003 0006 05DC 05DC FFFFFFFC  00000001 
-20: 0001 0258 00010258  00010258  0001 0258 
-30: 0001 0258 0001B6B4  0001B90C  0001 B924 
-40: 0001 B924 0001 BA14 0001 BA46 0001BA8E 
-50: 0001BA96  0001 BABA 0001 BAC4 0001 BAC4 
-60: 0001 BCD8 0001 BD24 0001 BD24 0001 BD9D 
-70: 0001 E6E3 0001 E72C 0001 F420 0001 F470 
-80: 0001 F948 0002 9E18 0001 F420 0001 F468 
-90: 0002 9C88 0002 9D18 0002 9DA0 0002 9DA8 
-A0: 0001 F41C 0001 F41C 0001 F41C 0001 F41C 
-B0: 0001 F41C 0001 F41C 0001 F41C 0001 F41C 
-C0: 0001 F41C 0000 0000
+20: 00010258  00010258  00010258  00010258 
+30: 00010258  0001B6B4  0001B90C  0001B924 
+40: 0001B924  0001BA14  0001BA46  0001BA8E 
+50: 0001BA96  0001BABA  0001BAC4  0001BAC4 
+60: 0001BCD8  0001BD24  0001BD24  0001BD9D 
+70: 0001E6E3  0001E72C  0001F420  0001F470 
+80: 0001F948  00029E18  0001F420  0001F468 
+90: 00029C88  00029D18  00029DA0  00029DA8 
+A0: 0001F41C  0001F41C  0001F41C  0001F41C 
+B0: 0001F41C  0001F41C  0001F41C  0001F41C 
+C0: 0001F41C  0000 0000
 
 Copied to 80081E70
 
@@ -111,21 +111,21 @@ Reads of 80081E70
 
 802A480C: LHU S4, 0x0000(A0)
 
-fact.raw
+Blackridge Works / fact.raw
 ----------------------------------------
 00: 0003 0003 05DC 09C4 0004 0007 03E8 03E8
 10: 0003 0005 05DC 05DC FFFFFFFC  00000001
-20: 0000 5D08 00005D08  00005D08  0000 5D18
-30: 0000 5D40 00009F64  0000A1BC  0000 A1BC
-40: 0000 A1BC 0000 A34C 0000 A446 0000A46A
-50: 0000A472  0000 A48D 0000 A496 0000 A496
-60: 0000 A61E 0000 A61F 0000 A61F 0000 A61F
-70: 0000 B2BB 0000 B2F8 0000 B3A0 0000 B930
-80: 0000 B930 0000 F808 0000 B3A0 0000 B3E8
-90: 0000 F688 0000 F718 0000 F798 0000 F7A0
-A0: 0000 B2FC 0000 B2FC 0000 B2FC 0000 B2FC
-B0: 0000 B39C 0000 B39C 0000 B39C 0000 B39C
-C0: 0000 B39C 0000 0000
+20: 00005D08  00005D08  00005D08  00005D18
+30: 00005D40  00009F64  0000A1BC  0000A1BC
+40: 0000A1BC  0000A34C  0000A446  0000A46A
+50: 0000A472  0000A48D  0000A496  0000A496
+60: 0000A61E  0000A61F  0000A61F  0000A61F
+70: 0000B2BB  0000B2F8  0000B3A0  0000B930
+80: 0000B930  0000F808  0000B3A0  0000B3E8
+90: 0000F688  0000F718  0000F798  0000F7A0
+A0: 0000B2FC  0000B2FC  0000B2FC  0000B2FC
+B0: 0000B39C  0000B39C  0000B39C  0000B39C
+C0: 0000B39C  00000000
 
 0x80364458: display list
 *0x80364458 = t0 + 0xC8;
@@ -143,28 +143,56 @@ struct
             // passed through t8
    u16 h08; // unsigned half, stored to 0x803BE720
    u16 h0A; // unsigned half, stored to 0x803BE722
+            // handled in proc_802A4464
    u16 h0C; // unsigned half, << 5, stored to word 0x803BE718
    u16 h0E; // unsigned half, << 5, stored to word 0x803BE71C
    u16 h10; // unsigned half, stored to 0x803BE72C
+            // handled in proc_802A3D54, proc_802A3DF8
    u16 h12; // unsigned half, stored to 0x803BE72E
+            // handled in proc_802A3D54, proc_802A3DF8
    u16 h14; // unsigned half, << 5, stored to word 0x803BE724
    u16 h16; // unsigned half, << 5, stored to word 0x803BE728
    s32 w18; // signed word, converted to float stored in 0x803EBBF0
    u32 w1C; // word, store to byte 0x803BE739
-   // 20-23
-   u32 w24; // added to t0, stored to 0x803BDAF4
-   u32 w28; // added to t0, stored to 0x803BDAF8
-   // 2C-33
-   u32 w34; // added to s0, passed through a0 to proc_8026FBB0, 6-bytes each
-   u32 w38; // added to s0, passed through a1 to proc_8026FBB0
-   // 3C-47
+   u32 w20; // passed through a0 to proc_8028C190
+   u32 w24; // start of ?, added to t0, stored to 0x803BDAF4
+            // passed through a1 to proc_8028C190
+   u32 w28; // end of ?,   added to t0, stored to 0x803BDAF8
+            // handled in proc_802CEAA0
+   u32 w2C; // handled in proc_802CEAA0
+   u32 w30; // handled in proc_802A4464
+   u32 w34; // RDUs start: added to s0, passed through a0 to proc_8026FBB0, 6-bytes each
+   u32 w38; // RDUs end:   added to s0, passed through a1 to proc_8026FBB0
+            //             added to t0, passed through a0 to proc_8028D4C0
+   u32 w3C; // added to s0, passed through a1 to proc_8028D4C0
+            // added to s0, passed through a0 to proc_8028FDA0
+   u32 w40; // added to s0, passed through a1 to proc_8028FDA0
+            // maybe handled by proc_802A5510
+   u32 w44; // maybe handled by proc_802A5510
    u32 w48; // added to a0, passed through s6 to proc_802A484C->proc_802A49A8
    u32 w4C; // added to t0=p, *0x803BE730 = p->h00;
             //                *0x803BE734 = p->h02;
             //                *0x803BE732 = p->h04;
             //                *0x803BE736 = p->h06;
    u32 w50; // added to t0, stored to 0x803BE6F8
-   // 54-C7
+            // handled by proc_802A350C
+   u32 w54; // handled by proc_802A350C, proc_802A303C, proc_802A3134
+   u32 w58; // added to t0, stored to 0x803BE6FC
+   u32 w5C; // added to t0, stored to 0x803BE700
+   u32 w60; // handled in proc_802A2C54
+   u32 w64; // handled in proc_802A2C54, proc_802A3E9C
+   u32 w68; // handled in proc_802A3E9C, proc_802A3F80
+   u32 w6C; // handled in proc_802A3F80, proc_802A3D54
+   u32 w70; // handled in proc_802A3DF8
+   u32 w74; // handled in proc_802A1A9C
+   u32 w78; // added to t0, s0 to proc_802A08E4
+            // handled in proc_802A1C88
+   u32 w84; // added to t0, s1 to proc_802A08E4
+            // handled in proc_802A1C88
+   u32 w90; // handled in proc_802A1C88
+   u32 w94; // handled in proc_802A1C88
+   u32 w98; // handled in proc_802A1C88
+   u32 w9C; // handled in proc_802A1C88
 }
 
 802A2DC4/802A2DCC
@@ -180,7 +208,44 @@ Thread3 -> proc_802475D8 -> proc_8024B8F4 -> proc_802A467C -> proc_802A470C
 proc_802A470C(A0:)
 
 ----------------------------------------------------------------
-Offset 0x34:
+Offset 0x24/0x28: ?
+
+Added to offset of start of level, stored to 0x803BDAF4/0x803BDAF8
+proc_802AC0BC() - records 0x14 bytes each (9 halfwords), each << 5
+
+----------------------------------------------------------------
+Offset 0x2C/0x30: ?
+
+proc_802A1C20() - records 12 bytes each
+w0: passed through 16 to proc_802A0CFC
+u8: skip if 0xFF
+9-0xb: ??
+
+----------------------------------------------------------------
+Offset 0x30/0x34: ?
+looks like a linked list of offsets
+
+proc_802A4464()
+t1 = t0->h08;
+t2 = t0->h0A;
+t5 = t0->w30;
+t1 = t1 * t2;
+t3 = 0x803BDB10;
+t6 = t5 = t5 + t0;
+while (t1 != 0) {
+   t6 += 4;
+   *t3 = t6;
+   at = t6;
+   t6 = lwl(-4, at) / lwr(-1, at);
+   t1--;
+   t3 += 4;
+}
+t6 += t5;
+t6 += 4;
+*t3 = t6;
+
+----------------------------------------------------------------
+Offset 0x34/0x38: RDUs
 802A1864: LW A0, 0x0034(S0)
 
 proc_802A1674()
@@ -194,3 +259,76 @@ proc_802A1674()
 proc_8026FBB0()
   six halfwords copied out to struct array at 801DC508
   *0x8036bed8 + (halfword at 0x8036eb90 * 0x88) 
+
+----------------------------------------------------------------
+Offset 0x38/0x3C: TNT crates, 12 bytes
+proc_8028D4C0(A0, A1)
+struct tnt
+{
+   int16 X; int16 Y; int16 Z;
+   // rotation? timing?
+   u8 b6; // stored to byte (T6 + 0x8039B07E)
+   u8 b7; // ((b7*16) - b7) * 4, stored to halfword (T9 + 0x8039B080)
+   int16 h8; // stored to (T1 + 0x8039B08A)
+   int16 hA; // stored to (T3 + 0x8039B08C)
+};
+
+
+----------------------------------------------------------------
+Offset 0x40/0x44: bounding boxes (terrain?)
+set of 5 int16, X1,Y1,X2,Y2,type?
+
+proc_802A5510() {
+   t2 = *0x803643E0;
+   t3 = *0x803643E8;
+   t1 = a0 + *(a0 + 0x40);
+   t5 = a0 + *(a0 + 0x44);
+   t6 = -1;
+   t2 >>= 5;
+   t3 >>= 5;
+   while (t1 != t5) {
+      t4 = *(u16*)(0 + t1);
+      if (t2 >= t4) {
+         t4 = *(u16*)(2 + t1);
+         if (t3 >= t4) {
+            t4 = *(u16*)(4 + t1);
+            if (t4 >= t2) {
+               t4 = *(u16*)(6 + t1);
+               if (t4 >= t3) {
+                  v0 = *(u16*)(8 + t1);
+                  if (v0 >= t6) {
+                     t6 = v0;
+                  }
+               }
+            }
+         }
+      }
+      t1 += 10;
+   }
+   if (at == 0xBB8) {
+      *(u8*)0x80364411 = 1;
+   } else {
+      t1 = *(u16*)(0x80364450);
+      t6 <<= 5;
+      t6 += t1;
+      *(u16*)0x8036444E = t6;
+      *(u8*)0x80364411 = 0;
+   }
+}
+
+----------------------------------------------------------------
+Offset 0x78/0x84: ?
+
+Added to offset of start of level, passed as s0/s1 to proc_802A08E4
+proc_802A08E4() - records 8 bytes, used as 2 words
+s3 = *(0x803B8D40);
+s5 = *(0x803B8D44);
+do {
+  w0 = read_u32_be(s0);
+  s0 += 8;
+} while (((w0 & 0xFF000000) >> 24) == 0xFD);
+w1 = read_u32_be(s0-4);
+s4 = 0x803B8570;
+while (w1 != *s4 && s3 != s4) {
+   s4 += 8;
+}
