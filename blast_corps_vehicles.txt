@@ -1,33 +1,38 @@
-proc_802C4108 - gzip decompress?
+Blast Corps (U) (V1.1) Vehicle Data
+Updated: 2016 Feb 03
+By: queueRAM
+For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
+
+proc_802C4108 - gzip decompress
 
 Thread3/proc_80285814 -> proc_80256A34 -> proc_802A1674 -> proc_802A1D54 -> proc_802A396C
 
 // load object
-// T3 = object type
+// T3 = vehicle type
 proc_802A396C(T3)
 {
    switch (T3) {
       // no 12, 17-0x95, 0x97, 0x99-0xFC
-      case 0:   // 491E00-4929D0 - driver / Player
-      case 1:   // 4929D0-494390 - sideswipe
-      case 2:   // 494390-496AD0 - magoo / Thunderfist
-      case 16:  // 4A1690-4A4120 - minimagoo / Cyclone Suit
-      case 3:   // 490AC0-491E00 - buggy / Skyfall
-      case 4:   // 496AD0-497AF0 - bulldozer / Ramdozer
-      case 5:   // 497AF0-4989E0 - truck / Backlash
-      case 6:   // 49AD20-49B630 - crane
-      case 7:   // 49B630-49BCE0 - train
-      case 8:   // 49BCE0-49C480 - hotrod / American Dream
-      case 9:   // 49C480-49E8E0 - jetpack / J-Bomb
-      case 10:  // 49E8E0-49F7A0 - bike / Ballista
+      case 0:    // 491E00-4929D0 - driver / Player
+      case 1:    // 4929D0-494390 - sideswipe
+      case 2:    // 494390-496AD0 - magoo / Thunderfist
+      case 16:   // 4A1690-4A4120 - minimagoo / Cyclone Suit
+      case 3:    // 490AC0-491E00 - buggy / Skyfall
+      case 4:    // 496AD0-497AF0 - bulldozer / Ramdozer
+      case 5:    // 497AF0-4989E0 - truck / Backlash
+      case 6:    // 49AD20-49B630 - crane
+      case 7:    // 49B630-49BCE0 - train
+      case 8:    // 49BCE0-49C480 - hotrod / American Dream
+      case 9:    // 49C480-49E8E0 - jetpack / J-Bomb
+      case 10:   // 49E8E0-49F7A0 - bike / Ballista
 
-      case 11:  // 49F7A0-49FF70 - barge
-      case 17:  // 49F7A0-49FF70 - barge
-      case 18:  // 49F7A0-49FF70 - barge
+      case 11:   // 49F7A0-49FF70 - barge
+      case 17:   // 49F7A0-49FF70 - barge
+      case 18:   // 49F7A0-49FF70 - barge
 
-      case 13:  // 49FF70-4A0720 - police
-      case 14:  // 4A0720-4A1000 - ateam / A-Team Van
-      case 15:  // 4A1000-4A1690 - starski / Hotrod
+      case 13:   // 49FF70-4A0720 - police
+      case 14:   // 4A0720-4A1000 - ateam / A-Team Van
+      case 15:   // 4A1000-4A1690 - starski / Hotrod
       case 0xFE: // 4989E0-499690 - chopper / BCT Chopper
       case 0xFF: // 499690-49AD20 - cmo / Missile Carrier
       case 0xFD: // 4A4120-4A5660 - shuttle
