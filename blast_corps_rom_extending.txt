@@ -1,0 +1,144 @@
+Blast Corps (U) (V1.1) ROM Extending
+Updated: 2016 Feb 03
+By: queueRAM
+For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
+
+This doc describes the process used to extend the Blast Corps (U) (V1.1) ROM 
+to facilitate hacking and modifying levels. The vanilla ROM isn't suitable 
+for modifying because the offsets of the level and vehicle data are stored in 
+code and data blocks that are gzip compressed. Changing these offsets would 
+involve inflating the gzip code, changing the offsets in code, and compressing 
+as gzip and hoping the new file size isn't larger than the current one.
+
+A better approach is to store the level offsets in the ROM and modify the 
+lookup code to reference this new table.  This also has the benefit of 
+reducing the code size.  Below are the steps needed to extend the Blast 
+Corps (U) (V1.1) ROM.
+
+1. Store Level Offsets at 0x7FA000 in ROM
+0x7FA000 is somewhat arbitrarily chosen as the first address with three zeros 
+in the unused block from 0x7FA1E0-0x7FFFFF
+
+Default table data:
+004ACC10  004B8960
+004A5660  004ACC10
+004B8960  004BFD60
+004BFD60  004C3AC0
+004C3AC0  004D5F90
+004D5F90  004E2F70
+004E2F70  004E4E80
+004E4E80  004E7C00
+004E7C00  004E8F70
+004E8F70  004F5C10
+004F5C10  00500520
+00500520  00507E80
+00507E80  00511340
+00511340  00523080
+00523080  0052CD00
+0052CD00  00532700
+00532700  0053E9B0
+0053E9B0  0054A820
+0054A820  00552DE0
+00552DE0  00555000
+00555000  00560E90
+00560E90  005652D0
+005652D0  0056F3F0
+0056F3F0  005721E0
+005721E0  005736E0
+005736E0  0057A2C0
+0057A2C0  00580B60
+00580B60  00588CE0
+00588CE0  0058BE80
+0058BE80  00597B80
+00597B80  0059B7D0
+0059B7D0  005A5840
+005A5840  005B0B10
+005B0B10  005B5A30
+005B5A30  005B8BB0
+005B8BB0  005C4C80
+005C4C80  005CA9C0
+005CA9C0  005CCF50
+005CCF50  005D1060
+005D1060  005DC830
+005DC830  005E6EE0
+005E6EE0  005EC800
+005EC800  005F3A80
+005F3A80  006014B0
+006014B0  0060A710
+0060A710  00613AA0
+00613AA0  0061DD70
+0061DD70  00621AF0
+00621AF0  006269E0
+006269E0  00630C30
+00630C30  00635700
+00635700  0063CA10
+0063CA10  00641F30
+00641F30  00644810
+00644810  00646080
+00646080  00647550
+00647550  00654FC0
+00654FC0  00660950
+00660950  00665F80
+00665F80  0066C900
+
+2. Inflate the hd_code_text.raw and hd_code_data.raw and level gzip blocks:
+787FD0-7D73B4  hd_code_text.raw  main asm code
+7D73B4-7E3AD0  hd_code_data.raw  data for main asm
+4ACC10-4B71AB  chimp.raw         Simian Acres
+4B71AB-4B8960  chimp_dl.raw      Simian Acres display list
+
+hd_code_data.raw.gz is not modified, but it needs to be reinserted immediately 
+after hd_code_text.raw.gz for the inflate methods to work correctly.
+
+3. Patch code at 0x01199C in hd_code_text.raw
+This is done with bass MIPS assembler:
+> bass -o hd_code_text.raw hd_code_text.asm
+
+Description of code changes:
+proc_8025615C: # begin 8025615C (01199C), T6 = Level ID
+  // existing code
+  addiu $sp, $sp, -0x28
+  sw    $a0, 0x28($sp)
+  lw    $t6, 0x28($sp)
+  sw    $ra, 0x1c($sp)
+  sw    $a1, 0x2c($sp)
+  sltiu $at, $t6, 0x3c
+  beqz  $at, .Lproc_8025615C_8A4
+  sw    $a2, 0x30($sp)
+  // new code starting at 119BC/8025617C
+  sll   t6, t6, 0x3    // each entry is two words
+  lui   at, 0xB080     // %hi(0xB07FA000), 0xB0000000 = ROM
+  addu  at, at, t6     //
+  lw    t6, 0xA000(at) // %lo(0xB07FA000)
+  sw    t6, 0x24(sp)   //
+  lw    t7, 0xA004(at) // %lo(0xB07FA004)
+  sub   t7, t7, t6     // compute length
+  lw    t4, 0x30(sp)   //
+  sw    t7, 0x0(t4)    //
+  b     0x12240        // skip over old code
+  
+  // replace this with nops
+
+.Lproc_8025615C_8A4: // offset 0x12240
+  addiu $t7, $zero, 0xa
+  addiu $t8, $zero, 1
+  sw    $t8, 0x14($sp)
+  sw    $t7, 0x10($sp)
+  lw    $a0, 0x24($sp)
+  lw    $a1, 0x2c($sp)
+  lw    $a2, 0x30($sp)
+  jal   proc_8028B4C4
+  addiu $a3, $zero, 0xc
+  lw    $ra, 0x1c($sp)
+  addiu $sp, $sp, 0x28
+  jr    $ra
+  nop
+
+4. Compress patched hd_code_text.raw in gzip:
+> gzip -c hd_code_text.raw > hd_code_text.raw.gz
+
+5. Insert the hd_code_text.raw.gz and hd_code_data.raw.gz back-to-back in the 
+   Blast Corps ROM at offset 787FD0 and Simian Acres level at 0x0x800000. 
+   Also update the Simian Acres offset in the level lookup table.  This is 
+   done with bass MIPS assembler bass.
+> bass -o "Blast Corps (U) (V1.1).z64" blast_corps_rom.asm

@@ -1,7 +1,15 @@
+// Blast Corps (U) (V1.1).z64 patch to use ROM lookup table
+// Updated: 2016 Feb 03
+// By: queueRAM
+// For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
+
+// Use with N64 version of bass: https://github.com/ARM9/bass
+// > bass -o "Blast Corps (U) (V1.1).z64" blast_corps_rom.asm
+
 arch n64.cpu
 endian msb
 
-include "N64.INC"
+include "mips4300.inc"
 
 // TODO: update end offset of code
 // origin 0x2A4C
@@ -15,13 +23,15 @@ fill 0x4B8960-0x4ACC10
 origin 0x787FD0
 insert "bin/hd_code_text.raw.gz"
 insert "bin/hd_code_data.raw.gz"
+// ensure new code isn't too large
 if pc() > 0x7E3AD0 {
    error "code + data > 0x7E3AD0"
 }
 
 fill 0x7E3AD0-pc()
 
-// LUT
+// Level LUT
+// TODO: relocate other levels
 origin 0x7FA000
 //dd 0x4ACC10, 0x4B8960
 dd chimp_start, chimp_end
