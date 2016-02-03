@@ -7,7 +7,14 @@ set title "Simian Acres"
 
 set style line 1 lc rgb 'orange' lt 1 lw 2 pt 3 ps 1.5
 set style line 2 lc rgb 'black'  lt 1 lw 2 pt 5 ps 1.5
-set style line 3 lc rgb 'red'    lt 1 lw 2 pt 7 ps 1.5
+set style line 3 lc rgb 'blue'   lt 1 lw 2 pt 7 ps 1.5
+set style line 4 lc rgb 'red'    lt 1 lw 2 pt 7 ps 1.5
+set style line 5 lc rgb 'brown'  lt 1 lw 2 pt 5 ps 2.0
+set style line 6 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 1.5
+set style line 7 lc rgb '#FF6060' lt 1 lw 2 pt 7 ps 1.5
+
+# level bounds from 0x4C
+set object 1 rect from 0x009E, 0x011B to 0x10B9, 0x1FA8 fc rgb "green" fs pattern 1 bo -1
 
 # bounding boxes from 0x40
 #set object 1 rect from 0x00D2, 0x041A to 0x1072, 0x1B8A fc rgb "cyan" fs pattern 1 bo -1
@@ -43,13 +50,19 @@ set object 23 rect from 0x09CE, 0x0CB2 to 0x0A96, 0x0DDE fc rgb "red" fs pattern
 #set object 29 rect from 0x08A2, 0x0CB2 to 0x0E1A, 0x18CE fc rgb "black" fs pattern 2 bo -1
 #set object 30 rect from 0x00D2, 0x0305 to 0x1072, 0x0AD5 fc rgb "black" fs pattern 2 bo -1
 
-# level bounds from 0x4C
-#set object 30 rect from 0x009E, 0x011B to 0x10B9, 0x1FA8 fc rgb "yellow" fs pattern 2 bo -1
-
 # RDUs: offsets 0x34-0x38: 01B6B4-01B90C
 # TNTs: offsets 0x38-0x3C: 01B90C-01B924
 # to read from chimp.raw: skip=0x01B6B4 
 plot 'chimp.raw.34rdus.bin' binary endian=big format="%int16%int16%int16" using 1:3 with points ls 1 title "RDUs", \
      'chimp.raw.38tnts.bin' binary endian=big format="%int16%int16%int16%int16%int16%int16" using 1:3 with points ls 2 title "TNT", \
-     'chimp.raw.50vehicles.bin' binary endian=big format="%uchar%int16%int16%int16%int16" using 2:4 with points ls 3 title "Vehicles"
+     'chimp.raw.50vehicles.bin' binary endian=big format="%uchar%int16%int16%int16%int16" using 2:4 with points ls 3 title "Vehicles", \
+     'chimp.raw.54.bin' binary endian=big format="%uchar%int16%int16%int16%int16" using 2:3 with points ls 4 title "Missile", \
+     'chimp.raw.5C.bin' binary endian=big format="%int16%int16%int16%int16%uchar%uchar%int16%int16" using 1:3 with points ls 5 title "Structures", \
+     'chimp.raw.68.1.txt' using 1:3 with lines ls 6 notitle, \
+     'chimp.raw.68.2.txt' using 1:3 with lines ls 6 notitle, \
+     'chimp.raw.68.3.txt' using 1:3 with lines ls 6 notitle, \
+     'chimp.raw.68.4.txt' using 1:3 with lines ls 6 notitle, \
+     'chimp.raw.68.01.txt' using 1:2 with lines ls 6 notitle, \
+     'chimp.raw.68.02.txt' using 1:2 with lines ls 6 notitle
+
 
