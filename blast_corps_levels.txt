@@ -1,10 +1,13 @@
-Level Loading
-------------------------
-Levels loaded from proc_8025615C
-Jump table at 80308B98/(hd_code_data:1FFC8):
+Blast Corps (U) (V1.1) Level Data
+Updated: 2016 Feb 03
+By: queueRAM
+For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
+
+Levels loaded from proc_8025615C()
+Jump table at 80308B98/(hd_code_data:1FFC8), listed below.
 
 ID: JmpTable  Start   End     Name gzip    Level Name
-----------------------------------------------------
+-----------------------------------------------------------
  0: 802561B8  4ACC10  4B8960  chimp.raw    Simian Acres
  1: 80256194  4A5660  4ACC10  lagp.raw     Angel City
  2: 802561DC  4B8960  4BFD60  valley.raw   Outland Farm
@@ -81,38 +84,14 @@ proc_8025615C(A0, A1, A2)
 // SP14 = 1
 proc_8028B4C4(A0, A1, A2, A3, SP10, SP14)
 
-Simian Acres / chimp.raw
-------------------------
-Header
-00: 0003 0006 05DC 05DC 0004 0007 04B0 04B0 
-10: 0003 0006 05DC 05DC FFFFFFFC  00000001 
-20: 00010258  00010258  00010258  00010258 
-30: 00010258  0001B6B4  0001B90C  0001B924 
-40: 0001B924  0001BA14  0001BA46  0001BA8E 
-50: 0001BA96  0001BABA  0001BAC4  0001BAC4 
-60: 0001BCD8  0001BD24  0001BD24  0001BD9D 
-70: 0001E6E3  0001E72C  0001F420  0001F470 
-80: 0001F948  00029E18  0001F420  0001F468 
-90: 00029C88  00029D18  00029DA0  00029DA8 
-A0: 0001F41C  0001F41C  0001F41C  0001F41C 
-B0: 0001F41C  0001F41C  0001F41C  0001F41C 
-C0: 0001F41C  0000 0000
 
-Copied to 80081E70
+Level Header
 
-Reads of 80081E70
-80298A20: LBU T4, 0x0000(T8) - before full level loaded?
+The level header is 0xC8 bytes long. Immediately following the level header at 
+offset 0xC8 is the display data loaded into segment 8. This display list is 
+also stored in the pointer at 0x80364458.
 
-802A2DC4: LHU T1, 0x0000(T0)
-802A2DCC: LHU T1, 0x0002(T0)
-
-802A4730: LHU S2, 0x0000(A0)
-802A4734: LHU S3, 0x0002(A0)
-
-802A480C: LHU S4, 0x0000(A0)
-
-0x80364458: display list
-*0x80364458 = t0 + 0xC8;
+The structure of the level header is as described below in the C-style struct.
 
 struct
 {
@@ -145,8 +124,8 @@ struct
             // handled in proc_802CEAA0
    u32 w2C; // handled in proc_802CEAA0
    u32 w30; // handled in proc_802A4464
-   u32 w34; // RDUs start: added to s0, passed through a0 to proc_8026FBB0, 6-bytes each
-   u32 w38; // RDUs end:   added to s0, passed through a1 to proc_8026FBB0
+   u32 w34; // RDUs added to s0, passed through a0 to proc_8026FBB0, 6-bytes each
+   u32 w38; // TNT crates  added to s0, passed through a1 to proc_8026FBB0
             //             added to t0, passed through a0 to proc_8028D4C0
    u32 w3C; // added to s0, passed through a1 to proc_8028D4C0
             // added to s0, passed through a0 to proc_8028FDA0
@@ -158,17 +137,19 @@ struct
             //                *0x803BE734 = p->h02;
             //                *0x803BE732 = p->h04;
             //                *0x803BE736 = p->h06;
-   u32 w50; // added to t0, stored to 0x803BE6F8
+   u32 w50; // Vehicles: added to t0, stored to 0x803BE6F8
             // handled by proc_802A350C
-   u32 w54; // handled by proc_802A350C, proc_802A303C, proc_802A3134
+   u32 w54; // Missile carrier: handled by proc_802A350C, proc_802A303C, proc_802A3134
    u32 w58; // added to t0, stored to 0x803BE6FC
-   u32 w5C; // added to t0, stored to 0x803BE700
+   u32 w5C; // Buildings? added to t0, stored to 0x803BE700
    u32 w60; // handled in proc_802A2C54
    u32 w64; // handled in proc_802A2C54, proc_802A3E9C
-   u32 w68; // handled in proc_802A3E9C, proc_802A3F80
+   u32 w68; // Train platform: handled in proc_802A3E9C, proc_802A3F80
    u32 w6C; // handled in proc_802A3F80, proc_802A3D54
    u32 w70; // handled in proc_802A3DF8
    u32 w74; // handled in proc_802A1A9C
+   // TODO: 78-9C appear to be beyond the length of level.raw
+   // perhaps this is working on display list data from level_dl.raw?
    u32 w78; // added to t0, s0 to proc_802A08E4
             // handled in proc_802A1C88
    u32 w84; // added to t0, s1 to proc_802A08E4
@@ -177,28 +158,37 @@ struct
    u32 w94; // handled in proc_802A1C88
    u32 w98; // handled in proc_802A1C88
    u32 w9C; // handled in proc_802A1C88
+   // TODO A0-C0
 }
 
-802A2DC4/802A2DCC
----------------------------------------------------------
-Thread3/proc_80285814 -> proc_80256A34 -> proc_802A1674 -> proc_802A2D68
+----------------------------------------------------------------
+Example header: Simian Acres / chimp.raw
 
-proc_802A2D68(T0:8009F5F0)
-
-802A4730/802A4734:
-------------------------------------------
-Thread3 -> proc_802475D8 -> proc_8024B8F4 -> proc_802A467C -> proc_802A470C
-
-proc_802A470C(A0:)
+00: 0003 0006 05DC 05DC 0004 0007 04B0 04B0 
+10: 0003 0006 05DC 05DC FFFFFFFC  00000001 
+20: 00010258  00010258  00010258  00010258 
+30: 00010258  0001B6B4  0001B90C  0001B924 
+40: 0001B924  0001BA14  0001BA46  0001BA8E 
+50: 0001BA96  0001BABA  0001BAC4  0001BAC4 
+60: 0001BCD8  0001BD24  0001BD24  0001BD9D 
+70: 0001E6E3  0001E72C  0001F420  0001F470 
+80: 0001F948  00029E18  0001F420  0001F468 
+90: 00029C88  00029D18  00029DA0  00029DA8 
+A0: 0001F41C  0001F41C  0001F41C  0001F41C 
+B0: 0001F41C  0001F41C  0001F41C  0001F41C 
+C0: 0001F41C  00000000
 
 ----------------------------------------------------------------
-Offset 0x24/0x28: TODO empty in chimp
+Offset 0x20: TODO empty in chimp
+
+----------------------------------------------------------------
+Offset 0x24: TODO empty in chimp
 
 Added to offset of start of level, stored to 0x803BDAF4/0x803BDAF8
 proc_802AC0BC() - records 0x14 bytes each (9 halfwords), each << 5
 
 ----------------------------------------------------------------
-Offset 0x2C/0x30: TODO empty in chimp
+Offset 0x2C: TODO empty in chimp
 
 proc_802A1C20() - records 12 bytes each
 w0: passed through 16 to proc_802A0CFC
@@ -206,7 +196,7 @@ u8: skip if 0xFF
 9-0xb: ??
 
 ----------------------------------------------------------------
-Offset 0x30/0x34: TODO
+Offset 0x30: TODO
 
 looks like a linked list of offsets
 
@@ -232,7 +222,7 @@ t6 += 4;
 chimp: 010258-01B6B4
 
 ----------------------------------------------------------------
-Offset 0x34/0x38: RDUs
+Offset 0x34: RDUs
 
 [XX XX] [YY YY] [ZZ ZZ]
 X,Y,Z: position of RDU
@@ -251,7 +241,7 @@ chimp: 01B6B4-01B90C
 ...
 
 ----------------------------------------------------------------
-Offset 0x38/0x3C: TNT crates, 12 bytes
+Offset 0x38: TNT crates, 12 bytes
 
 [XX XX] [YY YY] [ZZ ZZ] [B6] [B7] [H8 H8] [HA HA]
 X,Y,Z: position of TNT crate
@@ -267,10 +257,10 @@ chimp: 01B90C-01B924
 097D 0012 0D82 00 05 0001 0834
 
 ----------------------------------------------------------------
-Offset 0x3C/0x40: TODO empty in chimp
+Offset 0x3C: TODO empty in chimp
 
 ----------------------------------------------------------------
-Offset 0x40/0x44: bounding boxes (TODO terrain?)
+Offset 0x40: TODO some bounding boxes
 
 [X1 X1] [Z1 Z1] [X2 X2] [Z2 Z2] [TT TT]
 X1,Z1: lower X,Z of box
@@ -316,9 +306,33 @@ proc_802A5510() {
 }
 
 chimp: 01B924-01BA14
+00D2 041A 1072 1B8A 00A9 
+07DA 0ABE 096A 0B86 00F9 
+064A 0ABE 0776 0C4E 00F9 
+0456 0ABE 051E 0BEA 00F9 
+07DA 0C4E 083E 0D16 00F9 
+064A 0CB2 0712 0E42 00F9 
+0712 0DDE 096A 0EA6 00F9 
+0776 0D16 083E 0DDE 00F9 
+07DA 0C4E 08A2 0D16 00F9 
+05E6 0EA6 06AE 1036 00F9 
+051E 1036 064A 10FE 00F9 
+0712 0F6E 08A2 0FD2 00F9 
+096A 0E42 0A32 0F0A 00F9 
+09CE 0F6E 0A96 109A 00F9 
+0906 109A 09CE 1162 00F9 
+083E 10FE 0906 122A 00F9 
+0712 1162 07DA 12F2 00F9 
+08A2 0F6E 096A 1036 00F9 
+0A32 0DDE 0AFA 0EA6 00F9 
+0712 109A 083E 10FE 00F9 
+0712 0FD2 0776 109A 00F9 
+09CE 0CB2 0A96 0DDE 00F9 
+0C8A 041A 1072 1B8A 012F 
+0AFA 041A 0C8A 0C4E 012F
 
 ----------------------------------------------------------------
-Offset 0x44/0x48: bounding boxes?
+Offset 0x44: bounding boxes?
 
 [X1 X1] [Z1 Z1] [X2 X2] [Z2 Z2] [TT TT]
 X1,Z1: lower X,Z of box
@@ -328,6 +342,11 @@ T:     TODO type?
 proc_802A5604()
 
 chimp: 01BA14-01BA46
+00D2 0AD5 1072 1B8A 0059 
+01FE 0B22 051E 18CE 0099 
+051E 128E 0776 18CE 0067 
+08A2 0CB2 0E1A 18CE 007B 
+00D2 0305 1072 0AD5 0121
 
 ----------------------------------------------------------------
 Offset 0x48/0x4C: u32s?
@@ -342,7 +361,7 @@ chimp: 01BA46-01BA8E
 00000062 00000062
 
 ----------------------------------------------------------------
-Offset 0x4C: level bounds?
+Offset 0x4C: TODO level bounds?
 
 [X1 X1] [Z1 Z1] [X2 X2] [Z2 Z2]
 two points X1,Z1 and X2,Z2
@@ -357,8 +376,8 @@ set in proc_802A2D68() {
 }
 
 compared in proc_802A8CCC() {
-  if ((t2 >= *0x803be730 && t2 <= *0x803be732) &&
-      (t3 >= *0x803be734 && t3 <= *0x803be736)) {
+  if ((t2 >= *0x803BE730 && t2 <= *0x803BE732) &&
+      (t3 >= *0x803BE734 && t3 <= *0x803BE736)) {
       ...
    }
 }
@@ -398,8 +417,7 @@ chimp: 01BABA
 1C 07BC 07E2 0000 0BB8 00
 
 ----------------------------------------------------------------
-Offset 0x58: empty in chimp
-TODO
+Offset 0x58: TODO empty in chimp
 
 ----------------------------------------------------------------
 Offset 0x5C: buildings?
@@ -591,7 +609,7 @@ chimp: 01E6E3-01E72C
 00000048 
 
 ----------------------------------------------------------------
-Offset 0x74: 
+Offset 0x74: TODO
 
 [NN NN NN NN] {[EE EE] ... [CC CC CC CC] {[H0 H0] [H2 H2] [H4 H4] [H6 H6] [H8 H8] [HA HA] [HC HC] [HE HE] [HG HG] [BI] ...}}
 N: number of structs to allocate
@@ -618,7 +636,7 @@ FFFF
 ...
 
 ----------------------------------------------------------------
-Offset 0x78/0x84: ?
+Offset 0x78: TODO
 
 Added to offset of start of level, passed as s0/s1 to proc_802A08E4
 proc_802A08E4() - records 8 bytes, used as 2 words

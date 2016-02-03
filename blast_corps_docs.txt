@@ -1,9 +1,13 @@
 Blast Corps (U) (V1.1) hacking docs
-Updated: 2016 Jan 28
+Updated: 2016 Feb 03
+By: queueRAM
+For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
 
-The Blast Corps ROM contains 738 gzipped files. See the Blast Corps n64split config for the full list:
+The Blast Corps ROM contains 738 gzipped files. See the Blast Corps n64split 
+config for the full list:
 https://github.com/queueRAM/sm64tools/blob/master/configs/bc.config
-A majority of the assembly code is also gzipped and the startup code mostly just initializes the OS, DMAs the gzipped asm, inflates it, and then jumps to it.
+A majority of the assembly code is also gzipped and the startup code just 
+initializes the OS, DMAs the gzipped asm, inflates it, and then jumps to it.
 
 gzip assembly and data blocks:
 -------------------------------------------------------
@@ -16,7 +20,7 @@ gzip level blocks
 This list is provided from Kazepedia thanks to SunakazeKun:
 https://sites.google.com/site/kazepedia/blast-corps/file-structure
 -------------------------------------------------------
-4A5660-4ABF91  lagp.raw          Angel City?
+4A5660-4ABF91  lagp.raw          Angel City
 4ABF91-4ACC10  lagp_dl.raw
 4ACC10-4B71AB  chimp.raw         Simian Acres
 4B71AB-4B8960  chimp_dl.raw
@@ -137,19 +141,22 @@ https://sites.google.com/site/kazepedia/blast-corps/file-structure
 665F80-66BB49  level59.raw       Lizard Island
 66BB49-66C900  level59_dl.raw
 
+---------------------------------------------------------------------------
 Level Data:
--------------------------------------------------
+
 Levels are contained in two gzip blocks.  e.g.:
-chimp.raw: level data for Simian Acres
+chimp.raw:     level data for Simian Acres
 chimp_dl.raw: display lists for Simian Acres
 
-The level data first contains a list or table that is NULL terminated.
-After the rest of the data is set to segment 08 which contains vertices 
-and other data used by the display list.
+The level data first contains a header that contains the offsets in the file 
+for all of the level information (RDUs, buildings, vehicles, etc.). The level 
+data file also contains vertices and other data used by the display list 
+that are loaded into segment 08.  See blast_corps_levels.txt doc for full 
+description of the header and format of the data.
 
 The display list contains mostly raw F3D commands. The exception is 0xFD 
-G_SETTIMG which contain indexes to a texture table. After the display list 
-is copied to RAM, these G_SETTIMG are populated with texture offsets in 
+G_SETTIMG command which contain indexes to a texture table. After the display 
+list is copied to RAM, these G_SETTIMG are populated with texture offsets in 
 segment 0x00. These offsets are used to index into the texture table at
 ROM offset 0x4CE0. Each entry is 8 bytes (see "Texture Compression" below),
 so computing the entry in the table is 0x4CE0+8*index.
@@ -159,8 +166,9 @@ Offset: ROM F3D Command      RAM F3D Command   ROM    Entry  Offset Size   Descr
 00120:  FD100000 00000437 -> FD100000 000ABC90 0E7210 0E2530 6E98   128x16 bridge railing
 003B8:  FD100000 00000435 -> FD100000 000ACC90 0E6340 0E1660 6E88   16x96  bridge walk
 
-Texture Compression:
 ---------------------------------------------------------------------------
+Texture Compression:
+
 Some large textures (e.g. title screen) are just contained in gzip blocks.
 However, most of the game textures are compressed using one of seven custom 
 lossy compression methods. All the texture offsets and compression types are 
@@ -287,8 +295,9 @@ Boot sequence:
   proc_80220998(0x80000400, 0x802447c0, 0x801e7000, 0xd);
   proc_80220998(0x80000400, 0x802447c0, 0x801e7000, 0xa);
 
+---------------------------------------------------------------------------
 Functions in ROM:
---------------------
+
 8021ED00, EntryPoint
 80220730, Main
 80220BA0, bzero
@@ -432,6 +441,7 @@ Functions in hd_code_text.raw:
 802E28D0, __osSiDeviceBusy
 802E5200, __osAtomicDec
 
+---------------------------------------------------------------------------
 Tools:
 n64split (git version supports Blast Corps): http://origami64.net/showthread.php?tid=126
 Universal N64 Compressor (to manually decompress gzip files): http://www.goldeneyevault.com/viewfile.php?id=213
