@@ -91,75 +91,65 @@ The level header is 0xC8 bytes long. Immediately following the level header at
 offset 0xC8 is the display data loaded into segment 8. This display list is 
 also stored in the pointer at 0x80364458.
 
-The structure of the level header is as described below in the C-style struct.
+The structure of the level header is as described below.
 
-struct
-{
-   u16 h00; // unsigned half, stored to 0x803BE714
-            // stored to (*0x803C2B88)->h4
-            // passed through s4
-   u16 h02; // unsigned half, stored to 0x803BE716
-            // stored to (*0x803C2B88)->h6
-   u16 h04; // unsigned half, << 5, stored to word 0x803BE70C
-            // passed through s7
-   u16 h06; // unsigned half, << 5, stored to word 0x803BE710
-            // passed through t8
-   u16 h08; // unsigned half, stored to 0x803BE720
-   u16 h0A; // unsigned half, stored to 0x803BE722
-            // handled in proc_802A4464
-   u16 h0C; // unsigned half, << 5, stored to word 0x803BE718
-   u16 h0E; // unsigned half, << 5, stored to word 0x803BE71C
-   u16 h10; // unsigned half, stored to 0x803BE72C
-            // handled in proc_802A3D54, proc_802A3DF8
-   u16 h12; // unsigned half, stored to 0x803BE72E
-            // handled in proc_802A3D54, proc_802A3DF8
-   u16 h14; // unsigned half, << 5, stored to word 0x803BE724
-   u16 h16; // unsigned half, << 5, stored to word 0x803BE728
-   s32 w18; // signed word, converted to float stored in 0x803EBBF0
-   u32 w1C; // word, store to byte 0x803BE739
-   u32 w20; // passed through a0 to proc_8028C190
-   u32 w24; // start of ?, added to t0, stored to 0x803BDAF4
-            // passed through a1 to proc_8028C190
-   u32 w28; // end of ?,   added to t0, stored to 0x803BDAF8
-            // handled in proc_802CEAA0
-   u32 w2C; // handled in proc_802CEAA0
-   u32 w30; // handled in proc_802A4464
-   u32 w34; // RDUs added to s0, passed through a0 to proc_8026FBB0, 6-bytes each
-   u32 w38; // TNT crates  added to s0, passed through a1 to proc_8026FBB0
-            //             added to t0, passed through a0 to proc_8028D4C0
-   u32 w3C; // added to s0, passed through a1 to proc_8028D4C0
-            // added to s0, passed through a0 to proc_8028FDA0
-   u32 w40; // added to s0, passed through a1 to proc_8028FDA0
-            // maybe handled by proc_802A5510
-   u32 w44; // maybe handled by proc_802A5510
-   u32 w48; // added to a0, passed through s6 to proc_802A484C->proc_802A49A8
-   u32 w4C; // added to t0=p, *0x803BE730 = p->h00;
-            //                *0x803BE734 = p->h02;
-            //                *0x803BE732 = p->h04;
-            //                *0x803BE736 = p->h06;
-   u32 w50; // Vehicles: added to t0, stored to 0x803BE6F8
-            // handled by proc_802A350C
-   u32 w54; // Missile carrier: handled by proc_802A350C, proc_802A303C, proc_802A3134
-   u32 w58; // added to t0, stored to 0x803BE6FC
-   u32 w5C; // Buildings? added to t0, stored to 0x803BE700
-   u32 w60; // handled in proc_802A2C54
-   u32 w64; // handled in proc_802A2C54, proc_802A3E9C
-   u32 w68; // Train platform: handled in proc_802A3E9C, proc_802A3F80
-   u32 w6C; // handled in proc_802A3F80, proc_802A3D54
-   u32 w70; // handled in proc_802A3DF8
-   u32 w74; // handled in proc_802A1A9C
-   // TODO: 78-9C appear to be beyond the length of level.raw
-   // perhaps this is working on display list data from level_dl.raw?
-   u32 w78; // added to t0, s0 to proc_802A08E4
-            // handled in proc_802A1C88
-   u32 w84; // added to t0, s1 to proc_802A08E4
-            // handled in proc_802A1C88
-   u32 w90; // handled in proc_802A1C88
-   u32 w94; // handled in proc_802A1C88
-   u32 w98; // handled in proc_802A1C88
-   u32 w9C; // handled in proc_802A1C88
-   // TODO A0-C0
-}
+Offset Size Type      Description
+0x00   2    unsigned  stored to 0x803BE714, stored to (*0x803C2B88)->h4, passed through s4
+0x02   2    unsigned  stored to 0x803BE716, stored to (*0x803C2B88)->h6
+0x04   2    unsigned  << 5, stored to word 0x803BE70C, passed through s7
+0x06   2    unsigned  << 5, stored to word 0x803BE710, passed through t8
+0x08   2    unsigned  stored to 0x803BE720
+0x0A   2    unsigned  stored to 0x803BE722, handled in proc_802A4464
+0x0C   2    unsigned  << 5, stored to word 0x803BE718
+0x0E   2    unsigned  << 5, stored to word 0x803BE71C
+0x10   2    unsigned  stored to 0x803BE72C, handled in proc_802A3D54, proc_802A3DF8
+0x12   2    unsigned  stored to 0x803BE72E, handled in proc_802A3D54, proc_802A3DF8
+0x14   2    unsigned  << 5, stored to word 0x803BE724
+0x16   2    unsigned  << 5, stored to word 0x803BE728
+0x18   4    signed    gravity related (-4 normal, -2 planets), converted to float stored in 0x803EBBF0
+0x1C   4    unsigned  (1: normal, 0: dip, level18, level20, level34, level43, level9), stored to byte 0x803BE739
+0x20   4    unsigned  Ammo boxes (Ballista and Sideswipe)
+0x24   4    unsigned  Collision fixes
+0x28   4    unsigned  Communication Point
+0x2C   4    unsigned  TODO
+0x30   4    unsigned  TODO
+0x34   4    unsigned  RDUs
+0x38   4    unsigned  TNT crates
+0x3C   4    unsigned  Square blocks and holes
+0x40   4    unsigned  TODO Bounding boxes?
+0x44   4    unsigned  TODO Bounding boxes?
+0x48   4    unsigned  TODO
+0x4C   4    unsigned  TODO level bounds?
+0x50   4    unsigned  Vehicles
+0x54   4    unsigned  Missile carrier settings
+0x58   4    unsigned  TODO
+0x5C   4    unsigned  TODO Buildings?
+0x60   4    unsigned  TODO
+0x64   4    unsigned  TODO
+0x68   4    unsigned  Train platform
+0x6C   4    unsigned  TODO additional collision?
+0x70   4    unsigned  TODO
+0x74   4    unsigned  TODO
+TODO: 78-9C appear to be beyond the length of level.raw. perhaps referencing display list data from level_dl.raw?
+0x78   4    unsigned  TODO
+0x7C   4    TODO      TODO
+0x80   4    TODO      TODO
+0x84   4    TODO      TODO
+0x88   4    TODO      TODO
+0x8C   4    TODO      TODO
+0x90   4    unsigned  handled in proc_802A1C88
+0x94   4    unsigned  handled in proc_802A1C88
+0x98   4    unsigned  handled in proc_802A1C88
+0x9C   4    unsigned  handled in proc_802A1C88
+0xA0   4    TODO      TODO
+0xA4   4    TODO      TODO
+0xA8   4    TODO      TODO
+0xAC   4    TODO      TODO
+0xB0   4    TODO      TODO
+0xB4   4    TODO      TODO
+0xB8   4    TODO      TODO
+0xBC   4    TODO      TODO
+0xC0   4    TODO      TODO
 
 ----------------------------------------------------------------
 Example header: Simian Acres / chimp.raw
@@ -179,21 +169,107 @@ B0: 0001F41C  0001F41C  0001F41C  0001F41C
 C0: 0001F41C  00000000
 
 ----------------------------------------------------------------
-Offset 0x20: TODO empty in chimp
+Offset 0x20: Ammo - Ballista missile and Sideswipe hydraulic boxes
+
+[XX XX] [YY YY] [ZZ ZZ] [TT TT]
+X,Y,Z: position of box
+T: type of box (0 = Ballista missile, 1 = Sideswipe hydraulic)
+
+passed through a0 to proc_8028C190
+
+Argent Towers / level10:
+0AD8 002C 13AB 0000 
+0AD8 002C 1379 0000 
+0AA6 002C 1379 0000
 
 ----------------------------------------------------------------
-Offset 0x24: TODO empty in chimp
+Offset 0x24: Collision triangles to prevent bad things
+These look like collision triangles set up to prevent J-Bomb from
+clipping through structures from above. In levels that contain the 
+J-Bomb, triangles are drawn around the semi, tunnels, and other things
+it probably shouldn't mess with from above. Also, the large gray area 
+surrounding the crane in Ironstone Mine is defined with these.
+
+[X1 X1] [Y1 Y1] [Z1 Z1] [X2 X2] [Y2 Y2] [Z2 Z2] [X3 X3] [Y3 Y3] [Z3 Z3] [?? ??]
+X,Y,Z/1,2,3: three 3D coordinates that define a triangle
+?: TODO padding? always 0
 
 Added to offset of start of level, stored to 0x803BDAF4/0x803BDAF8
 proc_802AC0BC() - records 0x14 bytes each (9 halfwords), each << 5
+passed through a1 to proc_8028C190
+
+Argent Towers / level10:
+03EF 0109 119D 0395 0109 119D 0395 0108 12AB 0000
+03EF 0109 119D 0395 0108 12AB 03EF 0108 12AB 0000 
+0675 00DA 12A9 0701 00DA 12FE 06ED 00DA 131F 0000 
+0675 00DA 12A9 0661 00DA 12CB 06ED 00DA 131F 0000
 
 ----------------------------------------------------------------
-Offset 0x2C: TODO empty in chimp
+Offset 0x28: Communication Point
 
-proc_802A1C20() - records 12 bytes each
-w0: passed through 16 to proc_802A0CFC
-u8: skip if 0xFF
-9-0xb: ??
+[XX XX] [YY YY] [ZZ ZZ] [?? ??]
+X,Y,Z: position of communication point
+?: TODO padding? always 0
+
+added to t0, stored to 0x803BDAF8, handled in proc_802CEAA0
+
+Argent Towers / level10:
+067F 00BA 0C23 0000 
+0813 00A5 08A0 0000
+
+----------------------------------------------------------------
+Offset 0x2C: TODO
+
+{[W0 W0 W0 W0] [CC] [B5] [B6] [??] [??] [??] [??] [??] {[WC WC WC WC]}}
+W0: ID used in lookup proc_802A50DC
+C:  count of records to follow (+1)
+B5: *0x803C3240 = B5 ? *(B5*4+V0+8) : 0x0
+B6: stored to 0x803C324A, if not 0, compares 'C' with 'A5'
+?:  TODO
+WC: index used in lookup, overwritten with another offset returned from proc_802A0CFC
+
+handled by proc_802A1C20()
+proc_802A0CFC(T6) - some lookup and DMA
+
+W0 read by proc_802A50DC at 802A510C
+proc_802A4E4C -> proc_802A50DC
+
+Levels containing 0x2C:
+Angel City       lagp
+Blackridge Works fact
+Salvage Warf     bonus1
+Argent Towers    level10
+Skerries         level11
+Ebony Coast      level13
+Oyster Harbor    level14
+Carrick Point    level15
+Havoc District   level16
+Marine Quarter   level21
+Cooter Creek     level22
+Sleek Streets    level25
+Obsidian Mile    level26
+Corvine Bluff    level27
+Sideswipe        level28
+Echo Marches     level29
+Glander's Ranch  level35
+Dagger Pass      level36
+Magma Peak       level52
+Lizard Island    level59
+
+
+Argent Towers / level10:
+{0000002F 
+03 00 00 00 00 0A 00 00 
+00000614 00000614}  --> converted to 000965C0 000965C0
+{00000032 
+03 00 00 00 00 0A 00 00 
+00000615 00000615}  --> converted to 000975C0 000975C0
+{00000033 
+03 00 00 00 00 0A 00 00 
+00000616 00000616}  --> converted to 000945C0 000945C0
+{00000043 
+03 00 00 00 00 0A 00 00 
+00000617 00000617}  --> converted to 000955C0 000955C0
 
 ----------------------------------------------------------------
 Offset 0x30: TODO
@@ -243,10 +319,11 @@ chimp: 01B6B4-01B90C
 ----------------------------------------------------------------
 Offset 0x38: TNT crates, 12 bytes
 
-[XX XX] [YY YY] [ZZ ZZ] [B6] [B7] [H8 H8] [HA HA]
+[XX XX] [YY YY] [ZZ ZZ] [B6] [TT] [H8 H8] [HA HA]
 X,Y,Z: position of TNT crate
 B6:    TODO stored to byte (T6 + 0x8039B07E)
-B7:    TODO time? (B7 * 60) stored to halfword (T9 + 0x8039B080)
+T:     explosion timer (~2-2.5s * this value)
+       (T * 60) stored to halfword (T9 + 0x8039B080)
 H8:    TODO halfword stored to (T1 + 0x8039B08A)
 HA:    TODO halfword stored to (T3 + 0x8039B08C)
 
@@ -257,8 +334,110 @@ chimp: 01B90C-01B924
 097D 0012 0D82 00 05 0001 0834
 
 ----------------------------------------------------------------
-Offset 0x3C: TODO empty in chimp
+Offset 0x3C: Square blocks and holes
 
+[NN NN] {[XX XX] [YY YY] [ZZ ZZ] [T1] [T2] (HH HH) {[X1 X1] [Y1 Y1] [Z1 Z1]... [AA] [BB] [CC] [DD]}}
+N:  number of square blocks to in this group, stored as word to 0x8039C710
+X:  << 5 stored to 0x8039C550 + 56*SP[1C]
+Y:  << 5 stored to 0x8039C554 + 56*SP[1C]
+Z:  << 5 stored to 0x8039C558 + 56*SP[1C]
+T1: type of block, stored to 0x8039C7F8
+T2: block = 0/2, hole = 8
+H:  TODO if 'T2' is 8, this flag is present (either 1 or 0)
+XYZ123: if 'T2' is 8, then eight triangles follow
+ABCD: TODO flags normals?
+
+proc_8028FDA0
+
+Argent Towers / level10: 01C41C-01C4E2 (C6=198=2*3*3*11)
+[0001] 
+  0A16 00A4 0BB0 00 [00]
+[0001] 
+  0985 00A4 17BF 00 [08] 0000
+  09AB 0095 179B 
+  095D 0095 179B 
+  095D 00B3 179B 
+  07 FD 01 00 
+  09AB 00B3 179B 
+  09AB 0095 179B 
+  095D 00B3 179B 
+  07 FD 01 00 
+  09AB 0095 17E9 
+  09AB 0095 179B 
+  09AB 00B3 179B 
+  0B FF 00 00 
+  09AB 00B3 17E9 
+  09AB 0095 17E9 
+  09AB 00B3 179B 
+  0B FF 00 00 
+  095D 0095 179B 
+  095D 0095 17E9 
+  095D 00B3 17E9 
+  0B FE 01 00 
+  095D 00B3 179B 
+  095D 0095 179B 
+  095D 00B3 17E9 
+  0B FE 01 00 
+  095D 0095 17E9 
+  09AB 0095 17E9 
+  09AB 00B3 17E9 
+  07 FD 00 00 
+  095D 00B3 17E9 
+  095D 0095 17E9 
+  09AB 00B3 17E9 
+  07 FD 00 00
+
+Crystal Rift / level9: 01C88C-01CC5A
+[0005]
+  0EB7 0064 15F0 0000 
+  0F01 0064 1492 0000 
+  0F01 0064 150A 0000 
+  0F01 0064 1582 0000 
+  1035 0064 0CC4 0002 
+[0005] 
+  0EB3 0064 141A 0008 0001 
+    0ED9 0055 13F6 
+    0E8B 0055 13F6 
+    0E8B 0073 13F6 
+    07 FD 01 00 
+    0ED9 0073 13F6 
+    0ED9 0055 13F6 
+    0E8B 0073 13F6 
+    07 FD 01 00 
+    0ED9 0055 1444 
+    0ED9 0055 13F6 
+    0ED9 0073 13F6 
+    0B FF 00 00 
+    0ED9 0073 1444 
+    0ED9 0055 1444 
+    0ED9 0073 13F6 
+    0B FF 00 00 
+    0E8B 0055 13F6 
+    0E8B 0055 1444 
+    0E8B 0073 1444 
+    0B FE 01 00 
+    0E8B 0073 13F6 
+    0E8B 0055 13F6 
+    0E8B 0073 1444 
+    0B FE 01 00 
+    0E8B 0055 1444 
+    0ED9 0055 1444 
+    0ED9 0073 1444 
+    07 FD 00 00 
+    0E8B 0073 1444 
+    0E8B 0055 1444 
+    0ED9 0073 1444 
+    07 FD 00 00 
+  0EB3 0064 1492 0008 0001 
+    0ED9 0055 146E 
+    0E8B 0055 146E 
+    0E8B 0073 146E 
+    07 FD 01 00 
+    0ED9 0073 146E 
+    0ED9 0055 146E 
+    0E8B 0073 146E 
+    07 FD 01 00 
+...
 ----------------------------------------------------------------
 Offset 0x40: TODO some bounding boxes
 
@@ -391,10 +570,10 @@ records 9 bytes each
 
 proc_802A350C() -> proc_802A396C(T3=id)
 
-[TT] [XX XX] [YY YY] [ZZ ZZ] [BB BB]
+[TT] [XX XX] [YY YY] [ZZ ZZ] [HH HH]
 T:     vehicle type (see vehicles)
-X,Y,Z: starting position of vehicle
-B:     TODO stored in s1 and not used?
+X,Y,Z: position of vehicle
+H:     heading (N/+Z: 0x0, W/+X: 0x400, S/-Z: 0x800, E/-X: 0xC00)
 
 chimp: 01BA96-01BABA
 00 08C0 008C 0801 0000 // player
@@ -407,10 +586,10 @@ Offset 0x54: missile carrier settings
 
 proc_802A303C()
 
-[SS] [XX XX] [ZZ ZZ] [AA AA] [BB BB]
+[SS] [XX XX] [ZZ ZZ] [HH HH] [BB BB]
 S:   speed
 X,Z: X,Z start position
-A:   angle (0 is all positive Z)
+H:   heading (N/+Z: 0x0, W/+X: 0x400, S/-Z: 0x800, E/-X: 0xC00)
 B:   TODO
 
 chimp: 01BABA
@@ -425,13 +604,13 @@ records 14 bytes
 
 proc_802A1D54()
 
-[XX XX] [YY YY] [ZZ ZZ] [67 67] [88] [99] [AB AB] [CD CD]
+[XX XX] [YY YY] [ZZ ZZ] [H6 H6] [B8] [B9] [HA HA] [HC HC]
 X,Y,Z: position of object
-67:    TODO passed to proc_802A2A98 through t3
-8:     TODO passed to proc_802A21AC through s0
-9:     TODO stored to t4->b6
-AB:    TODO stored to t4->hE
-CD:    TODO passed to proc_802A21AC through t9
+H6:    TODO passed to proc_802A2A98 through t3
+B8:    TODO passed to proc_802A21AC through s0
+B9:    TODO stored to t4->b6
+HA:    TODO stored to t4->hE
+HC:    TODO passed to proc_802A21AC through t9
 
 chimp: 01BAC4-01BCD8
 07E0 0014 0AEA 001E 00 00 0000 0000 
@@ -507,6 +686,8 @@ FF
 ----------------------------------------------------------------
 Offset 0x64: TODO empty in chimp
 
+proc_802A2C54, proc_802A3E9C
+
 ----------------------------------------------------------------
 Offset 0x68: train platform and stopping zone
 
@@ -543,7 +724,7 @@ chimp: 01BD24-01BD9D
 {01} {02} {03} {04}
 
 ----------------------------------------------------------------
-Offset 0x6C: TODO collision?
+Offset 0x6C: TODO additional collision?
 
 Number of entries = t0->h10 * t0->h12
 
