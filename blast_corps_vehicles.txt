@@ -13,26 +13,26 @@ proc_802A396C(T3)
 {
    switch (T3) {
       // no 12, 17-0x95, 0x97, 0x99-0xFC
-      case 0:    // 491E00-4929D0 - driver / Player
-      case 1:    // 4929D0-494390 - sideswipe
-      case 2:    // 494390-496AD0 - magoo / Thunderfist
-      case 16:   // 4A1690-4A4120 - minimagoo / Cyclone Suit
-      case 3:    // 490AC0-491E00 - buggy / Skyfall
-      case 4:    // 496AD0-497AF0 - bulldozer / Ramdozer
-      case 5:    // 497AF0-4989E0 - truck / Backlash
-      case 6:    // 49AD20-49B630 - crane
-      case 7:    // 49B630-49BCE0 - train
-      case 8:    // 49BCE0-49C480 - hotrod / American Dream
-      case 9:    // 49C480-49E8E0 - jetpack / J-Bomb
-      case 10:   // 49E8E0-49F7A0 - bike / Ballista
+      case 0x00: // 491E00-4929D0 - driver / Player
+      case 0x01: // 4929D0-494390 - sideswipe
+      case 0x02: // 494390-496AD0 - magoo / Thunderfist
+      case 0x10: // 4A1690-4A4120 - minimagoo / Cyclone Suit
+      case 0x03: // 490AC0-491E00 - buggy / Skyfall
+      case 0x04: // 496AD0-497AF0 - bulldozer / Ramdozer
+      case 0x05: // 497AF0-4989E0 - truck / Backlash
+      case 0x06: // 49AD20-49B630 - crane
+      case 0x07: // 49B630-49BCE0 - train
+      case 0x08: // 49BCE0-49C480 - hotrod / American Dream
+      case 0x09: // 49C480-49E8E0 - jetpack / J-Bomb
+      case 0x0A: // 49E8E0-49F7A0 - bike / Ballista
 
-      case 11:   // 49F7A0-49FF70 - barge
-      case 17:   // 49F7A0-49FF70 - barge
-      case 18:   // 49F7A0-49FF70 - barge
+      case 0x0B: // 49F7A0-49FF70 - barge
+      case 0x11: // 49F7A0-49FF70 - barge
+      case 0x12: // 49F7A0-49FF70 - barge
 
-      case 13:   // 49FF70-4A0720 - police
-      case 14:   // 4A0720-4A1000 - ateam / A-Team Van
-      case 15:   // 4A1000-4A1690 - starski / Hotrod
+      case 0x0D: // 49FF70-4A0720 - police
+      case 0x0E: // 4A0720-4A1000 - ateam / A-Team Van
+      case 0x0F: // 4A1000-4A1690 - starski / Hotrod
       case 0xFE: // 4989E0-499690 - chopper / BCT Chopper
       case 0xFF: // 499690-49AD20 - cmo / Missile Carrier
       case 0xFD: // 4A4120-4A5660 - shuttle
