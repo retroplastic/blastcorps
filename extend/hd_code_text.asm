@@ -1,5 +1,5 @@
 // Blast Corps (U) (V1.1) patch to hd_code_text.raw to use ROM lookup table
-// Updated: 2016 Feb 03
+// Updated: 2016 Feb 15
 // By: queueRAM
 // For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
 
@@ -15,11 +15,11 @@ include "mips4300.inc"
 origin 0x119BC
 
 sll   t6, t6, 0x4    // each entry is four words
-lui   at, 0xB080     // %hi(0xB07FA000), 0xB0000000 = ROM
+lui   at, 0xB080     // %hi(0xB07FC000), 0xB0000000 = ROM
 addu  at, at, t6     //
-lw    t6, 0xA000(at) // %lo(0xB07FA000)
+lw    t6, 0xC000(at) // %lo(0xB07FC000)
 sw    t6, 0x24(sp)   //
-lw    t7, 0xA00C(at) // %lo(0xB07FA00C)
+lw    t7, 0xC00C(at) // %lo(0xB07FC00C)
 sub   t7, t7, t6     // compute length
 lw    t4, 0x30(sp)   //
 sw    t7, 0x0(t4)    //

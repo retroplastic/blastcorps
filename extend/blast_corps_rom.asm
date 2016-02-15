@@ -1,5 +1,5 @@
 // Blast Corps (U) (V1.1).z64 patch to use ROM lookup table
-// Updated: 2016 Feb 03
+// Updated: 2016 Feb 15
 // By: queueRAM
 // For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
 
@@ -32,7 +32,7 @@ fill 0x7E3AD0-pc()
 
 // Level LUT
 // TODO: relocate other levels
-origin 0x7FA000
+origin 0x7FC000
 //dd 0x4ACC10, 0x4B71AB, 0x4B71AB, 0x4B8960
 dd chimp_start, chimp_dl, chimp_dl, chimp_end
 dd 0x4A5660, 0x4ABF91, 0x4ABF91, 0x4ACC10
