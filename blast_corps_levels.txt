@@ -1,5 +1,5 @@
 Blast Corps (U) (V1.1) Level Data
-Updated: 2016 Feb 13
+Updated: 2016 Mar 02
 By: queueRAM
 For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
 
@@ -84,51 +84,51 @@ proc_8025615C(A0, A1, A2)
 // SP14 = 1
 proc_8028B4C4(A0, A1, A2, A3, SP10, SP14)
 
-
+----------------------------------------------------------------
 Level Header
 
 The level header is 0xC8 bytes long. Immediately following the level header at 
-offset 0xC8 is the display data loaded into segment 8. This display list is 
-also stored in the pointer at 0x80364458.
+offset 0xC8 is the display data loaded into segment 8. A pointer to this display 
+list is also stored at 0x80364458.
 
 The structure of the level header is as described below.
 
 Offset Size Type      Description
-0x00   2    unsigned  stored to 0x803BE714, stored to (*0x803C2B88)->h4, passed through s4
-0x02   2    unsigned  stored to 0x803BE716, stored to (*0x803C2B88)->h6
-0x04   2    unsigned  << 5, stored to word 0x803BE70C, passed through s7
-0x06   2    unsigned  << 5, stored to word 0x803BE710, passed through t8
-0x08   2    unsigned  stored to 0x803BE720
-0x0A   2    unsigned  stored to 0x803BE722, handled in proc_802A4464
-0x0C   2    unsigned  << 5, stored to word 0x803BE718
-0x0E   2    unsigned  << 5, stored to word 0x803BE71C
-0x10   2    unsigned  stored to 0x803BE72C, handled in proc_802A3D54, proc_802A3DF8
-0x12   2    unsigned  stored to 0x803BE72E, handled in proc_802A3D54, proc_802A3DF8
-0x14   2    unsigned  << 5, stored to word 0x803BE724
-0x16   2    unsigned  << 5, stored to word 0x803BE728
+0x00   2    unsigned  TODO stored to 0x803BE714, stored to (*0x803C2B88)->h4, passed through s4
+0x02   2    unsigned  TODO stored to 0x803BE716, stored to (*0x803C2B88)->h6
+0x04   2    unsigned  TODO << 5, stored to word 0x803BE70C, passed through s7
+0x06   2    unsigned  TODO << 5, stored to word 0x803BE710, passed through t8
+0x08   2    unsigned  TODO stored to 0x803BE720
+0x0A   2    unsigned  TODO stored to 0x803BE722, handled in proc_802A4464
+0x0C   2    unsigned  TODO << 5, stored to word 0x803BE718
+0x0E   2    unsigned  TODO << 5, stored to word 0x803BE71C
+0x10   2    unsigned  TODO stored to 0x803BE72C, handled in proc_802A3D54, proc_802A3DF8
+0x12   2    unsigned  TODO stored to 0x803BE72E, handled in proc_802A3D54, proc_802A3DF8
+0x14   2    unsigned  TODO << 5, stored to word 0x803BE724
+0x16   2    unsigned  TODO << 5, stored to word 0x803BE728
 0x18   4    signed    gravity related (-4 normal, -2 planets), converted to float stored in 0x803EBBF0
 0x1C   4    unsigned  (1: normal, 0: dip, level18, level20, level34, level43, level9), stored to byte 0x803BE739
 0x20   4    unsigned  Ammo boxes (Ballista and Sideswipe)
 0x24   4    unsigned  Collision fixes
 0x28   4    unsigned  Communication Point
 0x2C   4    unsigned  TODO
-0x30   4    unsigned  TODO
+0x30   4    unsigned  TODO Terrain data?
 0x34   4    unsigned  RDUs
 0x38   4    unsigned  TNT crates
 0x3C   4    unsigned  Square blocks and holes
 0x40   4    unsigned  TODO Bounding boxes?
 0x44   4    unsigned  TODO Bounding boxes?
 0x48   4    unsigned  TODO
-0x4C   4    unsigned  TODO level bounds?
+0x4C   4    unsigned  TODO Level bounds?
 0x50   4    unsigned  Vehicles
 0x54   4    unsigned  Missile carrier settings
 0x58   4    unsigned  TODO
 0x5C   4    unsigned  Buildings
-0x60   4    unsigned  TODO
+0x60   4    unsigned  TODO Bridge related?
 0x64   4    unsigned  TODO
-0x68   4    unsigned  Train platform
-0x6C   4    unsigned  TODO additional collision?
-0x70   4    unsigned  TODO
+0x68   4    unsigned  Train platform and stopping zones
+0x6C   4    unsigned  X/Z Collision (level perimeter, trees, walls)
+0x70   4    unsigned  TODO Water related?
 0x74   4    unsigned  TODO
 TODO: 78-9C appear to be beyond the length of level.raw. perhaps referencing display list data from level_dl.raw?
 0x78   4    unsigned  TODO
@@ -207,9 +207,9 @@ Argent Towers / level10: 010420-010470
 ----------------------------------------------------------------
 Offset 0x28: Communication Point
 
-[XX XX] [YY YY] [ZZ ZZ] [?? ??]
+[XX XX] [YY YY] [ZZ ZZ] [AA AA]
 X,Y,Z: position of communication point
-?: TODO padding? always 0
+A: Always 0, if set to 1 animates spinning dish by default
 
 added to t0, stored to 0x803BDAF8, handled in proc_802CEAA0
 
@@ -277,30 +277,42 @@ Lizard Island / level59: 0092A0-0092C4
 {00000202 02 00 01 00 00 0E 00 00 {00000A85}}
 
 ----------------------------------------------------------------
-Offset 0x30: TODO
+Offset 0x30: TODO Terrain data?
 
-looks like a linked list of offsets
+[WW WW WW WW] {[X1 X1] [Y1 Y1] [Z1 Z1] [X2 X2] [Y2 Y2] [Z2 Z2] [X3 X3] [Y3 Y3] [Z3 Z3] [AA] [BB]}
+W: offset to the next group of triangles
+X/Y/Z,1/2/3: triangle vertices for terrain data
+A: TODO byte at offset 0x12 terrain type?
+B: TODO byte at offset 0x13 flag?
+
+Two halfwords h08 and h0A from level header are multiplied to
+get the count of the number of groups in this list. Each group 
+contains multiple triangles and is stored to an array at 0x803BDB10.
+Triangles are overlapped between groups.
 
 proc_802A4464()
-t1 = t0->h08;
-t2 = t0->h0A;
-t5 = t0->w30;
-t1 = t1 * t2;
-t3 = 0x803BDB10;
-t6 = t5 = t5 + t0;
-while (t1 != 0) {
-   t6 += 4;
-   *t3 = t6;
-   at = t6;
-   t6 = lwl(-4, at) / lwr(-1, at);
-   t1--;
-   t3 += 4;
-}
-t6 += t5;
-t6 += 4;
-*t3 = t6;
 
 Simian Acres / chimp: 010258-01B6B4
+000: 000000F4    
+004: 03FA 00B6 031E  0328 00B2 0332  0332 00C1 064A  03 00
+018: 03FA 008C 031E  03FA 008C 0596  052E 008C 058B  03 00
+02C: 03FA 00B6 031E  0332 00C1 064A  03FA 00B6 0596  03 00 
+040: 03FA 008C 031E  03FA 00B6 031E  03FA 008C 0596  02 00
+054: 03FA 00B6 031E  03FA 00B6 0596  03FA 008C 0596  02 00
+068: 03FA 00B6 031E  0332 00C1 064A  03FA 00B6 0596  03 00 
+07C: 03FA 008C 031E  03FA 00B6 031E  03FA 008C 0596  02 00 
+090: 03FA 00B6 031E  03FA 00B6 0596  03FA 008C 0596  02 00 
+0A4: 0359 008C 01DC  035A 008C 01E1  073F 008C 0579  03 00  
+0B8: 035A 008C 01E1  052E 008C 058B  073F 008C 0579  03 00 
+0CC: 053B 0078 014D  0332 008C 018E  073F 008C 0579  03 00 
+0E0: 0332 008C 018E  0359 008C 01DC  073F 008C 0579  03 00 
+0F4: 0000029C
+0F8: 03FA 008C 031E  03FA 008C 0596  052E 008C 058B  03 00 
+10C: 0359 008C 01DC  035A 008C 01E1  073F 008C 0579  03 00 
+120: 035A 008C 01E1  052E 008C 058B  073F 008C 0579  03 00 
+134: 073F 008C 0579  0723 008C 0237  06DA 008C 014D  03 01  
+148: 06DA 008C 014D  053B 0078 014D  073F 008C 0579  03 01 
+15C: 053B 0078 014D  0332 008C 018E  073F 008C 0579  03 00 ...
 
 ----------------------------------------------------------------
 Offset 0x34: RDUs
@@ -579,10 +591,10 @@ H:     heading (N/+Z: 0x0, W/+X: 0x400, S/-Z: 0x800, E/-X: 0xC00)
 proc_802A350C() -> proc_802A396C(T3=id)
 
 Simian Acres / chimp: 01BA96-01BABA
-00 08C0 008C 0801 0000 // player
-04 08C0 008C 0801 002D // bulldozer
-07 073C 0014 0B01 0400 // train
-08 0685 0014 0AFC 0400 // hotrod
+00 08C0 008C 0801 0000 // player, north
+04 08C0 008C 0801 002D // bulldozer, slightly west of north
+07 073C 0014 0B01 0400 // train, west
+08 0685 0014 0AFC 0400 // hotrod, west
 
 ----------------------------------------------------------------
 Offset 0x54: Missile carrier settings
@@ -603,18 +615,18 @@ Simian Acres / chimp: 01BABA
 Offset 0x58: TODO empty in chimp
 
 ----------------------------------------------------------------
-Offset 0x5C: buildings
+Offset 0x5C: Buildings
 records 14 bytes
 
 proc_802A1D54()
 
-[XX XX] [YY YY] [ZZ ZZ] [TT TT] [B8] [B9] [HA HA] [HC HC]
+[XX XX] [YY YY] [ZZ ZZ] [TT TT] [CC] [B9] [BB BB] [SS SS]
 X,Y,Z: position of object
 T:     type
-B8:    TODO passed to proc_802A21AC through s0
+C:     if 1, increase 'destroyed buildings' counter
 B9:    TODO stored to t4->b6
-HA:    TODO stored to t4->hE
-HC:    TODO passed to proc_802A21AC through t9
+B:     behavior (1: vertical, 2: circle, 3: horizontal, 4: follow player, 5: rotation 90)
+S:     speed (for moving objects)
 
 Simian Acres / chimp: 01BAC4-01BCD8
 07E0 0014 0AEA 001E 00 00 0000 0000 
@@ -657,20 +669,20 @@ Simian Acres / chimp: 01BAC4-01BCD8
 080E 000E 0F91 0110 01 00 0000 0000
 
 ----------------------------------------------------------------
-Offset 0x60: TODO
+Offset 0x60: TODO Bridge related?
 
 first byte stored to 0x80364a6e
 variable length records after that
 
-[AA AA] [BB BB] [CC CC] [DD DD] [EE] [FF] [**] [GG] [HH]
+[H0 H0] [H2 H2] [H4 H4] [H6 H6] [B8] [B9] {**} [GG] [HH]
 
-A: TODO u16 << 5, stored as word to (0 + t3)
-B: TODO u16 << 5, stored as word to (4 + t3)
-C: TODO u16 << 5, stored as word to (8 + t3)
-D: TODO u16 << 5, stored as word to (C + t3)
-E: TODO stored to (0x10 + t3)
-F: TODO stored to (0x13 + t3), used as count for next bytes
-*: TODO 'F' number of bytes, stored to t5
+H0: TODO u16 << 5, stored as word to (0 + t3)
+H2: TODO u16 << 5, stored as word to (4 + t3)
+H4: TODO u16 << 5, stored as word to (8 + t3)
+H6: TODO u16 << 5, stored as word to (C + t3)
+B8: TODO stored to (0x10 + t3)
+B9: TODO stored to (0x13 + t3), used as count for next bytes
+*: TODO 'B9' number of bytes, stored to t5
 G: TODO stored to (0x11 + t3)
 H: TODO stored to (0x14 + t3)
 1 stored to (0x12 + t3)
@@ -681,44 +693,44 @@ t5 = t3 + 0x15
 
 Simian Acres / chimp: 01BCD8-01BD24
 FF
-07B9 003A 083A 002D 01 [03 04 08 FF] 00 96 
-07D5 0046 083A 002D 01 [03 04 08 FF] 00 96 
-07F3 0053 083A 002D 01 [03 04 08 FF] 00 96 
-079B 0046 083A 002D 01 [03 04 08 FF] 00 96 
-077D 0053 083A 002D 01 [03 04 08 FF] 00 96
+07B9 003A 083A 002D 01 03 {04 08 FF} 00 96 
+07D5 0046 083A 002D 01 03 {04 08 FF} 00 96 
+07F3 0053 083A 002D 01 03 {04 08 FF} 00 96 
+079B 0046 083A 002D 01 03 {04 08 FF} 00 96 
+077D 0053 083A 002D 01 03 {04 08 FF} 00 96
 
 Angel City / lagp: 014694-0148A9
 DC
-06 FE 00 40 06 66 00 20 02 02 04 05 00 00 
-06 D9 00 40 06 B0 00 20 02 02 04 05 00 00 
-03 DD 00 40 04 3F 00 28 02 06 00 01 02 03 04 05 00 00 
-03 B6 00 40 04 8B 00 28 02 06 00 01 02 03 04 05 00 00 
-03 DE 00 40 04 D8 00 28 02 06 00 01 02 03 04 05 00 00 
-03 B6 00 40 05 23 00 28 02 06 00 01 02 03 04 05 00 00 
-03 DE 00 40 05 6F 00 28 02 06 00 01 02 03 04 05 00 00 
-03 B6 00 40 05 BA 00 28 02 06 00 01 02 03 04 05 00 00 
-03 DE 00 40 06 04 00 28 02 06 00 01 02 03 04 05 00 00 
-05 D4 00 40 03 AE 00 28 02 06 00 01 02 03 04 05 00 00 
-05 B4 00 40 03 F4 00 28 02 06 00 01 02 03 04 05 00 00 
-05 D3 00 40 04 43 00 28 02 06 00 01 02 03 04 05 00 00 
-05 B1 00 40 04 8F 00 28 02 06 00 01 02 03 04 05 00 00 
-05 D5 00 40 04 D7 00 28 02 06 00 01 02 03 04 05 00 00 
-05 B0 00 40 05 23 00 28 02 06 00 01 02 03 04 05 00 00 
-05 D5 00 40 05 70 00 28 02 06 00 01 02 03 04 05 00 00 
-05 B1 00 40 05 BE 00 28 02 06 00 01 02 03 04 05 00 00 
-05 D7 00 40 06 05 00 28 02 06 00 01 02 03 04 05 00 00 
-01 DE 00 40 02 A2 00 28 02 06 00 01 02 03 04 05 00 00 
-01 71 00 40 02 E6 00 28 02 06 00 01 02 03 04 05 00 00 
-01 DB 00 40 03 2D 00 28 02 06 00 01 02 03 04 05 00 00 
-01 6F 00 40 03 71 00 28 02 06 00 01 02 03 04 05 00 00 
-01 DD 00 40 03 B6 00 28 02 06 00 01 02 03 04 05 00 00 
-01 71 00 40 03 F9 00 28 02 06 00 01 02 03 04 05 00 00 
-01 DC 00 40 04 42 00 28 02 06 00 01 02 03 04 05 00 00 
-01 6E 00 40 04 89 00 28 02 06 00 01 02 03 04 05 00 00 
-01 DD 00 40 04 D0 00 28 02 06 00 01 02 03 04 05 00 00 
-01 6F 00 40 05 11 00 28 02 06 00 01 02 03 04 05 00 00 
-01 DC 00 40 05 59 00 28 02 06 00 01 02 03 04 05 00 00 
-01 71 00 40 05 9D 00 28 02 06 00 01 02 03 04 05 00 00
+06FE 0040 0666 0020 02 02 {04 05} 00 00 
+06D9 0040 06B0 0020 02 02 {04 05} 00 00 
+03DD 0040 043F 0028 02 06 {00 01 02 03 04 05} 00 00 
+03B6 0040 048B 0028 02 06 {00 01 02 03 04 05} 00 00 
+03DE 0040 04D8 0028 02 06 {00 01 02 03 04 05} 00 00 
+03B6 0040 0523 0028 02 06 {00 01 02 03 04 05} 00 00 
+03DE 0040 056F 0028 02 06 {00 01 02 03 04 05} 00 00 
+03B6 0040 05BA 0028 02 06 {00 01 02 03 04 05} 00 00 
+03DE 0040 0604 0028 02 06 {00 01 02 03 04 05} 00 00 
+05D4 0040 03AE 0028 02 06 {00 01 02 03 04 05} 00 00 
+05B4 0040 03F4 0028 02 06 {00 01 02 03 04 05} 00 00 
+05D3 0040 0443 0028 02 06 {00 01 02 03 04 05} 00 00 
+05B1 0040 048F 0028 02 06 {00 01 02 03 04 05} 00 00 
+05D5 0040 04D7 0028 02 06 {00 01 02 03 04 05} 00 00 
+05B0 0040 0523 0028 02 06 {00 01 02 03 04 05} 00 00 
+05D5 0040 0570 0028 02 06 {00 01 02 03 04 05} 00 00 
+05B1 0040 05BE 0028 02 06 {00 01 02 03 04 05} 00 00 
+05D7 0040 0605 0028 02 06 {00 01 02 03 04 05} 00 00 
+01DE 0040 02A2 0028 02 06 {00 01 02 03 04 05} 00 00 
+0171 0040 02E6 0028 02 06 {00 01 02 03 04 05} 00 00 
+01DB 0040 032D 0028 02 06 {00 01 02 03 04 05} 00 00 
+016F 0040 0371 0028 02 06 {00 01 02 03 04 05} 00 00 
+01DD 0040 03B6 0028 02 06 {00 01 02 03 04 05} 00 00 
+0171 0040 03F9 0028 02 06 {00 01 02 03 04 05} 00 00 
+01DC 0040 0442 0028 02 06 {00 01 02 03 04 05} 00 00 
+016E 0040 0489 0028 02 06 {00 01 02 03 04 05} 00 00 
+01DD 0040 04D0 0028 02 06 {00 01 02 03 04 05} 00 00 
+016F 0040 0511 0028 02 06 {00 01 02 03 04 05} 00 00 
+01DC 0040 0559 0028 02 06 {00 01 02 03 04 05} 00 00 
+0171 0040 059D 0028 02 06 {00 01 02 03 04 05} 00 00
 
 ----------------------------------------------------------------
 Offset 0x64: TODO empty in chimp
@@ -743,7 +755,7 @@ C8 02 12 71 01 0E 06 D9 11 D9 01 0E 06 06 11 E5
 14 3D 03 D4 0C 3C 07 FF
 
 ----------------------------------------------------------------
-Offset 0x68: train platform and stopping zone
+Offset 0x68: Train platform and stopping zone
 
 [B0] [B1]
 [B2] {[X1 X1] [Z1 Z1] [X2 X2] [Z2 Z2] [X3 X3] [Z3 Z3]}
@@ -804,7 +816,7 @@ Ebony Coast / level13: 026DB7-026EA8
 {01} {02} {03} {04}
 
 ----------------------------------------------------------------
-Offset 0x6C: TODO additional collision?
+Offset 0x6C: X/Z Collision (level perimeter, trees, walls)
 
 Number of entries = t0->h10 * t0->h12
 
@@ -838,11 +850,11 @@ Simian Acres / chimp: 01BD9D-01E6E3
 ...
 
 ----------------------------------------------------------------
-Offset 0x70: TODO similar to 0x6C, except chimp doesn't have any values
+Offset 0x70: TODO similar to 0x6C, Water related?
 
 Number of entries = t0->h10 * t0->h12
 
-[OO OO OO OO] N * {0x14 bytes [BB] [CC]}}
+{[OO OO OO OO] N * {0x14 bytes [BB] [CC]}}
 O: end offset current, added to T1, compared with T5 inner loop
 B: passed through T7 to proc_802A41B0
 C: stored to T4
