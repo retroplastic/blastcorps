@@ -131,25 +131,25 @@ Offset Size Type      Description
 0x70   4    unsigned  TODO Water related?
 0x74   4    unsigned  TODO
 TODO: 78-9C appear to be beyond the length of level.raw. perhaps referencing display list data from level_dl.raw?
-0x78   4    unsigned  TODO
-0x7C   4    TODO      TODO
-0x80   4    TODO      TODO
-0x84   4    TODO      TODO
-0x88   4    TODO      TODO
-0x8C   4    TODO      TODO
-0x90   4    unsigned  handled in proc_802A1C88
-0x94   4    unsigned  handled in proc_802A1C88
-0x98   4    unsigned  handled in proc_802A1C88
-0x9C   4    unsigned  handled in proc_802A1C88
-0xA0   4    TODO      TODO
-0xA4   4    TODO      TODO
-0xA8   4    TODO      TODO
-0xAC   4    TODO      TODO
-0xB0   4    TODO      TODO
-0xB4   4    TODO      TODO
-0xB8   4    TODO      TODO
-0xBC   4    TODO      TODO
-0xC0   4    TODO      TODO
+0x78   4    unsigned  TODO offset to F3D DL
+0x7C   4    TODO      TODO offset to F3D DL
+0x80   4    TODO      TODO offset to F3D DL
+0x84   4    TODO      TODO offset to F3D DL
+0x88   4    TODO      TODO offset to F3D DL
+0x8C   4    TODO      TODO offset to F3D DL
+0x90   4    unsigned  handled in proc_802A1C88 offset to F3D DL
+0x94   4    unsigned  handled in proc_802A1C88 offset to F3D DL
+0x98   4    unsigned  handled in proc_802A1C88 offset to F3D DL
+0x9C   4    unsigned  handled in proc_802A1C88 offset to F3D DL
+0xA0   4    TODO      TODO chimp point to last word of chimp.raw
+0xA4   4    TODO      TODO chimp point to last word of chimp.raw
+0xA8   4    TODO      TODO chimp point to last word of chimp.raw
+0xAC   4    TODO      TODO chimp point to last word of chimp.raw
+0xB0   4    TODO      TODO chimp point to last word of chimp.raw
+0xB4   4    TODO      TODO chimp point to last word of chimp.raw
+0xB8   4    TODO      TODO chimp point to last word of chimp.raw
+0xBC   4    TODO      TODO chimp point to last word of chimp.raw
+0xC0   4    TODO      TODO chimp point to last word of chimp.raw
 
 ----------------------------------------------------------------
 Example header: Simian Acres / chimp
@@ -196,7 +196,6 @@ X,Y,Z/1,2,3: three 3D coordinates that define a triangle
 
 Added to offset of start of level, stored to 0x803BDAF4/0x803BDAF8
 proc_802AC0BC() - records 0x14 bytes each (9 halfwords), each << 5
-passed through a1 to proc_8028C190
 
 Argent Towers / level10: 010420-010470
 03EF 0109 119D 0395 0109 119D 0395 0108 12AB 0000
@@ -743,7 +742,7 @@ if B1 == 0, goto 7C
 B2 
 7C
 
-proc_802A2C54, proc_802A3E9C
+proc_802A3E9C
 
 Crystal Rift / level9: 01CE87-01CEE1
 00 01 
@@ -911,6 +910,7 @@ FFFF
 ----------------------------------------------------------------
 Offset 0x78: TODO
 
+proc_802A3008()
 Added to offset of start of level, passed as s0/s1 to proc_802A08E4
 proc_802A08E4() - records 8 bytes, used as 2 words
 s3 = *(0x803B8D40);

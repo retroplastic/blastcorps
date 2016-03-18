@@ -17,8 +17,8 @@ gzip assembly and data blocks:
 7F63A1-7F9BD5  hd_front_end_data.raw  data for UI asm
 
 gzip level blocks
-This list is provided from Kazepedia thanks to SunakazeKun:
-https://sites.google.com/site/kazepedia/blast-corps/file-structure
+This list is derived from SunakazeKun's notes:
+http://neomariogalaxy.bplaced.net/blastcorps/
 -------------------------------------------------------
 4A5660-4ABF91  lagp.raw          Angel City
 4ABF91-4ACC10  lagp_dl.raw
@@ -145,7 +145,7 @@ https://sites.google.com/site/kazepedia/blast-corps/file-structure
 Level Data:
 
 Levels are contained in two gzip blocks.  e.g.:
-chimp.raw:     level data for Simian Acres
+chimp.raw:    level data for Simian Acres
 chimp_dl.raw: display lists for Simian Acres
 
 The level data first contains a header that contains the offsets in the file 
@@ -405,7 +405,7 @@ Functions in hd_code_text.raw:
 802DC130, __osEnqueueThread
 802DC178, __osPopThread
 802DC188, __osDispatchThread
-802DC2C8, __osCleanupThread", 0x802DC2D0),
+802DC2C8, __osCleanupThread
 802D4E20, osVirtualToPhysical
 802E2650, __osSpSetStatus
 802E2660, __osSpSetPc
