@@ -64,3 +64,10 @@ constant gp(28)
 constant sp(29)
 constant s8(30)
 constant ra(31)
+
+// macros
+macro align(size) {
+   while (pc() % {size}) {
+      db 0
+   }
+}

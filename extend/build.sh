@@ -2,6 +2,8 @@
 set -x # echo on
 set -e # stop shell script if any commands error
 
+LEVEL_DIR=./levels
+
 BASS=~/git/bass/bass/bass
 
 CODE=./bin/hd_code_text.raw
@@ -16,9 +18,12 @@ $BASS -o $CODE hd_code_text.asm
 
 # gzip code block
 gzip -c $CODE > $CODE.gz
-# gzip level block
-gzip -c bin/chimp.raw > bin/chimp.raw.gz
-gzip -c bin/chimp_dl.raw > bin/chimp_dl.raw.gz
+
+# gzip level blocks
+for f in $LEVEL_DIR/*.raw
+do
+  gzip -c -9 $f > $f.gz
+done
 
 # apply LUT patch and include new code in ROM
 $BASS -o $ROM blast_corps_rom.asm
