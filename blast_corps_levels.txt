@@ -128,7 +128,7 @@ Offset Size Type      Description
 0x64   4    unsigned  TODO
 0x68   4    unsigned  Train platform and stopping zones
 0x6C   4    unsigned  X/Z Collision (level perimeter, trees, walls)
-0x70   4    unsigned  TODO Water related?
+0x70   4    unsigned  X/Z Player collision
 0x74   4    unsigned  TODO
 TODO: 78-9C appear to be beyond the length of level.raw. perhaps referencing display list data from level_dl.raw?
 0x78   4    unsigned  TODO offset to F3D DL
@@ -278,8 +278,8 @@ Lizard Island / level59: 0092A0-0092C4
 ----------------------------------------------------------------
 Offset 0x30: TODO Terrain data?
 
-[WW WW WW WW] {[X1 X1] [Y1 Y1] [Z1 Z1] [X2 X2] [Y2 Y2] [Z2 Z2] [X3 X3] [Y3 Y3] [Z3 Z3] [AA] [BB]}
-W: offset to the next group of triangles
+[EE EE EE EE] {[X1 X1] [Y1 Y1] [Z1 Z1] [X2 X2] [Y2 Y2] [Z2 Z2] [X3 X3] [Y3 Y3] [Z3 Z3] [AA] [BB]}
+E: end offset of this group of triangles
 X/Y/Z,1/2/3: triangle vertices for terrain data
 A: TODO byte at offset 0x12 terrain type?
 B: TODO byte at offset 0x13 flag?
@@ -819,10 +819,17 @@ Offset 0x6C: X/Z Collision (level perimeter, trees, walls)
 
 Number of entries = t0->h10 * t0->h12
 
-{[OO OO OO OO] N * {0x14 bytes [BB] [CC]}}
-O: end offset current, added to T1, compared with T5 inner loop
-B: passed through T7 to proc_802A41B0
-C: stored to T4
+{[EE EE EE EE] {[X1 X1] [Y1 Y1] [Z1 Z1] [X2 X2] [Y2 Y2] [Z2 Z2] [X3 X3] [Y3 Y3] [Z3 Z3] [AA AA] [BB] [CC]}}
+E: end offset current collision group
+X/Y/Z,1/2/3: triangle vertices for collision data
+A: TODO: stored to 0x4c(T4) in proc_802A41B0
+B: TODO: passed through T7 to proc_802A41B0
+C: TODO: stored to T4
+
+Two halfwords h10 and h12 from level header are multiplied to
+get the count of the number of groups in this list. Each group 
+contains multiple triangles that consist of three X,Y,Z points 
+a halfword and two bytes.
 
 proc_802A3D54() -> proc_802A41B0()
 
@@ -849,39 +856,49 @@ Simian Acres / chimp: 01BD9D-01E6E3
 ...
 
 ----------------------------------------------------------------
-Offset 0x70: TODO similar to 0x6C, Water related?
+Offset 0x70: Player collision
 
 Number of entries = t0->h10 * t0->h12
 
-{[OO OO OO OO] N * {0x14 bytes [BB] [CC]}}
-O: end offset current, added to T1, compared with T5 inner loop
+{[EE EE EE EE] {[X1 X1] [Y1 Y1] [Z1 Z1] [X2 X2] [Y2 Y2] [Z2 Z2] [X3 X3] [Y3 Y3] [Z3 Z3] [AA AA] [BB] [CC]}}
+E: end offset current, added to T1, compared with T5 inner loop
+X/Y/Z,1/2/3: triangle vertices for collision data
+A: TODO: stored to 0x4c(T4) in proc_802A41B0
 B: passed through T7 to proc_802A41B0
 C: stored to T4
 
 proc_802A3DF8()
 
-Simian Acres / chimp: 01E6E3-01E72C
-00000004
-00000008 
+Argent Towers / level10: 0211B1, count = 3*5 = 15
+00000004 
+00000008
 0000000C 
 00000010 
-00000014 
-00000018 
-0000001C 
-00000020 
-00000024 
-00000028 
-0000002C 
-00000030 
-00000034 
-00000038 
-0000003C 
-00000040 
-00000044 
-00000048 
+00000098
+062F 00CD 0C83 062F 00BB 0C83 062F 00BA 0BD3 0BFF 00 00
+062F 00CD 0C83 062F 00BA 0BD3 062F 00CD 0BD3 0BFE 00 00 
+06DA 00CD 0BD3 06DA 00BA 0BD3 06DA 00BA 0C83 0BFE 01 00 
+06DA 00CD 0BD3 06DA 00BA 0C83 06DA 00CD 0C83 0BFE 01 00 
+062F 00CD 0BD3 062F 00BA 0BD3 06DA 00BA 0BD3 07FF 00 00 
+062F 00CD 0BD3 06DA 00BA 0BD3 06DA 00CD 0BD3 07FF 00 00 
+0000009C 
+00000124 
+0395 0131 119D 0395 0109 119D 03EF 0108 119D 07FF 00 00 
+0395 0131 119D 03EF 0108 119D 03EF 0131 119D 07FF 00 00 
+0395 0131 12AB 0395 0109 12AB 0395 0109 119D 0BFF 00 00 
+0395 0131 12AB 0395 0109 119D 0395 0131 119D 0BFF 00 00 
+03EF 0131 119D 03EF 0108 119D 03EF 0108 12AB 0BFE 01 00 
+03EF 0131 119D 03EF 0108 12AB 03EF 0131 12AB 0BFE 01 00 
+0000030C 
+062F 00CD 0C83 062F 00BB 0C83 062F 00BA 0BD3 0BFF 00 00 
+062F 00CD 0C83 062F 00BA 0BD3 062F 00CD 0BD3 0BFE 00 00 
+06DA 00CD 0C83 06DA 00BA 0C83 062F 00BB 0C83 07FE 01 00 
+...
 
 ----------------------------------------------------------------
 Offset 0x74: TODO
+
+0x74 starts at word boundary, so between 0 and 3 bytes of padding may be inserted
 
 [NN NN NN NN] {[EE EE] ... [CC CC CC CC] {[H0 H0] [H2 H2] [H4 H4] [H6 H6] [H8 H8] [HA HA] [HC HC] [HE HE] [HG HG] [BI] ...}}
 N: number of structs to allocate
@@ -910,7 +927,6 @@ FFFF
 ----------------------------------------------------------------
 Offset 0x78: TODO
 
-proc_802A3008()
 Added to offset of start of level, passed as s0/s1 to proc_802A08E4
 proc_802A08E4() - records 8 bytes, used as 2 words
 s3 = *(0x803B8D40);
