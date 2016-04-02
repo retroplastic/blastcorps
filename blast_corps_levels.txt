@@ -111,7 +111,7 @@ Offset Size Type      Description
 0x20   4    unsigned  Ammo boxes (Ballista and Sideswipe)
 0x24   4    unsigned  Collision fixes
 0x28   4    unsigned  Communication Point
-0x2C   4    unsigned  TODO
+0x2C   4    unsigned  TODO Animated textures (water, lava, barricades)
 0x30   4    unsigned  TODO Terrain data?
 0x34   4    unsigned  RDUs
 0x38   4    unsigned  TNT crates
@@ -128,7 +128,7 @@ Offset Size Type      Description
 0x64   4    unsigned  TODO
 0x68   4    unsigned  Train platform and stopping zones
 0x6C   4    unsigned  X/Z Collision (level perimeter, trees, walls)
-0x70   4    unsigned  TODO Water related?
+0x70   4    unsigned  TODO
 0x74   4    unsigned  TODO
 TODO: 78-9C appear to be beyond the length of level.raw. perhaps referencing display list data from level_dl.raw?
 0x78   4    unsigned  TODO offset to F3D DL
@@ -257,23 +257,24 @@ Lizard Island    level59
 
 
 Argent Towers / level10: 010480-0104D0
-{0000002F 03 00 00 00 00 0A 00 00
-{00000614 00000614}}  --> converted to 000965C0 000965C0
-{00000032 03 00 00 00 00 0A 00 00
-{00000615 00000615}}  --> converted to 000975C0 000975C0
-{00000033 03 00 00 00 00 0A 00 00
-{00000616 00000616}}  --> converted to 000945C0 000945C0
-{00000043 03 00 00 00 00 0A 00 00
-{00000617 00000617}}  --> converted to 000955C0 000955C0
+{0000002F 03 00 00 00 00 0A 00 00 {00000614 00000614}}  --> converted to 000965C0 000965C0
+{00000032 03 00 00 00 00 0A 00 00 {00000615 00000615}}  --> converted to 000975C0 000975C0
+{00000033 03 00 00 00 00 0A 00 00 {00000616 00000616}}  --> converted to 000945C0 000945C0
+{00000043 03 00 00 00 00 0A 00 00 {00000617 00000617}}  --> converted to 000955C0 000955C0
+614,615,616,617 are texture IDs for flashing road barricade
 
 Magma Peak / level52: 005800-005838
 {00000205 03 00 01 00 00 0F 00 00 {00000A82 00000A83}}
 {00000202 02 00 01 00 00 0E 00 00 {00000A84}}
 {00000200 03 00 01 00 00 0F 00 00 {00000633 00000634}}
+A82,A83,A84 is animated magma
+633,634 is water animated waves
 
 Lizard Island / level59: 0092A0-0092C4
 {00000201 03 00 01 00 00 0F 00 00 {00000A82 00000A83}}
 {00000202 02 00 01 00 00 0E 00 00 {00000A85}}
+A82,A83 is animated magma
+A85 is glowing rock
 
 ----------------------------------------------------------------
 Offset 0x30: TODO Terrain data?
@@ -611,7 +612,15 @@ Simian Acres / chimp: 01BABA
 1C 07BC 07E2 0000 0BB8 00
 
 ----------------------------------------------------------------
-Offset 0x58: TODO empty in chimp
+Offset 0x58: TODO
+
+8 bytes of data, only used in two levels, both with same data
+
+Angel City / lagp: 0144CC
+Obsidian Mile / level26: 01201E
+0B3F 0101 0581 0000
+
+if read as X,Y,Z coordinates, lower left corner, up high
 
 ----------------------------------------------------------------
 Offset 0x5C: Buildings
@@ -849,7 +858,7 @@ Simian Acres / chimp: 01BD9D-01E6E3
 ...
 
 ----------------------------------------------------------------
-Offset 0x70: TODO similar to 0x6C, Water related?
+Offset 0x70: TODO similar to 0x6C
 
 Number of entries = t0->h10 * t0->h12
 
