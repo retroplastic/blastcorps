@@ -125,7 +125,7 @@ Offset Size Type      Description
 0x58   4    unsigned  TODO
 0x5C   4    unsigned  Buildings
 0x60   4    unsigned  TODO Bridge related?
-0x64   4    unsigned  TODO
+0x64   4    unsigned  TODO Walls?
 0x68   4    unsigned  Train platform and stopping zones
 0x6C   4    unsigned  X/Z Collision (level perimeter, trees, walls)
 0x70   4    unsigned  X/Z Player collision
@@ -219,15 +219,15 @@ Argent Towers / level10: 010470-010480
 ----------------------------------------------------------------
 Offset 0x2C: TODO
 
-{[W0 W0 W0 W0] [CC] [B5] [B6] [??] [??] [??] [??] [??] {[WC WC WC WC]}}
+{[W0 W0 W0 W0] [CC] [B5] [B6] [??] [??] [??] [??] [??] {[TT TT TT TT]}}
 W0: ID used in lookup proc_802A50DC
 C:  count of records to follow (+1)
 B5: *0x803C3240 = B5 ? *(B5*4+V0+8) : 0x0
 B6: stored to 0x803C324A, if not 0, compares 'C' with 'A5'
 ?:  TODO
-WC: index used in lookup, overwritten with another offset returned from proc_802A0CFC
+T: texture index, overwritten with address from loading proc_802A0CFC
 
-handled by proc_802A1C20()
+further handled by proc_802A1C20()
 proc_802A0CFC(T6) - some lookup and DMA
 
 W0 read by proc_802A50DC at 802A510C
@@ -283,7 +283,13 @@ Offset 0x30: TODO Terrain data?
 E: end offset of this group of triangles
 X/Y/Z,1/2/3: triangle vertices for terrain data
 A: TODO byte at offset 0x12 terrain type?
+  01: low traction / dirt
+  02: high traction, high speed / roads, rails
+  03: high traction, medium speed / grass
+  05: slow speed / ponds
+  67: high traction, high speed / gravel lots (similar to roads?)
 B: TODO byte at offset 0x13 flag?
+
 
 Two halfwords h08 and h0A from level header are multiplied to
 get the count of the number of groups in this list. Each group 
@@ -312,7 +318,8 @@ Simian Acres / chimp: 010258-01B6B4
 120: 035A 008C 01E1  052E 008C 058B  073F 008C 0579  03 00 
 134: 073F 008C 0579  0723 008C 0237  06DA 008C 014D  03 01  
 148: 06DA 008C 014D  053B 0078 014D  073F 008C 0579  03 01 
-15C: 053B 0078 014D  0332 008C 018E  073F 008C 0579  03 00 ...
+15C: 053B 0078 014D  0332 008C 018E  073F 008C 0579  03 00
+...
 
 ----------------------------------------------------------------
 Offset 0x34: RDUs
@@ -677,7 +684,7 @@ Simian Acres / chimp: 01BAC4-01BCD8
 080E 000E 0F91 0110 01 00 0000 0000
 
 ----------------------------------------------------------------
-Offset 0x60: TODO Bridge related?
+Offset 0x60: TODO
 
 first byte stored to 0x80364a6e
 variable length records after that
@@ -741,7 +748,7 @@ DC
 0171 0040 059D 0028 02 06 {00 01 02 03 04 05} 00 00
 
 ----------------------------------------------------------------
-Offset 0x64: TODO empty in chimp
+Offset 0x64: TODO walls to prevent player movement
 
 [B0] [B1] [B2]
 
@@ -753,14 +760,57 @@ B2
 
 proc_802A3E9C
 
+Salvage Warf / bonus1: 52D3 +287
+
 Crystal Rift / level9: 01CE87-01CEE1
-00 01 
-C8 02 12 71 01 0E 06 D9 11 D9 01 0E 06 06 11 E5 
-00 C8 06 16 0D 95 12 71 01 0E 06 D9 11 E5 00 C8 
-06 16 12 5B 00 C8 06 BA 0D 95 00 03 03 04 0E 02 
-14 3D 03 70 0C 3C 14 6E 03 70 0C 3C 14 6E 03 D4 
-0C 3C 07 FF 14 3D 03 70 0C 3C 14 6E 03 D4 0C 3C 
-14 3D 03 D4 0C 3C 07 FF
+00 01 C8 
+02 
+1271 010E 06D9 
+11D9 010E 0606 
+11E5 00C8 0616 0D 95 
+1271 010E 06D9 
+11E5 00C8 0616 
+125B 00C8 06BA 0D 95 
+00 03 03 04 0E 
+02 
+143D 0370 0C3C 
+146E 0370 0C3C 
+146E 03D4 0C3C 07 FF 
+143D 0370 0C3C 
+146E 03D4 0C3C 
+143D 03D4 0C3C 07 FF
+
+Argent Towers / level10: 1C857 +1B4
+Diamond Sands / level12: 19351 +F5
+Ebony Coast / level13: 26C97 +120
+Oyster Harbor / level14: 17A19 +49D
+Carrick Point / level15: DACD +1E7
+Havoc District / level16: 19779 +2E3
+Ironstone Mine / level17: 1D023 +1A9
+Beeton Tracks / level18: 17231 +81
+00 02 04 0D 
+04 
+0681 0078 0F95 
+0681 0064 0F95 
+0681 0064 0F6D 0B FF 
+0681 0078 0F95 
+0681 0064 0F6D 
+0681 0078 0F6D 0B FF 
+041A 0078 0F6C 
+041A 0064 0F6C 
+041A 0064 0F94 0B FE 
+041A 0078 0F6C 
+041A 0064 0F94 
+041A 0078 0F94 0B FE 
+00 01 06 
+02 
+0578 0064 0FF8 
+0578 0080 0FF8 
+050A 0080 0FF8 07 FF 
+0578 0064 0FF8 
+050A 0080 0FF8 
+050A 0064 0FF8 07 FF
+
 
 ----------------------------------------------------------------
 Offset 0x68: Train platform and stopping zone
@@ -949,3 +999,7 @@ s4 = 0x803B8570;
 while (w1 != *s4 && s3 != s4) {
    s4 += 8;
 }
+
+----------------------------------------------------------------
+Offset 0x88: Display list stuff, related to 0x2C animated textures
+calls proc_802A50DC with T4 = ID of W0 to change
