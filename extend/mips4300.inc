@@ -33,6 +33,7 @@ constant r29(29)
 constant r30(30)
 constant r31(31)
 
+constant zero(0)
 constant at(1)
 constant v0(2)
 constant v1(3)

@@ -575,3 +575,4 @@ level59_dl:
 insert "levels/level59_dl.raw.gz"
 level59_end:
 
+fill 0xC00000-origin()
