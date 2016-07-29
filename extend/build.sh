@@ -14,7 +14,7 @@ cp $ROM.bak $ROM
 cp $CODE.bak $CODE
 
 # apply source patch to main code
-$BASS -o $CODE hd_code_text.asm
+$BASS -d VERSION=VER_U1 -o $CODE hd_code_text.asm
 
 # gzip code block
 gzip -c $CODE > $CODE.gz
