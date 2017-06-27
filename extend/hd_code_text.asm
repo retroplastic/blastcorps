@@ -1,7 +1,6 @@
 // Blast Corps/Dozer patch to hd_code_text.raw to use ROM lookup table
 // Updated: 2016 Jul 28
 // By: queueRAM
-// For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
 
 // Use with N64 version of bass: https://github.com/ARM9/bass
 // > bass -d VERSION=VER_U0 -o hd_code_text.raw hd_code_text.asm

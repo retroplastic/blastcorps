@@ -1,24 +1,21 @@
 Blast Corps (U) (V1.1) hacking docs
 Updated: 2016 Mar 02
 By: queueRAM
-For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
 
 The Blast Corps ROM contains 738 gzipped files. See the Blast Corps n64split 
 config for the full list:
-https://github.com/queueRAM/sm64tools/blob/master/configs/bc.config
+https://github.com/queueRAM/sm64tools/blob/master/configs/
 A majority of the assembly code is also gzipped and the startup code just 
 initializes the OS, DMAs the gzipped asm, inflates it, and then jumps to it.
 
 gzip assembly and data blocks:
 -------------------------------------------------------
-787FD0-7D73B4  hd_code_text.raw       main asm code
-7D73B4-7E3AD0  hd_code_data.raw       data for main asm
-7E3AD0-7F63A1  hd_front_end_text.raw  UI asm code
-7F63A1-7F9BD5  hd_front_end_data.raw  data for UI asm
+787FD0-7D73B4  hd_code_text.raw       main asm code
+7D73B4-7E3AD0  hd_code_data.raw       data for main asm
+7E3AD0-7F63A1  hd_front_end_text.raw  UI asm code
+7F63A1-7F9BD5  hd_front_end_data.raw  data for UI asm
 
 gzip level blocks
-This list is derived from SunakazeKun's notes:
-http://neomariogalaxy.bplaced.net/blastcorps/
 -------------------------------------------------------
 4A5660-4ABF91  lagp.raw          Angel City
 4ABF91-4ACC10  lagp_dl.raw
@@ -315,7 +312,7 @@ Functions in ROM:
 80221BC8, __ll_mul
 80221DE0, __osSiDeviceBusy
 
-Functions in hd_code_text.raw:
+Functions in hd_code_text.raw:
 ------------------------------
 802447C0, MainJump
 80244870, Thread1
@@ -443,13 +440,12 @@ Functions in hd_code_text.raw:
 
 ---------------------------------------------------------------------------
 Tools:
-n64split (git version supports Blast Corps): http://origami64.net/showthread.php?tid=126
+n64split (git version supports Blast Corps): https://github.com/queueRAM/sm64tools
 Universal N64 Compressor (to manually decompress gzip files): http://www.goldeneyevault.com/viewfile.php?id=213
 BlastTool (GUI wrapper for general N64 tools): http://kuribo64.net/board/thread.php?pid=50055
 
 Other Notes:
 The Cutting Room Floor Wiki: https://tcrf.net/Blast_Corps
-SunakazeKun's Notes: http://neomariogalaxy.bplaced.net/blastcorps/
 
 Special Thanks:
  - SubDrag for putting together the Universal N64 Compressor and notes.

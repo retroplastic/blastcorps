@@ -1,7 +1,6 @@
 Blast Corps (U) (V1.1) ROM Extending
 Updated: 2016 Feb 03
 By: queueRAM
-For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
 
 This doc describes the process used to extend the Blast Corps (U) (V1.1) ROM 
 to facilitate hacking and modifying levels. The vanilla ROM isn't suitable 

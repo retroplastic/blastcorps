@@ -1,7 +1,6 @@
 // Blast Corps (U) (V1.1).z64 patch to use ROM lookup table
 // Updated: 2016 Feb 15
 // By: queueRAM
-// For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
 
 // Use with N64 version of bass: https://github.com/ARM9/bass
 // > bass -o "Blast Corps (U) (V1.1).z64" blast_corps_rom.asm

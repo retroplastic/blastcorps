@@ -1,7 +1,6 @@
 Blast Corps (U) (V1.1) Vehicle Data
 Updated: 2016 Feb 03
 By: queueRAM
-For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
 
 proc_802C4108 - gzip decompress
 

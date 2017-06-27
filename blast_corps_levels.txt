@@ -1,7 +1,6 @@
 Blast Corps (U) (V1.1) Level Data
 Updated: 2016 Mar 02
 By: queueRAM
-For updates, check: http://origami64.net/showthread.php?tid=334&pid=2566
 
 Levels loaded from proc_8025615C()
 Jump table at 80308B98/(hd_code_data:1FFC8), listed below.
