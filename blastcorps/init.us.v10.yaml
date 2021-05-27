@@ -1,0 +1,42 @@
+options:
+  base_path: .
+  basename: init.us.v10
+  compiler: IDO
+  create_detected_syms: yes
+  find_file_boundaries: yes
+  target_path: init.us.v10.bin
+  symbol_addrs_path: symbol_addrs.init.us.v10.txt
+  undefined_funcs_auto_path: undefined_funcs_auto.init.us.v10.txt
+  undefined_syms_auto_path: undefined_syms_auto.init.us.v10.txt
+  src_path: src.us.v10
+segments:
+  - name:  init
+    type:  code
+    vram:  0x8021ED00
+    start: 0x00000000
+    subsegments:
+    - [0x0000, asm, init/0000]
+    - [0x0050, asm, init/0050]
+    - [0x1660, asm, init/1660]
+    - [0x1A00, asm, init/1A00]
+    - [0x1A30, asm, init/1A30]
+    - [0x1F40, asm, init/1F40]
+    - [0x2260, asm, init/2260]
+    - [0x2280, asm, init/2280]
+    - [0x2330, asm, init/2330]
+    - [0x2C20, asm, init/2C20]
+    - [0x2CA0, asm, init/2CA0]
+    - [0x2D00, asm, init/2D00]
+    - [0x2D60, asm, init/2D60]
+    - [0x3060, asm, init/3060]
+    - [0x30E0, asm, init/30E0]
+    - [0x3110, asm, init/3110]
+    - [0x3590, asm, init/3590]
+    - [0x3700, asm, init/3700]
+    - [0x3770, asm, init/3770]
+    - [0x38D0, asm, init/38D0]
+    - [0x3990, asm, init/3990]
+    - [0x39A0, asm, init/39A0]
+    - [0x3A00, asm, init/3A00]
+    - [0x3A40, bin, init/3A40] # .data?
+  - [0x3CE0]

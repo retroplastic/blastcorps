@@ -1,0 +1,15 @@
+# files
+*.bin
+*.ext
+*.ld
+*.ok
+*.z64
+*auto*.txt
+
+# directories
+__pycache__/
+asm/
+assets/
+build/
+expected/
+junk/

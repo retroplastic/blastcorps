@@ -1,0 +1,17 @@
+options:
+  base_path: .
+  basename: hd_front_end.us.v11
+  compiler: IDO
+  create_detected_syms: yes
+  find_file_boundaries: yes
+  target_path: hd_front_end.us.v11.bin
+  src_path: src.us.v11
+segments:
+  - name:  hd_front_end
+    type:  code
+    vram:  0x802447C0 # TBD
+    start: 0x00000000
+    subsegments:
+    - [0x0, asm]
+    - [0x21040, bin, hd_front_end_data] # data
+  - [0x29E90] # EOF
