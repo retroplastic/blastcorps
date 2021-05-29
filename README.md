@@ -1,8 +1,14 @@
-# blastcorps
+# Blast Corps
 
 This is a two-stage build; first stage is to extract the compressed section from the ROM, second stage is to extract/compile them.
 
 Place a US Rev 1.0 ROM at the base of this repo.
+
+## Checkout Repo
+
+```
+git clone git@github.com:mkst/blastcorps.git --recursive
+```
 
 ## Stage 1
 
