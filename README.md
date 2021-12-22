@@ -36,6 +36,14 @@ This is a two-stage build; first stage is to extract the compressed section from
 
 Place a US Rev 1.0 ROM at the base of this repo.
 
+## Set up Python for splat
+
+```
+virtualenv .env
+. .env/bin/activate
+pip install -r tools/splat/requirements.txt
+```
+
 ## Stage 1
 
 **Extract init, hd_code and hd_front_end code from ROM**
