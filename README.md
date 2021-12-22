@@ -48,34 +48,34 @@ pip install -r tools/splat/requirements.txt
 
 **Extract init, hd_code and hd_front_end code from ROM**
 ```
-make extract
+make VERSION=us.v11 extract
 ```
 **Decompress hd_code and hd_front_end .text and .data sections**
 ```
-make decompress
+make VERSION=us.v11 decompress
 ```
 **Build ROM**
 ```
-make
+make VERSION=us.v11
 ```
 
 ## Stage 2 (Optional)
 
 **Extract `init` + `hd_code` (TODO: `hd_front_end`):**
 ```
-make -C blastcorps extract
+make VERSION=us.v11 -C blastcorps extract
 ```
 **Compile ASM/C**
 ```
-make -C blastcorps
+make VERSION=us.v11 -C blastcorps
 ```
 **Compress compiled code and replace**
 ```
-make -C blastcorps compress
+make VERSION=us.v11 -C blastcorps compress
 ```
 **(re)Build ROM**
 ```
-make
+make VERSION=us.v11
 ```
 
 ## C tools
