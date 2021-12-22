@@ -126,3 +126,8 @@ ninja -C build-tools
 * [n64decomp](https://github.com/n64decomp)
 
   A collection of N64 decompilation projects.
+
+* queueRAM's [Texture](https://github.com/queueRAM/Texture64)
+
+  Can be used to view raw textures extracted from gzip. Works with mono.
+
