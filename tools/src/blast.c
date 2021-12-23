@@ -428,17 +428,9 @@ decompress_block(block_t* block,
                  uint8_t** decompressed_bytes,
                  uint8_t* rom_bytes)
 {
-  uint8_t* src;
-  uint32_t len;
-  uint32_t type;
-  int32_t v0 = -1;
+  *decompressed_bytes = malloc(100 * block->length);
 
-  len = block->length;
-  *decompressed_bytes = malloc(100 * len);
-  src = block->src;
-
-  type = block->type;
-  switch (type)
+  switch (block->type)
   {
     // a0 - input buffer
     // a1 - input length
@@ -446,34 +438,28 @@ decompress_block(block_t* block,
     // a3 - output buffer
     // t4 - blocks 4 & 5 reference t4 which is set to FP
     case 0:
-      v0 = decode_block0(src, len, *decompressed_bytes);
-      break;
+      return decode_block0(block->src, block->length, *decompressed_bytes);
     case 1:
-      v0 = decode_block1(src, len, *decompressed_bytes);
-      break;
+      return decode_block1(block->src, block->length, *decompressed_bytes);
     case 2:
-      v0 = decode_block2(src, len, *decompressed_bytes);
-      break;
+      return decode_block2(block->src, block->length, *decompressed_bytes);
     case 3:
-      v0 = decode_block3(src, len, *decompressed_bytes);
-      break;
+      return decode_block3(block->src, block->length, *decompressed_bytes);
     // TODO: need to figure out where last param is set for decoders 4 and 5
     case 4:
-      v0 = decode_block4(src, len, *decompressed_bytes, &rom_bytes[0x047480]);
-      break;
+      return decode_block4(
+        block->src, block->length, *decompressed_bytes, &rom_bytes[0x047480]);
     // case 5: v0 = decode_block5(src, len, *copy, &rom[0x0998E0]); break;
     case 5:
-      v0 = decode_block5(src, len, *decompressed_bytes, &rom_bytes[0x152970]);
-      break;
+      return decode_block5(
+        block->src, block->length, *decompressed_bytes, &rom_bytes[0x152970]);
     // case 5: v0 = decode_block5(src, len, *copy, &rom[0x1E2C00]); break;
     case 6:
-      v0 = decode_block6(src, len, *decompressed_bytes);
-      break;
+      return decode_block6(block->src, block->length, *decompressed_bytes);
     default:
-      printf("Need type %d\n", type);
-      break;
+      printf("Need type %d\n", block->type);
+      return -1;
   }
-  return v0;
 }
 
 static void
