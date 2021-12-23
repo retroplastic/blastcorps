@@ -427,7 +427,7 @@ typedef struct
 // 802A57DC (06101C)
 // a0 is only real parameters in ROM
 int32_t
-decompress_block(block_t* block, uint8_t* result_bytes, uint8_t* rom_bytes)
+decompress_block(block_t* block, uint8_t* result_bytes, uint8_t* lut)
 {
   switch (block->type)
   {
@@ -444,15 +444,10 @@ decompress_block(block_t* block, uint8_t* result_bytes, uint8_t* rom_bytes)
       return decode_block2(block->src, block->size, result_bytes);
     case 3:
       return decode_block3(block->src, block->size, result_bytes);
-    // TODO: need to figure out where last param is set for decoders 4 and 5
     case 4:
-      return decode_block4(
-        block->src, block->size, result_bytes, &rom_bytes[0x047480]);
-    // case 5: v0 = decode_block5(src, len, *copy, &rom[0x0998E0]); break;
+      return decode_block4(block->src, block->size, result_bytes, lut);
     case 5:
-      return decode_block5(
-        block->src, block->size, result_bytes, &rom_bytes[0x152970]);
-    // case 5: v0 = decode_block5(src, len, *copy, &rom[0x1E2C00]); break;
+      return decode_block5(block->src, block->size, result_bytes, lut);
     case 6:
       return decode_block6(block->src, block->size, result_bytes);
     default:
@@ -671,8 +666,25 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
     };
     // printf("%X (%X) %X %d\n", start, start+ROM_OFFSET, len, type);
     uint8_t* decompressed_bytes = malloc(100 * block.size);
+
+    // TODO: need to figure out where last param is set for decoders 4 and 5
+    uint8_t* lut;
+    switch (type)
+    {
+      case 4:
+        lut = &rom_bytes[0x047480];
+        break;
+      case 5:
+        // 0x0998E0
+        // 0x1E2C00
+        lut = &rom_bytes[0x152970];
+        break;
+      default:
+        lut = NULL;
+    }
+
     int32_t decompressed_size =
-      decompress_block(&block, decompressed_bytes, rom_bytes);
+      decompress_block(&block, decompressed_bytes, lut);
 
     res_t res = guess_resolution(type, decompressed_size);
 
