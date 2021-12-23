@@ -131,12 +131,6 @@ write_file(const char* file_name, unsigned char* data, size_t length);
 void
 generate_filename(const char* in_name, char* out_name, char* extension);
 
-// extract base filename from file path
-// name: path to file
-// returns just the file name after the last '/'
-char*
-basename(const char* name);
-
 // make a directory if it doesn't exist
 // dir_name: name of the directory
 void

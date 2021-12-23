@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <libgen.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -595,6 +596,8 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
   uint8_t* out;
   int32_t width, height, depth;
   char* format;
+  char* rom_dir_path = strdup(rom_path);
+  dirname(rom_dir_path);
 
   // loop through from 0x4CE0 to 0xCCE0
   for (off = ROM_OFFSET; off < END_OFFSET; off += 8)
@@ -611,8 +614,12 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
       block.w8 = type;
       // printf("%X (%X) %X %d\n", start, start+ROM_OFFSET, len, type);
       out_size = proc_802A57DC(&block, &out, data);
-      sprintf(out_fname, "%s.%06X.%d.bin", rom_path, start + ROM_OFFSET, type);
-      // printf("writing %s: %04X -> %04X\n", out_fname, len, out_size);
+
+      sprintf(out_fname,
+              "%s/%06X.blast%d.bin",
+              rom_dir_path,
+              start + ROM_OFFSET,
+              type);
       depth = 0;
       switch (type)
       {
