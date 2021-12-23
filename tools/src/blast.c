@@ -12,14 +12,14 @@
 
 // 802A5E10 (061650)
 // just a memcpy from a0 to a3
-int
-decode_block0(unsigned char* in, int length, unsigned char* out)
+int32_t
+decode_block0(uint8_t* in, int32_t length, uint8_t* out)
 {
-  int ret_len = length;
+  int32_t ret_len = length;
   length >>= 3; // a1 - gets number of dwords
   while (length != 0)
   {
-    int i;
+    int32_t i;
     for (i = 0; i < 8; i++)
     {
       out[i] = in[i];
@@ -32,12 +32,12 @@ decode_block0(unsigned char* in, int length, unsigned char* out)
 }
 
 // 802A5AE0 (061320)
-int
-decode_block1(unsigned char* in, int length, unsigned char* out)
+int32_t
+decode_block1(uint8_t* in, int32_t length, uint8_t* out)
 {
-  unsigned short t0, t1, t3;
-  unsigned char* t2;
-  int len = 0;
+  uint16_t t0, t1, t3;
+  uint8_t* t2;
+  int32_t len = 0;
   while (length != 0)
   {
     t0 = read_u16_be(in); // a0
@@ -73,13 +73,13 @@ decode_block1(unsigned char* in, int length, unsigned char* out)
 }
 
 // 802A5B90 (0613D0)
-int
-decode_block2(unsigned char* in, int length, unsigned char* out)
+int32_t
+decode_block2(uint8_t* in, int32_t length, uint8_t* out)
 {
-  unsigned char* look;
-  unsigned short t0;
-  unsigned int t1, t2, t3;
-  int len = 0;
+  uint8_t* look;
+  uint16_t t0;
+  uint32_t t1, t2, t3;
+  int32_t len = 0;
   while (length != 0)
   {
     t0 = read_u16_be(in);
@@ -124,12 +124,12 @@ decode_block2(unsigned char* in, int length, unsigned char* out)
 }
 
 // 802A5A2C (06126C)
-int
-decode_block3(unsigned char* in, int length, unsigned char* out)
+int32_t
+decode_block3(uint8_t* in, int32_t length, uint8_t* out)
 {
-  unsigned short t0, t1, t3;
-  unsigned char* t2;
-  int len = 0;
+  uint16_t t0, t1, t3;
+  uint8_t* t2;
+  int32_t len = 0;
   while (length != 0)
   {
     t0 = read_u16_be(in);
@@ -138,10 +138,10 @@ decode_block3(unsigned char* in, int length, unsigned char* out)
     {
       t1 = t0 >> 8;
       t1 <<= 1;
-      *out = (unsigned char)t1; // sb
+      *out = (uint8_t)t1; // sb
       t1 = t0 & 0xFF;
       t1 <<= 1;
-      *(out + 1) = (unsigned char)t1; // sb
+      *(out + 1) = (uint8_t)t1; // sb
       out += 2;
       length -= 2;
       len += 2;
@@ -168,16 +168,13 @@ decode_block3(unsigned char* in, int length, unsigned char* out)
 }
 
 // 802A5C5C (06149C)
-int
-decode_block4(unsigned char* in,
-              int length,
-              unsigned char* out,
-              unsigned char* lut)
+int32_t
+decode_block4(uint8_t* in, int32_t length, uint8_t* out, uint8_t* lut)
 {
-  unsigned char* look;
-  unsigned int t3;
-  unsigned short t0, t1, t2;
-  int len = 0;
+  uint8_t* look;
+  uint32_t t3;
+  uint16_t t0, t1, t2;
+  int32_t len = 0;
   while (length != 0)
   {
     t0 = read_u16_be(in);
@@ -227,16 +224,13 @@ decode_block4(unsigned char* in,
 }
 
 // 802A5D34 (061574)
-int
-decode_block5(unsigned char* in,
-              int length,
-              unsigned char* out,
-              unsigned char* lut)
+int32_t
+decode_block5(uint8_t* in, int32_t length, uint8_t* out, uint8_t* lut)
 {
-  unsigned char* tmp;
-  unsigned short t0, t1;
-  unsigned int t2, t3;
-  int len = 0;
+  uint8_t* tmp;
+  uint16_t t0, t1;
+  uint32_t t2, t3;
+  int32_t len = 0;
   while (length != 0)
   {
     t0 = read_u16_be(in);
@@ -285,11 +279,11 @@ decode_block5(unsigned char* in,
 }
 
 // 802A5958 (061198)
-int
-decode_block6(unsigned char* in, int length, unsigned char* out)
+int32_t
+decode_block6(uint8_t* in, int32_t length, uint8_t* out)
 {
-  unsigned short t0, t1, t3;
-  int len = 0;
+  uint16_t t0, t1, t3;
+  int32_t len = 0;
   // .Lproc_802A5958_20: # 802A5978
   while (length != 0)
   {
@@ -297,7 +291,7 @@ decode_block6(unsigned char* in, int length, unsigned char* out)
     in += 2;
     if ((0x8000 & t0) == 0)
     {
-      unsigned short t2;
+      uint16_t t2;
       t1 = t0 >> 8;
       t2 = t1 & 0x38;
       t1 = t1 & 0x07;
@@ -318,7 +312,7 @@ decode_block6(unsigned char* in, int length, unsigned char* out)
     }
     else
     {
-      unsigned char* t2;
+      uint8_t* t2;
       t1 = t0 & 0x1F;
       t0 = t0 & 0x7FFF;
       t0 >>= 5;
@@ -338,18 +332,18 @@ decode_block6(unsigned char* in, int length, unsigned char* out)
   return len;
 }
 
-int
+int32_t
 blast_decode_file(char* in_filename,
-                  int type,
+                  int32_t type,
                   char* out_filename,
-                  unsigned char* lut)
+                  uint8_t* lut)
 {
-  unsigned char* in_buf = NULL;
-  unsigned char* out_buf = NULL;
-  int in_len;
-  int write_len;
-  int out_len = 0;
-  int ret_val = 0;
+  uint8_t* in_buf = NULL;
+  uint8_t* out_buf = NULL;
+  int32_t in_len;
+  int32_t write_len;
+  int32_t out_len = 0;
+  int32_t ret_val = 0;
 
   in_len = read_file(in_filename, &in_buf);
   if (in_len <= 0)
@@ -420,21 +414,21 @@ free_all:
 
 typedef struct
 {
-  unsigned char* w0; // source ptr
-  unsigned int w4;   // length
-  unsigned int w8;   // type
-  unsigned int wC;
+  uint8_t* w0; // source ptr
+  uint32_t w4; // length
+  uint32_t w8; // type
+  uint32_t wC;
 } block_t;
 
 // 802A57DC (06101C)
 // a0 is only real parameters in ROM
-int
-proc_802A57DC(block_t* a0, unsigned char** copy, unsigned char* rom)
+int32_t
+proc_802A57DC(block_t* a0, uint8_t** copy, uint8_t* rom)
 {
-  unsigned char* src;
-  unsigned int len;
-  unsigned int type;
-  int v0 = -1;
+  uint8_t* src;
+  uint32_t len;
+  uint32_t type;
+  int32_t v0 = -1;
 
   len = a0->w4;
   *copy = malloc(100 * len);
@@ -480,10 +474,10 @@ proc_802A57DC(block_t* a0, unsigned char** copy, unsigned char* rom)
 }
 
 static void
-convert_to_png(char* fname, unsigned short len, unsigned short type)
+convert_to_png(char* fname, uint16_t len, uint16_t type)
 {
   char pngname[512];
-  int height, width, depth;
+  int32_t height, width, depth;
   rgba* rimg;
   ia* img;
   generate_filename(fname, pngname, "png");
@@ -592,22 +586,22 @@ convert_to_png(char* fname, unsigned short len, unsigned short type)
 }
 
 void
-decompress_rom(const char* rom_path, unsigned char* data, long size)
+decompress_rom(const char* rom_path, uint8_t* data, size_t size)
 {
   block_t block;
   char out_fname[512];
-  int out_size;
-  unsigned int off;
-  unsigned char* out;
-  int width, height, depth;
+  int32_t out_size;
+  uint32_t off;
+  uint8_t* out;
+  int32_t width, height, depth;
   char* format;
 
   // loop through from 0x4CE0 to 0xCCE0
   for (off = ROM_OFFSET; off < END_OFFSET; off += 8)
   {
-    unsigned int start = read_u32_be(&data[off]);
-    unsigned short len = read_u16_be(&data[off + 4]);
-    unsigned short type = read_u16_be(&data[off + 6]);
+    uint32_t start = read_u32_be(&data[off]);
+    uint16_t len = read_u16_be(&data[off + 4]);
+    uint16_t type = read_u16_be(&data[off + 6]);
     assert(size >= start);
     // TODO: there are large sections of len=0, possibly LUTs for 4 & 5?
     if (len > 0)
@@ -752,8 +746,8 @@ print_usage()
 int
 main(int argc, char* argv[])
 {
-  unsigned char* data;
-  long size;
+  uint8_t* data;
+  size_t size;
 
   if (argc < 2)
   {
