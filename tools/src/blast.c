@@ -504,85 +504,81 @@ get_type_depth(uint16_t type)
   }
 }
 
-
 // This cannot be reliably determined by the data and needs to be
 // tracked manually in the splat yaml.
-void
-guess_resolution(uint16_t type,
-                 int32_t decompressed_size,
-                 int32_t* width,
-                 int32_t* height)
+
+typedef struct
+{
+  uint32_t w;
+  uint32_t h;
+} res_t;
+
+res_t
+guess_resolution(uint16_t type, int32_t size)
 {
   switch (type)
   {
     case 1:
-      switch (decompressed_size)
+      switch (size)
       {
         // clang-format off
-        case 16:   *width = 4;  *height = 2;  break;
-        case 512:  *width = 16; *height = 16; break;
-        case 1*KB: *width = 16; *height = 32; break;
-        case 2*KB: *width = 32; *height = 32; break;
-        case 4*KB: *width = 64; *height = 32; break;
-        case 8*KB: *width = 64; *height = 64; break;
-        case 3200: *width = 40; *height = 40; break;
-        default:   *width = 32; *height = decompressed_size / *width / 2;
+        case 16:   return (res_t){ 4, 2 };
+        case 512:  return (res_t){ 16, 16 };
+        case 1*KB: return (res_t){ 16, 32 };
+        case 2*KB: return (res_t){ 32, 32 };
+        case 4*KB: return (res_t){ 64, 32 };
+        case 8*KB: return (res_t){ 64, 64 };
+        case 3200: return (res_t){ 40, 40 };
+        default:   return (res_t){ 32, size / (32 * 2) };
           // clang-format on
       }
-      return;
     case 2:
-      switch (decompressed_size)
+      switch (size)
       {
         // clang-format off
-        case 256:  *width = 8;  *height = 8;  break;
-        case 512:  *width = 8;  *height = 16; break;
-        case 1*KB: *width = 16; *height = 16; break;
-        case 2*KB: *width = 16; *height = 32; break;
-        case 4*KB: *width = 32; *height = 32; break;
-        case 8*KB: *width = 64; *height = 32; break;
-        default:   *width = 32; *height = decompressed_size / *width / 4;
+        case 256:  return (res_t){ 8, 8 };
+        case 512:  return (res_t){ 8, 16 };
+        case 1*KB: return (res_t){ 16, 16 };
+        case 2*KB: return (res_t){ 16, 32 };
+        case 4*KB: return (res_t){ 32, 32 };
+        case 8*KB: return (res_t){ 64, 32 };
+        default:   return (res_t){ 32, size / (32 * 4) };
           // clang-format on
       }
-      return;
     case 3:
-      switch (decompressed_size)
+      switch (size)
       {
         // clang-format off
-        case 1*KB: *width = 32; *height = 32; break;
-        case 2*KB: *width = 32; *height = 64; break;
-        case 4*KB: *width = 64; *height = 64; break;
-        default:   *width = 32; *height = decompressed_size / *width;
+        case 1*KB: return (res_t){ 32, 32 };
+        case 2*KB: return (res_t){ 32, 64 };
+        case 4*KB: return (res_t){ 64, 64 };
+        default:   return (res_t){ 32, size / 32 };
           // clang-format on
       }
-      return;
     case 4:
-      switch (decompressed_size)
+      switch (size)
       {
         // clang-format off
-        case 1*KB: *width = 16; *height = 32; break;
-        case 2*KB: *width = 32; *height = 32; break;
-        case 4*KB: *width = 32; *height = 64; break;
-        case 8*KB: *width = 64; *height = 64; break;
-        default:   *width = 32; *height = decompressed_size / *width / 2;
+        case 1*KB: return (res_t){ 16, 32 };
+        case 2*KB: return (res_t){ 32, 32 };
+        case 4*KB: return (res_t){ 32, 64 };
+        case 8*KB: return (res_t){ 64, 64 };
+        default:   return (res_t){ 32, size / (32 * 2) };
           // clang-format on
       }
-      return;
     case 5:
-      switch (decompressed_size)
+      switch (size)
       {
         // clang-format off
-        case 1*KB: *width = 16; *height = 16; break;
-        case 2*KB: *width = 32; *height = 16; break;
-        case 4*KB: *width = 32; *height = 32; break;
-        case 8*KB: *width = 64; *height = 32; break;
-        default:   *width = 32; *height = decompressed_size / *width / 4;
+        case 1*KB: return (res_t){ 16, 16 };
+        case 2*KB: return (res_t){ 32, 16 };
+        case 4*KB: return (res_t){ 32, 32 };
+        case 8*KB: return (res_t){ 64, 32 };
+        default:   return (res_t){ 32, size / (32 * 4) };
           // clang-format on
       }
-      return;
     case 6:
-      *width = 16;
-      *height = decompressed_size / *width;
-      return;
+      return (res_t){ 16, size / 16 };
     default:
       assert(false);
   }
@@ -596,8 +592,7 @@ convert_to_png(char* fname, uint16_t len, uint16_t type)
     return false;
   }
 
-  int32_t width = 0, height = 0;
-  guess_resolution(type, len, &width, &height);
+  res_t res = guess_resolution(type, len);
 
   int32_t depth = get_type_depth(type);
 
@@ -609,24 +604,24 @@ convert_to_png(char* fname, uint16_t len, uint16_t type)
     case 2: // RGBA32
     case 5: // RGBA32
     {
-      rgba* rimg = file2rgba(fname, 0, width, height, depth);
+      rgba* rimg = file2rgba(fname, 0, res.w, res.h, depth);
       if (!rimg)
       {
         return false;
       }
-      rgba2png(rimg, width, height, pngname);
+      rgba2png(rimg, res.w, res.h, pngname);
       return true;
     }
     case 3: // IA8
     case 4: // IA16
     case 6: // IA8
     {
-      ia* img = file2ia(fname, 0, width, height, depth);
+      ia* img = file2ia(fname, 0, res.w, res.h, depth);
       if (!img)
       {
         return false;
       }
-      ia2png(img, width, height, pngname);
+      ia2png(img, res.w, res.h, pngname);
       return true;
     }
     default:
@@ -683,8 +678,7 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
     int32_t decompressed_size =
       decompress_block(&block, &decompressed_bytes, rom_bytes);
 
-    int32_t width = 0, height = 0;
-    guess_resolution(type, decompressed_size, &width, &height);
+    res_t res = guess_resolution(type, decompressed_size);
 
     int32_t depth = get_type_depth(type);
 
@@ -697,8 +691,8 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
            start + ROM_OFFSET + compressed_size,
            type,
            format_str,
-           width,
-           height,
+           res.w,
+           res.h,
            compressed_size,
            decompressed_size);
 
