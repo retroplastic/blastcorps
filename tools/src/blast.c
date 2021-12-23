@@ -520,7 +520,7 @@ convert_to_png(char* fname, unsigned short len, unsigned short type)
         case 2*KB: width = 16; height = 32; break;
         case 4*KB: width = 32; height = 32; break;
         case 8*KB: width = 64; height = 32; break;
-        default: width = 32; height = len/width/4; break;
+        default:   width = 32; height = len/width/4; break;
           // clang-format on
       }
       // RGBA32
@@ -536,7 +536,7 @@ convert_to_png(char* fname, unsigned short len, unsigned short type)
         case 1*KB: width = 32; height = 32; break;
         case 2*KB: width = 32; height = 64; break;
         case 4*KB: width = 64; height = 64; break;
-        default: width = 32; height = len/width; break;
+        default:   width = 32; height = len/width; break;
           // clang-format on
       }
       // IA8
@@ -553,7 +553,7 @@ convert_to_png(char* fname, unsigned short len, unsigned short type)
         case 2*KB: width = 32; height = 32; break;
         case 4*KB: width = 32; height = 64; break;
         case 8*KB: width = 64; height = 64; break;
-        default: width = 32; height = len/width/2; break;
+        default:   width = 32; height = len/width/2; break;
           // clang-format on
       }
       // IA16
@@ -570,7 +570,7 @@ convert_to_png(char* fname, unsigned short len, unsigned short type)
         case 2*KB: width = 32; height = 16; break;
         case 4*KB: width = 32; height = 32; break;
         case 8*KB: width = 64; height = 32; break;
-        default: width = 32; height = len/width/2; break;
+        default:   width = 32; height = len/width/2; break;
           // clang-format on
       }
       // RGBA32
@@ -674,7 +674,7 @@ main(int argc, char* argv[])
             case 2*KB: width = 16; height = 32; break;
             case 4*KB: width = 32; height = 32; break;
             case 8*KB: width = 64; height = 32; break;
-            default: width = 32; height = out_size/width/4; break;
+            default:   width = 32; height = out_size/width/4; break;
               // clang-format on
           }
           format = "\"rgba\"";
@@ -688,7 +688,7 @@ main(int argc, char* argv[])
             case 1*KB: width = 32; height = 32; break;
             case 2*KB: width = 32; height = 64; break;
             case 4*KB: width = 64; height = 64; break;
-            default: width = 32; height = out_size/width; break;
+            default:   width = 32; height = out_size/width; break;
               // clang-format on
           }
           format = "\"ia\"";
@@ -703,7 +703,7 @@ main(int argc, char* argv[])
             case 2*KB: width = 32; height = 32; break;
             case 4*KB: width = 32; height = 64; break;
             case 8*KB: width = 64; height = 64; break;
-            default: width = 32; height = out_size/width/2; break;
+            default:   width = 32; height = out_size/width/2; break;
               // clang-format on
           }
           format = "\"ia\"";
@@ -718,7 +718,7 @@ main(int argc, char* argv[])
             case 2*KB: width = 32; height = 16; break;
             case 4*KB: width = 32; height = 32; break;
             case 8*KB: width = 64; height = 32; break;
-            default: width = 32; height = out_size/width/4; break;
+            default:   width = 32; height = out_size/width/4; break;
               // clang-format on
           }
           format = "\"rgba\"";
