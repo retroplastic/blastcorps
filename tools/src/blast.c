@@ -478,6 +478,12 @@ static void convert_to_png(char *fname, unsigned short len, unsigned short type)
    }
 }
 
+void print_usage()
+{
+  printf("Usage:\n");
+  printf("./blast <rom_path>\n");
+}
+
 int main(int argc, char *argv[])
 {
 #define ROM_OFFSET 0x4CE0
@@ -492,7 +498,10 @@ int main(int argc, char *argv[])
    int width, height, depth;
    char *format;
 
-   if (argc < 2) return 1;
+   if (argc < 2) {
+     print_usage();
+     return 1;
+   }
 
    // read in Blast Corps ROM
    size = read_file(argv[1], &data);
