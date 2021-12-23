@@ -1,6 +1,14 @@
+#include <assert.h>
+#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+#include "n64graphics.h"
 #include "utils.h"
+
+#define ROM_OFFSET 0x4CE0
+#define END_OFFSET 0xCCE0
 
 // 802A5E10 (061650)
 // just a memcpy from a0 to a3
@@ -410,14 +418,6 @@ free_all:
   return ret_val;
 }
 
-#ifdef BLAST_STANDALONE
-#include <assert.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-
-#include "n64graphics.h"
-
 typedef struct
 {
   unsigned char* w0; // source ptr
@@ -601,8 +601,6 @@ print_usage()
 int
 main(int argc, char* argv[])
 {
-#define ROM_OFFSET 0x4CE0
-#define END_OFFSET 0xCCE0
   block_t block;
   char out_fname[512];
   unsigned char* data;
@@ -763,5 +761,3 @@ main(int argc, char* argv[])
 
   return 0;
 }
-
-#endif // BLAST_STANDALONE
