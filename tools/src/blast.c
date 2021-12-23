@@ -611,7 +611,7 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
       block.w8 = type;
       // printf("%X (%X) %X %d\n", start, start+ROM_OFFSET, len, type);
       out_size = proc_802A57DC(&block, &out, data);
-      sprintf(out_fname, "%s.%06X.%d.bin", rom_path, start, type);
+      sprintf(out_fname, "%s.%06X.%d.bin", rom_path, start + ROM_OFFSET, type);
       // printf("writing %s: %04X -> %04X\n", out_fname, len, out_size);
       depth = 0;
       switch (type)
@@ -721,14 +721,15 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
         char format_str[16];
         sprintf(format_str, "(%s%d)", format, depth);
 
-        printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %d bytes\n",
+        printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %4d bytes -> %s\n",
                start + ROM_OFFSET,
                start + ROM_OFFSET + len,
                type,
                format_str,
                width,
                height,
-               out_size);
+               out_size,
+               out_fname);
       }
       write_file(out_fname, out, out_size);
       // attempt to convert to PNG
