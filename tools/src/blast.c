@@ -590,7 +590,7 @@ void
 decompress_rom(const char* rom_path, uint8_t* data, size_t size)
 {
   block_t block;
-  char out_fname[512];
+
   int32_t out_size;
   uint32_t off;
   uint8_t* out;
@@ -615,11 +615,6 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
       // printf("%X (%X) %X %d\n", start, start+ROM_OFFSET, len, type);
       out_size = proc_802A57DC(&block, &out, data);
 
-      sprintf(out_fname,
-              "%s/%06X.blast%d.bin",
-              rom_dir_path,
-              start + ROM_OFFSET,
-              type);
       depth = 0;
       switch (type)
       {
@@ -728,19 +723,38 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
         char format_str[16];
         sprintf(format_str, "(%s%d)", format, depth);
 
-        printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %4d bytes -> %s\n",
+        printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %4d -> %4d bytes\n",
                start + ROM_OFFSET,
                start + ROM_OFFSET + len,
                type,
                format_str,
                width,
                height,
-               out_size,
-               out_fname);
+               len,
+               out_size);
       }
-      write_file(out_fname, out, out_size);
+
+      // Write compressed file
+      char out_path_compressed[512];
+      sprintf(out_path_compressed,
+              "%s/%06X.blast%d",
+              rom_dir_path,
+              start + ROM_OFFSET,
+              type);
+      write_file(out_path_compressed, data, len);
+
+      // Write decompressed file
+      char out_path_decompressed[512];
+      sprintf(out_path_decompressed,
+              "%s/%06X.%s%d",
+              rom_dir_path,
+              start + ROM_OFFSET,
+              format,
+              depth);
+      write_file(out_path_decompressed, out, out_size);
+
       // attempt to convert to PNG
-      convert_to_png(out_fname, out_size, type);
+      convert_to_png(out_path_decompressed, out_size, type);
     }
   }
 }
