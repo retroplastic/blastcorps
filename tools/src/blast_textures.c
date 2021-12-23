@@ -6,7 +6,7 @@
 
 // 802A5E10 (061650)
 // just a memcpy from a0 to a3
-int decode_block0(unsigned char *in, int length, unsigned char *out)
+int decode_blast0(unsigned char *in, int length, unsigned char *out)
 {
    int ret_len = length;
    length >>= 3; // a1 - gets number of dwords
@@ -319,7 +319,7 @@ int proc_802A57DC(block_t *a0, unsigned char **copy, unsigned char *rom)
       // a2 - type (always unused)
       // a3 - output buffer
       // t4 - blocks 4 & 5 reference t4 which is set to FP
-      case 0: v0 = decode_block0(src, len, *copy); break;
+      case 0: v0 = decode_blast0(src, len, *copy); break;
       case 1: v0 = decode_block1(src, len, *copy); break;
       case 2: v0 = decode_block2(src, len, *copy); break;
       // TODO: need to figure out where last param is set for decoders 4 and 5

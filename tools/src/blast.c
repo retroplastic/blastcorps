@@ -418,18 +418,16 @@ free_all:
 
 typedef struct
 {
-  uint8_t* src;    // w0
-  uint32_t length; // w4
-  uint32_t type;   // w8
+  uint8_t* src;  // w0
+  uint32_t size; // w4
+  uint32_t type; // w8
   uint32_t wC;
 } block_t;
 
 // 802A57DC (06101C)
 // a0 is only real parameters in ROM
 int32_t
-decompress_block(block_t* block,
-                 uint8_t* decompressed_bytes,
-                 uint8_t* rom_bytes)
+decompress_block(block_t* block, uint8_t* result_bytes, uint8_t* rom_bytes)
 {
   switch (block->type)
   {
@@ -439,24 +437,24 @@ decompress_block(block_t* block,
     // a3 - output buffer
     // t4 - blocks 4 & 5 reference t4 which is set to FP
     case 0:
-      return decode_block0(block->src, block->length, decompressed_bytes);
+      return decode_block0(block->src, block->size, result_bytes);
     case 1:
-      return decode_block1(block->src, block->length, decompressed_bytes);
+      return decode_block1(block->src, block->size, result_bytes);
     case 2:
-      return decode_block2(block->src, block->length, decompressed_bytes);
+      return decode_block2(block->src, block->size, result_bytes);
     case 3:
-      return decode_block3(block->src, block->length, decompressed_bytes);
+      return decode_block3(block->src, block->size, result_bytes);
     // TODO: need to figure out where last param is set for decoders 4 and 5
     case 4:
       return decode_block4(
-        block->src, block->length, decompressed_bytes, &rom_bytes[0x047480]);
+        block->src, block->size, result_bytes, &rom_bytes[0x047480]);
     // case 5: v0 = decode_block5(src, len, *copy, &rom[0x0998E0]); break;
     case 5:
       return decode_block5(
-        block->src, block->length, decompressed_bytes, &rom_bytes[0x152970]);
+        block->src, block->size, result_bytes, &rom_bytes[0x152970]);
     // case 5: v0 = decode_block5(src, len, *copy, &rom[0x1E2C00]); break;
     case 6:
-      return decode_block6(block->src, block->length, decompressed_bytes);
+      return decode_block6(block->src, block->size, result_bytes);
     default:
       printf("Need type %d\n", block->type);
       return -1;
@@ -668,11 +666,11 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
 
     block_t block = {
       .src = &rom_bytes[start + ROM_OFFSET],
-      .length = compressed_size,
+      .size = compressed_size,
       .type = type,
     };
     // printf("%X (%X) %X %d\n", start, start+ROM_OFFSET, len, type);
-    uint8_t* decompressed_bytes = malloc(100 * block.length);
+    uint8_t* decompressed_bytes = malloc(100 * block.size);
     int32_t decompressed_size =
       decompress_block(&block, decompressed_bytes, rom_bytes);
 
