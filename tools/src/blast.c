@@ -752,7 +752,7 @@ main(int argc, char* argv[])
   if (argc < 2)
   {
     print_usage();
-    return 1;
+    return EXIT_FAILURE;
   }
 
   // read in Blast Corps ROM
@@ -762,5 +762,5 @@ main(int argc, char* argv[])
 
   free(data);
 
-  return 0;
+  return EXIT_SUCCESS;
 }
