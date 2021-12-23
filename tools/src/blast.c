@@ -622,11 +622,21 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
     uint32_t start = read_u32_be(&rom_bytes[address]);
     uint16_t compressed_size = read_u16_be(&rom_bytes[address + 4]);
     uint16_t type = read_u16_be(&rom_bytes[address + 6]);
-    assert(rom_size >= start);
-    // TODO: there are large sections of len=0, possibly LUTs for 4 & 5?
 
+    assert(rom_size >= start);
+
+    // TODO: there are large sections of len=0, possibly LUTs for 4 & 5?
     if (compressed_size == 0)
     {
+      continue;
+    }
+
+    if (type == 0)
+    {
+      printf("[0x%06X, 0x%06X] blast0 Skipping %5d bytes\n",
+             start + ROM_OFFSET,
+             start + ROM_OFFSET + compressed_size,
+             compressed_size);
       continue;
     }
 
@@ -645,16 +655,7 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
     bool type_valid = get_type_params(
       type, decompressed_size, &width, &height, &depth, &format);
 
-    if (!type_valid)
-    {
-      ERROR("Error: %d x %d for %X at %X type %d\n",
-            width,
-            height,
-            decompressed_size,
-            start + ROM_OFFSET,
-            type);
-      continue;
-    }
+    assert(type_valid);
 
     char format_str[16];
     sprintf(format_str, "(%s%d)", format, depth);
