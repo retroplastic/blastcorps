@@ -690,69 +690,72 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
     uint16_t type = read_u16_be(&rom_bytes[address + 6]);
     assert(rom_size >= start);
     // TODO: there are large sections of len=0, possibly LUTs for 4 & 5?
-    if (compressed_size > 0)
+
+    if (compressed_size == 0)
     {
-      block_t block = { .src = &rom_bytes[start + ROM_OFFSET],
-                        .length = compressed_size,
-                        .type = type };
-      // printf("%X (%X) %X %d\n", start, start+ROM_OFFSET, len, type);
-      uint8_t* decompressed_bytes;
-      int32_t decompressed_size =
-        decompress_block(&block, &decompressed_bytes, rom_bytes);
-
-      char* format = NULL;
-      int32_t width = 0, height = 0, depth = 0;
-      bool type_valid = get_type_params(
-        type, decompressed_size, &width, &height, &depth, &format);
-
-      if (type_valid)
-      {
-        if (width == 0 || height == 0)
-        {
-          ERROR("Error: %d x %d for %X at %X type %d\n",
-                width,
-                height,
-                decompressed_size,
-                start + ROM_OFFSET,
-                type);
-        }
-
-        char format_str[16];
-        sprintf(format_str, "(%s%d)", format, depth);
-
-        printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %4d -> %4d bytes\n",
-               start + ROM_OFFSET,
-               start + ROM_OFFSET + compressed_size,
-               type,
-               format_str,
-               width,
-               height,
-               compressed_size,
-               decompressed_size);
-      }
-
-      // Write compressed file
-      char out_path_compressed[512];
-      sprintf(out_path_compressed,
-              "%s/%06X.blast%d",
-              rom_dir_path,
-              start + ROM_OFFSET,
-              type);
-      write_file(out_path_compressed, rom_bytes, compressed_size);
-
-      // Write decompressed file
-      char out_path_decompressed[512];
-      sprintf(out_path_decompressed,
-              "%s/%06X.%s%d",
-              rom_dir_path,
-              start + ROM_OFFSET,
-              format,
-              depth);
-      write_file(out_path_decompressed, decompressed_bytes, decompressed_size);
-
-      // attempt to convert to PNG
-      convert_to_png(out_path_decompressed, decompressed_size, type);
+      continue;
     }
+
+    block_t block = {
+      .src = &rom_bytes[start + ROM_OFFSET],
+      .length = compressed_size,
+      .type = type,
+    };
+    // printf("%X (%X) %X %d\n", start, start+ROM_OFFSET, len, type);
+    uint8_t* decompressed_bytes;
+    int32_t decompressed_size =
+      decompress_block(&block, &decompressed_bytes, rom_bytes);
+
+    char* format = NULL;
+    int32_t width = 0, height = 0, depth = 0;
+    bool type_valid = get_type_params(
+      type, decompressed_size, &width, &height, &depth, &format);
+
+    if (!type_valid)
+    {
+      ERROR("Error: %d x %d for %X at %X type %d\n",
+            width,
+            height,
+            decompressed_size,
+            start + ROM_OFFSET,
+            type);
+      continue;
+    }
+
+    char format_str[16];
+    sprintf(format_str, "(%s%d)", format, depth);
+
+    printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %4d -> %4d bytes\n",
+           start + ROM_OFFSET,
+           start + ROM_OFFSET + compressed_size,
+           type,
+           format_str,
+           width,
+           height,
+           compressed_size,
+           decompressed_size);
+
+    // Write compressed file
+    char out_path_compressed[512];
+    sprintf(out_path_compressed,
+            "%s/%06X.blast%d",
+            rom_dir_path,
+            start + ROM_OFFSET,
+            type);
+    write_file(out_path_compressed, rom_bytes, compressed_size);
+
+    // Write decompressed file
+    char out_path_decompressed[512];
+    sprintf(out_path_decompressed,
+            "%s/%06X.%s%d",
+            rom_dir_path,
+            start + ROM_OFFSET,
+            format,
+            depth);
+    write_file(out_path_decompressed, decompressed_bytes, decompressed_size);
+
+    // attempt to convert to PNG
+    convert_to_png(out_path_decompressed, decompressed_size, type);
   }
 }
 
