@@ -7,6 +7,7 @@ options:
   create_detected_syms: yes
   find_file_boundaries: yes
   target_path: baserom.us.v11.z64
+  extensions_path: tools/splat_ext
 segments:
   - name:  header
     type:  header
