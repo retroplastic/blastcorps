@@ -487,7 +487,7 @@ get_type_params(uint16_t type,
         case 4*KB: *width = 64; *height = 32; break;
         case 8*KB: *width = 64; *height = 64; break;
         case 3200: *width = 40; *height = 40; break;
-        default:   *width = 32; *height = decompressed_size / *width / 2; break;
+        default:   *width = 32; *height = decompressed_size / *width / 2;
           // clang-format on
       }
       *format = "rgba";
@@ -504,7 +504,7 @@ get_type_params(uint16_t type,
         case 2*KB: *width = 16; *height = 32; break;
         case 4*KB: *width = 32; *height = 32; break;
         case 8*KB: *width = 64; *height = 32; break;
-        default:   *width = 32; *height = decompressed_size / *width / 4; break;
+        default:   *width = 32; *height = decompressed_size / *width / 4;
           // clang-format on
       }
       *format = "rgba";
@@ -518,7 +518,7 @@ get_type_params(uint16_t type,
         case 1*KB: *width = 32; *height = 32; break;
         case 2*KB: *width = 32; *height = 64; break;
         case 4*KB: *width = 64; *height = 64; break;
-        default:   *width = 32; *height = decompressed_size / *width; break;
+        default:   *width = 32; *height = decompressed_size / *width;
           // clang-format on
       }
       *format = "ia";
@@ -533,7 +533,7 @@ get_type_params(uint16_t type,
         case 2*KB: *width = 32; *height = 32; break;
         case 4*KB: *width = 32; *height = 64; break;
         case 8*KB: *width = 64; *height = 64; break;
-        default:   *width = 32; *height = decompressed_size / *width / 2; break;
+        default:   *width = 32; *height = decompressed_size / *width / 2;
           // clang-format on
       }
       *format = "ia";
@@ -548,7 +548,7 @@ get_type_params(uint16_t type,
         case 2*KB: *width = 32; *height = 16; break;
         case 4*KB: *width = 32; *height = 32; break;
         case 8*KB: *width = 64; *height = 32; break;
-        default:   *width = 32; *height = decompressed_size / *width / 4; break;
+        default:   *width = 32; *height = decompressed_size / *width / 4;
           // clang-format on
       }
       *format = "rgba";
