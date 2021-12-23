@@ -21,6 +21,23 @@ segments:
   - [0xCDE0, bin, some_rgba16_text0.blast]
   - [0xD380, bin, some_rgba16_text1.blast]
   - [0xD4F0, bin]
+  
+  - [0x2E6008, bin, blast1_rgba16_32_32_some_explosion_part]
+  - [0x2E6438, bin, blast1_rgba16_32_32_guy_happy]
+  - [0x2E68C0, bin, blast1_rgba16_32_32_guy_angry]
+  - [0x2E6D3A]
+  - [0x2E6D40, blast, guy_very_angry, 1, rgba16, 32, 32]
+  - [0x2E7222]
+  - [0x2E7228, bin, blast1_rgba16_something2]
+  - [0x2E7730]
+  
+  #- [0x2E1328, bin, blast1_rgba16_32_32_some_explosion_part]
+  #- [0x2E1758, bin, blast1_rgba16_32_32_guy_happy]
+  #- [0x2E1BE0, bin, blast1_rgba16_32_32_guy_angry]
+  #- [0x2E2060, bin, blast1_rgba16_32_32_guy_very_angry]
+  #- [0x2E2548, bin, blast1_rgba16_something2]
+  #- [0x2E2A50]
+  
   # TODO: extract each of these
   #- [0x487050, rgba16gz, titlelogo_usa.raw.855417225, 280, 64]
   #- [0x487050, rzip, titlelogo_usa.raw.855417225]
