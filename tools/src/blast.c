@@ -631,9 +631,18 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
       continue;
     }
 
+    // Write compressed file
+    char out_path_compressed[512];
+    sprintf(out_path_compressed,
+            "%s/%06X.blast%d",
+            rom_dir_path,
+            start + ROM_OFFSET,
+            type);
+    write_file(out_path_compressed, rom_bytes, compressed_size);
+
     if (type == 0)
     {
-      printf("[0x%06X, 0x%06X] blast0 Skipping %5d bytes\n",
+      printf("[0x%06X, 0x%06X] blast0 %5d bytes\n",
              start + ROM_OFFSET,
              start + ROM_OFFSET + compressed_size,
              compressed_size);
@@ -669,15 +678,6 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
            height,
            compressed_size,
            decompressed_size);
-
-    // Write compressed file
-    char out_path_compressed[512];
-    sprintf(out_path_compressed,
-            "%s/%06X.blast%d",
-            rom_dir_path,
-            start + ROM_OFFSET,
-            type);
-    write_file(out_path_compressed, rom_bytes, compressed_size);
 
     // Write decompressed file
     char out_path_decompressed[512];
