@@ -17,11 +17,22 @@ segments:
     start: 0x00000040
   - [0x1000, bin, init.us.v11]
   - [0x4CE0, bin]                           # offsets table (0x8000 long)
-  - [0xCCE0, bin]                           # tbd
+  - [0xCCE0, bin, some_ia8_tex.blast]
+  - [0xCDE0, bin, some_rgba16_text0.blast]
+  - [0xD380, bin, some_rgba16_text1.blast]
+  - [0xD4F0, bin]
   # TODO: extract each of these
-  - [0x487050, rgba16gz, titlelogo_usa.raw.855417225, 280, 64]
+  #- [0x487050, rgba16gz, titlelogo_usa.raw.855417225, 280, 64]
+  #- [0x487050, rzip, titlelogo_usa.raw.855417225]
+  #- [0x487050, bin, titlelogo_usa_compressed]
+  #- [0x487050, gzip, titlelogo_usa_uncompressed]
+  # - name:  titlelogo_usa_rzip
+  #  type: gzip
+  #  start: 0x487050
+  #  subsegments:
+  - [0x487050, rgba16gz, titlelogo_usa, 280, 64]
   - [0x489E70, rgba16gz, titlepicture_usa.raw.855417226, 156, 156]
-  - [0x48F5A0, bin, nink.raw.855417226]
+  - [0x48F5A0, gzip, nink.raw.855417226]
   - [0x48F970, bin, 64k.raw.855417226]
   - [0x48FA70, bin, copyrightLogo.raw.855417226]
   - [0x48FE90, bin, scientist.raw.855417173]
@@ -187,6 +198,9 @@ segments:
   - [0x665F80, bin, level59.raw.850841501]
   - [0x66BB49, bin, level59_dl.raw.850841517]
   - [0x66C900, bin, worldtextures.raw.855417250]
+  #- name:  worldtextures
+  #  type:  rzip
+  #  start: 0x66C900
   - [0x68B550, bin, ambertextures.raw.855417184]
   - [0x6A32B0, bin, traffictextures.raw.855417184]
   - [0x6A8DA0, bin, controllertextures.raw.855417205]
