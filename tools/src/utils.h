@@ -116,13 +116,13 @@ touch_file(const char* filename);
 
 // read entire contents of file into buffer
 // returns file size or negative on error
-long
+size_t
 read_file(const char* file_name, unsigned char** data);
 
 // write buffer to file
 // returns number of bytes written out or -1 on failure
-long
-write_file(const char* file_name, unsigned char* data, long length);
+size_t
+write_file(const char* file_name, unsigned char* data, size_t length);
 
 // generate an output file name from input name by replacing file extension
 // in_name: input file name

@@ -112,13 +112,13 @@ touch_file(const char* filename)
   }
 }
 
-long
+size_t
 read_file(const char* file_name, unsigned char** data)
 {
   FILE* in;
   unsigned char* in_buf = NULL;
-  long file_size;
-  long bytes_read;
+  size_t file_size;
+  size_t bytes_read;
   in = fopen(file_name, "rb");
   if (in == NULL)
   {
@@ -150,11 +150,11 @@ read_file(const char* file_name, unsigned char** data)
   return bytes_read;
 }
 
-long
-write_file(const char* file_name, unsigned char* data, long length)
+size_t
+write_file(const char* file_name, unsigned char* data, size_t length)
 {
   FILE* out;
-  long bytes_written;
+  size_t bytes_written;
   // open output file
   out = fopen(file_name, "wb");
   if (out == NULL)
