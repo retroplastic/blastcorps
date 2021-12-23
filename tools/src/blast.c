@@ -334,6 +334,7 @@ decode_block6(uint8_t* in, int32_t length, uint8_t* out)
   return len;
 }
 
+#if 0
 int32_t
 blast_decode_file(char* in_filename,
                   int32_t type,
@@ -413,6 +414,7 @@ free_all:
 
   return ret_val;
 }
+#endif
 
 typedef struct
 {
