@@ -415,27 +415,29 @@ free_all:
 
 typedef struct
 {
-  uint8_t* w0; // source ptr
-  uint32_t w4; // length
-  uint32_t w8; // type
+  uint8_t* src;    // w0
+  uint32_t length; // w4
+  uint32_t type;   // w8
   uint32_t wC;
 } block_t;
 
 // 802A57DC (06101C)
 // a0 is only real parameters in ROM
 int32_t
-proc_802A57DC(block_t* a0, uint8_t** copy, uint8_t* rom)
+decompress_block(block_t* block,
+                 uint8_t** decompressed_bytes,
+                 uint8_t* rom_bytes)
 {
   uint8_t* src;
   uint32_t len;
   uint32_t type;
   int32_t v0 = -1;
 
-  len = a0->w4;
-  *copy = malloc(100 * len);
-  src = a0->w0;
+  len = block->length;
+  *decompressed_bytes = malloc(100 * len);
+  src = block->src;
 
-  type = a0->w8;
+  type = block->type;
   switch (type)
   {
     // a0 - input buffer
@@ -444,28 +446,28 @@ proc_802A57DC(block_t* a0, uint8_t** copy, uint8_t* rom)
     // a3 - output buffer
     // t4 - blocks 4 & 5 reference t4 which is set to FP
     case 0:
-      v0 = decode_block0(src, len, *copy);
+      v0 = decode_block0(src, len, *decompressed_bytes);
       break;
     case 1:
-      v0 = decode_block1(src, len, *copy);
+      v0 = decode_block1(src, len, *decompressed_bytes);
       break;
     case 2:
-      v0 = decode_block2(src, len, *copy);
+      v0 = decode_block2(src, len, *decompressed_bytes);
       break;
     case 3:
-      v0 = decode_block3(src, len, *copy);
+      v0 = decode_block3(src, len, *decompressed_bytes);
       break;
     // TODO: need to figure out where last param is set for decoders 4 and 5
     case 4:
-      v0 = decode_block4(src, len, *copy, &rom[0x047480]);
+      v0 = decode_block4(src, len, *decompressed_bytes, &rom_bytes[0x047480]);
       break;
     // case 5: v0 = decode_block5(src, len, *copy, &rom[0x0998E0]); break;
     case 5:
-      v0 = decode_block5(src, len, *copy, &rom[0x152970]);
+      v0 = decode_block5(src, len, *decompressed_bytes, &rom_bytes[0x152970]);
       break;
     // case 5: v0 = decode_block5(src, len, *copy, &rom[0x1E2C00]); break;
     case 6:
-      v0 = decode_block6(src, len, *copy);
+      v0 = decode_block6(src, len, *decompressed_bytes);
       break;
     default:
       printf("Need type %d\n", type);
@@ -587,13 +589,13 @@ convert_to_png(char* fname, uint16_t len, uint16_t type)
 }
 
 void
-decompress_rom(const char* rom_path, uint8_t* data, size_t size)
+decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
 {
   block_t block;
 
-  int32_t out_size;
+  int32_t decompressed_size;
   uint32_t off;
-  uint8_t* out;
+  uint8_t* decompressed_bytes;
   int32_t width, height, depth;
   char* format;
   char* rom_dir_path = strdup(rom_path);
@@ -602,18 +604,19 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
   // loop through from 0x4CE0 to 0xCCE0
   for (off = ROM_OFFSET; off < END_OFFSET; off += 8)
   {
-    uint32_t start = read_u32_be(&data[off]);
-    uint16_t len = read_u16_be(&data[off + 4]);
-    uint16_t type = read_u16_be(&data[off + 6]);
-    assert(size >= start);
+    uint32_t start = read_u32_be(&rom_bytes[off]);
+    uint16_t compressed_size = read_u16_be(&rom_bytes[off + 4]);
+    uint16_t type = read_u16_be(&rom_bytes[off + 6]);
+    assert(rom_size >= start);
     // TODO: there are large sections of len=0, possibly LUTs for 4 & 5?
-    if (len > 0)
+    if (compressed_size > 0)
     {
-      block.w0 = &data[start + ROM_OFFSET];
-      block.w4 = len;
-      block.w8 = type;
+      block.src = &rom_bytes[start + ROM_OFFSET];
+      block.length = compressed_size;
+      block.type = type;
       // printf("%X (%X) %X %d\n", start, start+ROM_OFFSET, len, type);
-      out_size = proc_802A57DC(&block, &out, data);
+      decompressed_size =
+        decompress_block(&block, &decompressed_bytes, rom_bytes);
 
       depth = 0;
       switch (type)
@@ -623,7 +626,7 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
           break;
         case 1:
           // guess at dims
-          switch (out_size)
+          switch (decompressed_size)
           {
             // clang-format off
             case 16:   width = 4;  height = 2;  break;
@@ -633,7 +636,7 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
             case 4*KB: width = 64; height = 32; break;
             case 8*KB: width = 64; height = 64; break;
             case 3200: width = 40; height = 40; break;
-            default:   width = 32; height = out_size/width/2; break;
+            default:   width = 32; height = decompressed_size/width/2; break;
               // clang-format on
           }
           format = "rgba";
@@ -641,7 +644,7 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
           break;
         case 2:
           // guess at dims
-          switch (out_size)
+          switch (decompressed_size)
           {
             // clang-format off
             case 256:  width = 8;  height = 8;  break;
@@ -650,7 +653,7 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
             case 2*KB: width = 16; height = 32; break;
             case 4*KB: width = 32; height = 32; break;
             case 8*KB: width = 64; height = 32; break;
-            default:   width = 32; height = out_size/width/4; break;
+            default:   width = 32; height = decompressed_size/width/4; break;
               // clang-format on
           }
           format = "rgba";
@@ -658,13 +661,13 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
           break;
         case 3:
           // guess at dims
-          switch (out_size)
+          switch (decompressed_size)
           {
             // clang-format off
             case 1*KB: width = 32; height = 32; break;
             case 2*KB: width = 32; height = 64; break;
             case 4*KB: width = 64; height = 64; break;
-            default:   width = 32; height = out_size/width; break;
+            default:   width = 32; height = decompressed_size/width; break;
               // clang-format on
           }
           format = "ia";
@@ -672,14 +675,14 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
           break;
         case 4:
           // guess at dims
-          switch (out_size)
+          switch (decompressed_size)
           {
             // clang-format off
             case 1*KB: width = 16; height = 32; break;
             case 2*KB: width = 32; height = 32; break;
             case 4*KB: width = 32; height = 64; break;
             case 8*KB: width = 64; height = 64; break;
-            default:   width = 32; height = out_size/width/2; break;
+            default:   width = 32; height = decompressed_size/width/2; break;
               // clang-format on
           }
           format = "ia";
@@ -687,14 +690,14 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
           break;
         case 5:
           // guess at dims
-          switch (out_size)
+          switch (decompressed_size)
           {
             // clang-format off
             case 1*KB: width = 16; height = 16; break;
             case 2*KB: width = 32; height = 16; break;
             case 4*KB: width = 32; height = 32; break;
             case 8*KB: width = 64; height = 32; break;
-            default:   width = 32; height = out_size/width/4; break;
+            default:   width = 32; height = decompressed_size/width/4; break;
               // clang-format on
           }
           format = "rgba";
@@ -704,7 +707,7 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
           // guess at dims
           depth = 8;
           width = 16;
-          height = (out_size * 8 / depth) / width;
+          height = (decompressed_size * 8 / depth) / width;
           format = "ia";
           break;
       }
@@ -715,7 +718,7 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
           ERROR("Error: %d x %d for %X at %X type %d\n",
                 width,
                 height,
-                out_size,
+                decompressed_size,
                 start + ROM_OFFSET,
                 type);
         }
@@ -725,13 +728,13 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
 
         printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %4d -> %4d bytes\n",
                start + ROM_OFFSET,
-               start + ROM_OFFSET + len,
+               start + ROM_OFFSET + compressed_size,
                type,
                format_str,
                width,
                height,
-               len,
-               out_size);
+               compressed_size,
+               decompressed_size);
       }
 
       // Write compressed file
@@ -741,7 +744,7 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
               rom_dir_path,
               start + ROM_OFFSET,
               type);
-      write_file(out_path_compressed, data, len);
+      write_file(out_path_compressed, rom_bytes, compressed_size);
 
       // Write decompressed file
       char out_path_decompressed[512];
@@ -751,10 +754,10 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
               start + ROM_OFFSET,
               format,
               depth);
-      write_file(out_path_decompressed, out, out_size);
+      write_file(out_path_decompressed, decompressed_bytes, decompressed_size);
 
       // attempt to convert to PNG
-      convert_to_png(out_path_decompressed, out_size, type);
+      convert_to_png(out_path_decompressed, decompressed_size, type);
     }
   }
 }
@@ -770,7 +773,7 @@ print_usage()
 int
 main(int argc, char* argv[])
 {
-  uint8_t* data;
+  uint8_t* rom_bytes;
   size_t size;
 
   if (argc < 2 || argc > 3)
@@ -780,12 +783,12 @@ main(int argc, char* argv[])
   }
 
   // read in Blast Corps ROM
-  size = read_file(argv[1], &data);
+  size = read_file(argv[1], &rom_bytes);
 
   if (argc == 2)
   {
     // decompress whole rom
-    decompress_rom(argv[1], data, size);
+    decompress_rom(argv[1], rom_bytes, size);
   }
   else if (argc == 3)
   {
@@ -793,7 +796,7 @@ main(int argc, char* argv[])
     convert_to_png(argv[1], size, atoi(argv[2]));
   }
 
-  free(data);
+  free(rom_bytes);
 
   return EXIT_SUCCESS;
 }
