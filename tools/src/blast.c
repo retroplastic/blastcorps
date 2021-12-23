@@ -577,34 +577,30 @@ convert_to_png(char* fname, uint16_t len, uint16_t type)
 void
 decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
 {
-  block_t block;
-
-  int32_t decompressed_size;
-  uint32_t off;
-  uint8_t* decompressed_bytes;
-  int32_t width, height, depth;
-  char* format;
   char* rom_dir_path = strdup(rom_path);
   dirname(rom_dir_path);
 
   // loop through from 0x4CE0 to 0xCCE0
-  for (off = ROM_OFFSET; off < END_OFFSET; off += 8)
+  for (uint32_t address = ROM_OFFSET; address < END_OFFSET; address += 8)
   {
-    uint32_t start = read_u32_be(&rom_bytes[off]);
-    uint16_t compressed_size = read_u16_be(&rom_bytes[off + 4]);
-    uint16_t type = read_u16_be(&rom_bytes[off + 6]);
+    uint32_t start = read_u32_be(&rom_bytes[address]);
+    uint16_t compressed_size = read_u16_be(&rom_bytes[address + 4]);
+    uint16_t type = read_u16_be(&rom_bytes[address + 6]);
     assert(rom_size >= start);
     // TODO: there are large sections of len=0, possibly LUTs for 4 & 5?
     if (compressed_size > 0)
     {
-      block.src = &rom_bytes[start + ROM_OFFSET];
-      block.length = compressed_size;
-      block.type = type;
+      block_t block = { .src = &rom_bytes[start + ROM_OFFSET],
+                        .length = compressed_size,
+                        .type = type };
       // printf("%X (%X) %X %d\n", start, start+ROM_OFFSET, len, type);
-      decompressed_size =
+      uint8_t* decompressed_bytes;
+      int32_t decompressed_size =
         decompress_block(&block, &decompressed_bytes, rom_bytes);
 
-      depth = 0;
+      char* format = NULL;
+      int32_t width = 0, height = 0, depth = 0;
+
       switch (type)
       {
         case 0:
@@ -759,9 +755,6 @@ print_usage()
 int
 main(int argc, char* argv[])
 {
-  uint8_t* rom_bytes;
-  size_t size;
-
   if (argc < 2 || argc > 3)
   {
     print_usage();
@@ -769,7 +762,8 @@ main(int argc, char* argv[])
   }
 
   // read in Blast Corps ROM
-  size = read_file(argv[1], &rom_bytes);
+  uint8_t* rom_bytes;
+  size_t size = read_file(argv[1], &rom_bytes);
 
   if (argc == 2)
   {
