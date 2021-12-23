@@ -416,11 +416,22 @@ free_all:
 }
 #endif
 
+typedef enum
+{
+  BLAST0 = 0,
+  BLAST1_RGBA16,
+  BLAST2_RGBA32,
+  BLAST3_IA8,
+  BLAST4_IA16,
+  BLAST5_RGBA32,
+  BLAST6_IA8
+} blast_t;
+
 typedef struct
 {
   uint8_t* src;  // w0
   uint32_t size; // w4
-  uint32_t type; // w8
+  blast_t type; // w8
   uint32_t wC;
 } block_t;
 
@@ -436,19 +447,19 @@ decompress_block(block_t* block, uint8_t* result_bytes, uint8_t* lut)
     // a2 - type (always unused)
     // a3 - output buffer
     // t4 - blocks 4 & 5 reference t4 which is set to FP
-    case 0:
+    case BLAST0:
       return decode_block0(block->src, block->size, result_bytes);
-    case 1:
+    case BLAST1_RGBA16:
       return decode_block1(block->src, block->size, result_bytes);
-    case 2:
+    case BLAST2_RGBA32:
       return decode_block2(block->src, block->size, result_bytes);
-    case 3:
+    case BLAST3_IA8:
       return decode_block3(block->src, block->size, result_bytes);
-    case 4:
+    case BLAST4_IA16:
       return decode_block4(block->src, block->size, result_bytes, lut);
-    case 5:
+    case BLAST5_RGBA32:
       return decode_block5(block->src, block->size, result_bytes, lut);
-    case 6:
+    case BLAST6_IA8:
       return decode_block6(block->src, block->size, result_bytes);
     default:
       printf("Need type %d\n", block->type);
@@ -457,17 +468,17 @@ decompress_block(block_t* block, uint8_t* result_bytes, uint8_t* lut)
 }
 
 const char*
-get_type_format_name(uint16_t type)
+get_type_format_name(blast_t type)
 {
   switch (type)
   {
-    case 1:
-    case 2:
-    case 5:
+    case BLAST1_RGBA16:
+    case BLAST2_RGBA32:
+    case BLAST5_RGBA32:
       return "rgba";
-    case 3:
-    case 4:
-    case 6:
+    case BLAST3_IA8:
+    case BLAST4_IA16:
+    case BLAST6_IA8:
       return "ia";
     default:
       assert(false);
@@ -476,18 +487,18 @@ get_type_format_name(uint16_t type)
 }
 
 int32_t
-get_type_depth(uint16_t type)
+get_type_depth(blast_t type)
 {
   switch (type)
   {
-    case 3:
-    case 6:
+    case BLAST3_IA8:
+    case BLAST6_IA8:
       return 8;
-    case 1:
-    case 4:
+    case BLAST1_RGBA16:
+    case BLAST4_IA16:
       return 16;
-    case 2:
-    case 5:
+    case BLAST2_RGBA32:
+    case BLAST5_RGBA32:
       return 32;
     default:
       assert(false);
@@ -505,11 +516,11 @@ typedef struct
 } res_t;
 
 res_t
-guess_resolution(uint16_t type, int32_t size)
+guess_resolution(blast_t type, int32_t size)
 {
   switch (type)
   {
-    case 1:
+    case BLAST1_RGBA16:
       switch (size)
       {
         // clang-format off
@@ -523,7 +534,7 @@ guess_resolution(uint16_t type, int32_t size)
         default:   return (res_t){ 32, size / (32 * 2) };
           // clang-format on
       }
-    case 2:
+    case BLAST2_RGBA32:
       switch (size)
       {
         // clang-format off
@@ -536,7 +547,7 @@ guess_resolution(uint16_t type, int32_t size)
         default:   return (res_t){ 32, size / (32 * 4) };
           // clang-format on
       }
-    case 3:
+    case BLAST3_IA8:
       switch (size)
       {
         // clang-format off
@@ -546,7 +557,7 @@ guess_resolution(uint16_t type, int32_t size)
         default:   return (res_t){ 32, size / 32 };
           // clang-format on
       }
-    case 4:
+    case BLAST4_IA16:
       switch (size)
       {
         // clang-format off
@@ -557,7 +568,7 @@ guess_resolution(uint16_t type, int32_t size)
         default:   return (res_t){ 32, size / (32 * 2) };
           // clang-format on
       }
-    case 5:
+    case BLAST5_RGBA32:
       switch (size)
       {
         // clang-format off
@@ -568,7 +579,7 @@ guess_resolution(uint16_t type, int32_t size)
         default:   return (res_t){ 32, size / (32 * 4) };
           // clang-format on
       }
-    case 6:
+    case BLAST6_IA8:
       return (res_t){ 16, size / 16 };
     default:
       assert(false);
@@ -576,9 +587,9 @@ guess_resolution(uint16_t type, int32_t size)
 }
 
 static bool
-convert_to_png(char* fname, uint16_t len, uint16_t type)
+convert_to_png(char* fname, uint16_t len, blast_t type)
 {
-  if (type == 0)
+  if (type == BLAST0)
   {
     return false;
   }
@@ -591,9 +602,9 @@ convert_to_png(char* fname, uint16_t len, uint16_t type)
   generate_filename(fname, pngname, "png");
   switch (type)
   {
-    case 1: // RGBA16
-    case 2: // RGBA32
-    case 5: // RGBA32
+    case BLAST1_RGBA16:
+    case BLAST2_RGBA32:
+    case BLAST5_RGBA32:
     {
       rgba* rimg = file2rgba(fname, 0, res.w, res.h, depth);
       if (!rimg)
@@ -603,9 +614,9 @@ convert_to_png(char* fname, uint16_t len, uint16_t type)
       rgba2png(rimg, res.w, res.h, pngname);
       return true;
     }
-    case 3: // IA8
-    case 4: // IA16
-    case 6: // IA8
+    case BLAST3_IA8:
+    case BLAST4_IA16:
+    case BLAST6_IA8:
     {
       ia* img = file2ia(fname, 0, res.w, res.h, depth);
       if (!img)
@@ -631,7 +642,7 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
   {
     uint32_t start = read_u32_be(&rom_bytes[address]);
     uint16_t compressed_size = read_u16_be(&rom_bytes[address + 4]);
-    uint16_t type = read_u16_be(&rom_bytes[address + 6]);
+    blast_t type = read_u16_be(&rom_bytes[address + 6]);
 
     assert(rom_size >= start);
 
@@ -650,7 +661,7 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
             type);
     write_file(out_path_compressed, rom_bytes, compressed_size);
 
-    if (type == 0)
+    if (type == BLAST0)
     {
       printf("[0x%06X, 0x%06X] blast0 %5d bytes\n",
              start + ROM_OFFSET,
@@ -671,10 +682,10 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
     uint8_t* lut;
     switch (type)
     {
-      case 4:
+      case BLAST4_IA16:
         lut = &rom_bytes[0x047480];
         break;
-      case 5:
+      case BLAST5_RGBA32:
         // 0x0998E0
         // 0x1E2C00
         lut = &rom_bytes[0x152970];
