@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <libgen.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -462,6 +463,107 @@ decompress_block(block_t* block,
   }
 }
 
+bool
+get_type_params(uint16_t type,
+                int32_t decompressed_size,
+                int32_t* width,
+                int32_t* height,
+                int32_t* depth,
+                char** format)
+{
+  switch (type)
+  {
+    case 1:
+      // guess at dims
+      switch (decompressed_size)
+      {
+        // clang-format off
+        case 16:   *width = 4;  *height = 2;  break;
+        case 512:  *width = 16; *height = 16; break;
+        case 1*KB: *width = 16; *height = 32; break;
+        case 2*KB: *width = 32; *height = 32; break;
+        case 4*KB: *width = 64; *height = 32; break;
+        case 8*KB: *width = 64; *height = 64; break;
+        case 3200: *width = 40; *height = 40; break;
+        default:   *width = 32; *height = decompressed_size / *width / 2; break;
+          // clang-format on
+      }
+      *format = "rgba";
+      *depth = 16;
+      return true;
+    case 2:
+      // guess at dims
+      switch (decompressed_size)
+      {
+        // clang-format off
+        case 256:  *width = 8;  *height = 8;  break;
+        case 512:  *width = 8;  *height = 16; break;
+        case 1*KB: *width = 16; *height = 16; break;
+        case 2*KB: *width = 16; *height = 32; break;
+        case 4*KB: *width = 32; *height = 32; break;
+        case 8*KB: *width = 64; *height = 32; break;
+        default:   *width = 32; *height = decompressed_size / *width / 4; break;
+          // clang-format on
+      }
+      *format = "rgba";
+      *depth = 32;
+      return true;
+    case 3:
+      // guess at dims
+      switch (decompressed_size)
+      {
+        // clang-format off
+        case 1*KB: *width = 32; *height = 32; break;
+        case 2*KB: *width = 32; *height = 64; break;
+        case 4*KB: *width = 64; *height = 64; break;
+        default:   *width = 32; *height = decompressed_size / *width; break;
+          // clang-format on
+      }
+      *format = "ia";
+      *depth = 8;
+      return true;
+    case 4:
+      // guess at dims
+      switch (decompressed_size)
+      {
+        // clang-format off
+        case 1*KB: *width = 16; *height = 32; break;
+        case 2*KB: *width = 32; *height = 32; break;
+        case 4*KB: *width = 32; *height = 64; break;
+        case 8*KB: *width = 64; *height = 64; break;
+        default:   *width = 32; *height = decompressed_size / *width / 2; break;
+          // clang-format on
+      }
+      *format = "ia";
+      *depth = 16;
+      return true;
+    case 5:
+      // guess at dims
+      switch (decompressed_size)
+      {
+        // clang-format off
+        case 1*KB: *width = 16; *height = 16; break;
+        case 2*KB: *width = 32; *height = 16; break;
+        case 4*KB: *width = 32; *height = 32; break;
+        case 8*KB: *width = 64; *height = 32; break;
+        default:   *width = 32; *height = decompressed_size / *width / 4; break;
+          // clang-format on
+      }
+      *format = "rgba";
+      *depth = 32;
+      return true;
+    case 6:
+      // guess at dims
+      *depth = 8;
+      *width = 16;
+      *height = (decompressed_size * 8 / *depth) / *width;
+      *format = "ia";
+      return true;
+    default:
+      return false;
+  }
+}
+
 static void
 convert_to_png(char* fname, uint16_t len, uint16_t type)
 {
@@ -600,100 +702,10 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
 
       char* format = NULL;
       int32_t width = 0, height = 0, depth = 0;
+      bool type_valid = get_type_params(
+        type, decompressed_size, &width, &height, &depth, &format);
 
-      switch (type)
-      {
-        case 0:
-          // TODO: memcpy, no info
-          break;
-        case 1:
-          // guess at dims
-          switch (decompressed_size)
-          {
-            // clang-format off
-            case 16:   width = 4;  height = 2;  break;
-            case 512:  width = 16; height = 16; break;
-            case 1*KB: width = 16; height = 32; break;
-            case 2*KB: width = 32; height = 32; break;
-            case 4*KB: width = 64; height = 32; break;
-            case 8*KB: width = 64; height = 64; break;
-            case 3200: width = 40; height = 40; break;
-            default:   width = 32; height = decompressed_size/width/2; break;
-              // clang-format on
-          }
-          format = "rgba";
-          depth = 16;
-          break;
-        case 2:
-          // guess at dims
-          switch (decompressed_size)
-          {
-            // clang-format off
-            case 256:  width = 8;  height = 8;  break;
-            case 512:  width = 8;  height = 16; break;
-            case 1*KB: width = 16; height = 16; break;
-            case 2*KB: width = 16; height = 32; break;
-            case 4*KB: width = 32; height = 32; break;
-            case 8*KB: width = 64; height = 32; break;
-            default:   width = 32; height = decompressed_size/width/4; break;
-              // clang-format on
-          }
-          format = "rgba";
-          depth = 32;
-          break;
-        case 3:
-          // guess at dims
-          switch (decompressed_size)
-          {
-            // clang-format off
-            case 1*KB: width = 32; height = 32; break;
-            case 2*KB: width = 32; height = 64; break;
-            case 4*KB: width = 64; height = 64; break;
-            default:   width = 32; height = decompressed_size/width; break;
-              // clang-format on
-          }
-          format = "ia";
-          depth = 8;
-          break;
-        case 4:
-          // guess at dims
-          switch (decompressed_size)
-          {
-            // clang-format off
-            case 1*KB: width = 16; height = 32; break;
-            case 2*KB: width = 32; height = 32; break;
-            case 4*KB: width = 32; height = 64; break;
-            case 8*KB: width = 64; height = 64; break;
-            default:   width = 32; height = decompressed_size/width/2; break;
-              // clang-format on
-          }
-          format = "ia";
-          depth = 16;
-          break;
-        case 5:
-          // guess at dims
-          switch (decompressed_size)
-          {
-            // clang-format off
-            case 1*KB: width = 16; height = 16; break;
-            case 2*KB: width = 32; height = 16; break;
-            case 4*KB: width = 32; height = 32; break;
-            case 8*KB: width = 64; height = 32; break;
-            default:   width = 32; height = decompressed_size/width/4; break;
-              // clang-format on
-          }
-          format = "rgba";
-          depth = 32;
-          break;
-        case 6:
-          // guess at dims
-          depth = 8;
-          width = 16;
-          height = (decompressed_size * 8 / depth) / width;
-          format = "ia";
-          break;
-      }
-      if (depth)
+      if (type_valid)
       {
         if (width == 0 || height == 0)
         {
