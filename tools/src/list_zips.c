@@ -41,10 +41,12 @@ main(int argc, char** argv)
 
   for (uint64_t address = 0x0; address < size; address++)
   {
+// clang-format off
     if (bytes[address]     == 0x1F &&
         bytes[address + 1] == 0x8B &&
         bytes[address + 2] == 0x08 &&
         bytes[address + 3] == 0x08)
+// clang-format on
     {
       char name[300];
 
