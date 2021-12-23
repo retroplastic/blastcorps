@@ -721,13 +721,14 @@ decompress_rom(const char* rom_path, uint8_t* data, size_t size)
         char format_str[16];
         sprintf(format_str, "(%s%d)", format, depth);
 
-        printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d\n",
+        printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %d bytes\n",
                start + ROM_OFFSET,
                start + ROM_OFFSET + len,
                type,
                format_str,
                width,
-               height);
+               height,
+               out_size);
       }
       write_file(out_fname, out, out_size);
       // attempt to convert to PNG
@@ -741,6 +742,7 @@ print_usage()
 {
   printf("Usage:\n");
   printf("./blast <rom_path>\n");
+  printf("./blast <file_path> <blast_compression_id>\n");
 }
 
 int
@@ -749,7 +751,7 @@ main(int argc, char* argv[])
   uint8_t* data;
   size_t size;
 
-  if (argc < 2)
+  if (argc < 2 || argc > 3)
   {
     print_usage();
     return EXIT_FAILURE;
@@ -758,7 +760,16 @@ main(int argc, char* argv[])
   // read in Blast Corps ROM
   size = read_file(argv[1], &data);
 
-  decompress_rom(argv[1], data, size);
+  if (argc == 2)
+  {
+    // decompress whole rom
+    decompress_rom(argv[1], data, size);
+  }
+  else if (argc == 3)
+  {
+    // convert single file
+    convert_to_png(argv[1], size, atoi(argv[2]));
+  }
 
   free(data);
 
