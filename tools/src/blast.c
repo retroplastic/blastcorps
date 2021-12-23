@@ -564,115 +564,49 @@ get_type_params(uint16_t type,
   }
 }
 
-static void
+static bool
 convert_to_png(char* fname, uint16_t len, uint16_t type)
 {
+  char* format = NULL;
+  int32_t width = 0, height = 0, depth = 0;
+  bool type_valid =
+    get_type_params(type, len, &width, &height, &depth, &format);
+
+  if (!type_valid)
+  {
+    return false;
+  }
+
   char pngname[512];
-  int32_t height, width, depth;
-  rgba* rimg;
-  ia* img;
   generate_filename(fname, pngname, "png");
   switch (type)
   {
-    case 0:
-      // TODO: memcpy, no info
-      break;
-    case 1:
-      // guess at dims
-      switch (len)
+    case 1: // RGBA16
+    case 2: // RGBA32
+    case 5: // RGBA32
+    {
+      rgba* rimg = file2rgba(fname, 0, width, height, depth);
+      if (!rimg)
       {
-        // clang-format off
-        case 16:   width = 4;  height = 2;  break;
-        case 512:  width = 16; height = 16; break;
-        case 1*KB: width = 16; height = 32; break;
-        case 2*KB: width = 32; height = 32; break;
-        case 4*KB: width = 64; height = 32; break;
-        case 8*KB: width = 64; height = 64; break;
-        default:   width = 32; height = len/width/2; break;
-          // clang-format on
+        return false;
       }
-      // RGBA16
-      rimg = file2rgba(fname, 0, width, height, 16);
-      if (rimg)
-        rgba2png(rimg, width, height, pngname);
-      break;
-    case 2:
-      // guess at dims
-      switch (len)
+      rgba2png(rimg, width, height, pngname);
+      return true;
+    }
+    case 3: // IA8
+    case 4: // IA16
+    case 6: // IA8
+    {
+      ia* img = file2ia(fname, 0, width, height, depth);
+      if (!img)
       {
-        // clang-format off
-        case 1*KB: width = 16; height = 16; break;
-        case 2*KB: width = 16; height = 32; break;
-        case 4*KB: width = 32; height = 32; break;
-        case 8*KB: width = 64; height = 32; break;
-        default:   width = 32; height = len/width/4; break;
-          // clang-format on
+        return false;
       }
-      // RGBA32
-      rimg = file2rgba(fname, 0, width, height, 32);
-      if (rimg)
-        rgba2png(rimg, width, height, pngname);
-      break;
-    case 3:
-      // guess at dims
-      switch (len)
-      {
-        // clang-format off
-        case 1*KB: width = 32; height = 32; break;
-        case 2*KB: width = 32; height = 64; break;
-        case 4*KB: width = 64; height = 64; break;
-        default:   width = 32; height = len/width; break;
-          // clang-format on
-      }
-      // IA8
-      img = file2ia(fname, 0, width, height, 8);
-      if (img)
-        ia2png(img, width, height, pngname);
-      break;
-    case 4:
-      // guess at dims
-      switch (len)
-      {
-        // clang-format off
-        case 1*KB: width = 32; height = 16; break;
-        case 2*KB: width = 32; height = 32; break;
-        case 4*KB: width = 32; height = 64; break;
-        case 8*KB: width = 64; height = 64; break;
-        default:   width = 32; height = len/width/2; break;
-          // clang-format on
-      }
-      // IA16
-      img = file2ia(fname, 0, width, height, 16);
-      if (img)
-        ia2png(img, width, height, pngname);
-      break;
-    case 5:
-      // guess at dims
-      switch (len)
-      {
-        // clang-format off
-        case 1*KB: width = 16; height = 16; break;
-        case 2*KB: width = 32; height = 16; break;
-        case 4*KB: width = 32; height = 32; break;
-        case 8*KB: width = 64; height = 32; break;
-        default:   width = 32; height = len/width/2; break;
-          // clang-format on
-      }
-      // RGBA32
-      rimg = file2rgba(fname, 0, width, height, 32);
-      if (rimg)
-        rgba2png(rimg, width, height, pngname);
-      break;
-    case 6:
-      // guess at dims
-      depth = 8;
-      width = 16;
-      height = (len * 8 / depth) / width;
-      // IA8
-      img = file2ia(fname, 0, width, height, depth);
-      if (img)
-        ia2png(img, width, height, pngname);
-      break;
+      ia2png(img, width, height, pngname);
+      return true;
+    }
+    default:
+      return false;
   }
 }
 
