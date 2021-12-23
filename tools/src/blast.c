@@ -123,6 +123,50 @@ decode_block2(unsigned char* in, int length, unsigned char* out)
   return len;
 }
 
+// 802A5A2C (06126C)
+int
+decode_block3(unsigned char* in, int length, unsigned char* out)
+{
+  unsigned short t0, t1, t3;
+  unsigned char* t2;
+  int len = 0;
+  while (length != 0)
+  {
+    t0 = read_u16_be(in);
+    in += 2;
+    if ((0x8000 & t0) == 0)
+    {
+      t1 = t0 >> 8;
+      t1 <<= 1;
+      *out = (unsigned char)t1; // sb
+      t1 = t0 & 0xFF;
+      t1 <<= 1;
+      *(out + 1) = (unsigned char)t1; // sb
+      out += 2;
+      length -= 2;
+      len += 2;
+    }
+    else
+    {
+      t1 = t0 & 0x1F;
+      t0 &= 0x7FFF;
+      t0 >>= 5;
+      length -= 2;
+      t2 = out - t0;
+      while (t1 != 0)
+      {
+        t3 = read_u16_be(t2);
+        t2 += 2;
+        t1 -= 1;
+        write_u16_be(out, t3);
+        out += 2;
+        len += 2;
+      }
+    }
+  }
+  return len;
+}
+
 // 802A5C5C (06149C)
 int
 decode_block4(unsigned char* in,
@@ -240,50 +284,6 @@ decode_block5(unsigned char* in,
   return len;
 }
 
-// 802A5A2C (06126C)
-int
-decode_block3(unsigned char* in, int length, unsigned char* out)
-{
-  unsigned short t0, t1, t3;
-  unsigned char* t2;
-  int len = 0;
-  while (length != 0)
-  {
-    t0 = read_u16_be(in);
-    in += 2;
-    if ((0x8000 & t0) == 0)
-    {
-      t1 = t0 >> 8;
-      t1 <<= 1;
-      *out = (unsigned char)t1; // sb
-      t1 = t0 & 0xFF;
-      t1 <<= 1;
-      *(out + 1) = (unsigned char)t1; // sb
-      out += 2;
-      length -= 2;
-      len += 2;
-    }
-    else
-    {
-      t1 = t0 & 0x1F;
-      t0 &= 0x7FFF;
-      t0 >>= 5;
-      length -= 2;
-      t2 = out - t0;
-      while (t1 != 0)
-      {
-        t3 = read_u16_be(t2);
-        t2 += 2;
-        t1 -= 1;
-        write_u16_be(out, t3);
-        out += 2;
-        len += 2;
-      }
-    }
-  }
-  return len;
-}
-
 // 802A5958 (061198)
 int
 decode_block6(unsigned char* in, int length, unsigned char* out)
@@ -381,15 +381,15 @@ blast_decode_file(char* in_filename,
     case 2:
       out_len = decode_block2(in_buf, in_len, out_buf);
       break;
+    case 3:
+      out_len = decode_block3(in_buf, in_len, out_buf);
+      break;
     // TODO: need to figure out where last param is set for decoders 4 and 5
     case 4:
       out_len = decode_block4(in_buf, in_len, out_buf, lut);
       break;
     case 5:
       out_len = decode_block5(in_buf, in_len, out_buf, lut);
-      break;
-    case 3:
-      out_len = decode_block3(in_buf, in_len, out_buf);
       break;
     case 6:
       out_len = decode_block6(in_buf, in_len, out_buf);
@@ -457,6 +457,9 @@ proc_802A57DC(block_t* a0, unsigned char** copy, unsigned char* rom)
     case 2:
       v0 = decode_block2(src, len, *copy);
       break;
+    case 3:
+      v0 = decode_block3(src, len, *copy);
+      break;
     // TODO: need to figure out where last param is set for decoders 4 and 5
     case 4:
       v0 = decode_block4(src, len, *copy, &rom[0x047480]);
@@ -466,9 +469,6 @@ proc_802A57DC(block_t* a0, unsigned char** copy, unsigned char* rom)
       v0 = decode_block5(src, len, *copy, &rom[0x152970]);
       break;
     // case 5: v0 = decode_block5(src, len, *copy, &rom[0x1E2C00]); break;
-    case 3:
-      v0 = decode_block3(src, len, *copy);
-      break;
     case 6:
       v0 = decode_block6(src, len, *copy);
       break;
