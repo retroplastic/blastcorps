@@ -658,7 +658,7 @@ main(int argc, char* argv[])
             default:   width = 32; height = out_size/width/2; break;
               // clang-format on
           }
-          format = "\"rgba\"";
+          format = "rgba";
           depth = 16;
           break;
         case 2:
@@ -675,7 +675,7 @@ main(int argc, char* argv[])
             default:   width = 32; height = out_size/width/4; break;
               // clang-format on
           }
-          format = "\"rgba\"";
+          format = "rgba";
           depth = 32;
           break;
         case 3:
@@ -689,7 +689,7 @@ main(int argc, char* argv[])
             default:   width = 32; height = out_size/width; break;
               // clang-format on
           }
-          format = "\"ia\"";
+          format = "ia";
           depth = 8;
           break;
         case 4:
@@ -704,7 +704,7 @@ main(int argc, char* argv[])
             default:   width = 32; height = out_size/width/2; break;
               // clang-format on
           }
-          format = "\"ia\"";
+          format = "ia";
           depth = 16;
           break;
         case 5:
@@ -719,7 +719,7 @@ main(int argc, char* argv[])
             default:   width = 32; height = out_size/width/4; break;
               // clang-format on
           }
-          format = "\"rgba\"";
+          format = "rgba";
           depth = 32;
           break;
         case 6:
@@ -727,7 +727,7 @@ main(int argc, char* argv[])
           depth = 8;
           width = 16;
           height = (out_size * 8 / depth) / width;
-          format = "\"ia\"";
+          format = "ia";
           break;
       }
       if (depth)
@@ -741,14 +741,17 @@ main(int argc, char* argv[])
                 start + ROM_OFFSET,
                 type);
         }
-        printf("[0x%06X, 0x%06X] blast%d (%6s) %2dx%2d@%2d\n",
+
+        char format_str[16];
+        sprintf(format_str, "(%s%d)", format, depth);
+
+        printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d\n",
                start + ROM_OFFSET,
                start + ROM_OFFSET + len,
                type,
-               format,
+               format_str,
                width,
-               height,
-               depth);
+               height);
       }
       write_file(out_fname, out, out_size);
       // attempt to convert to PNG
