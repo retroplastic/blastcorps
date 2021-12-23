@@ -465,18 +465,57 @@ decompress_block(block_t* block,
   }
 }
 
-bool
-get_type_params(uint16_t type,
-                int32_t decompressed_size,
-                int32_t* width,
-                int32_t* height,
-                int32_t* depth,
-                char** format)
+const char*
+get_type_format_name(uint16_t type)
 {
   switch (type)
   {
     case 1:
-      // guess at dims
+    case 2:
+    case 5:
+      return "rgba";
+    case 3:
+    case 4:
+    case 6:
+      return "ia";
+    default:
+      assert(false);
+      return "";
+  }
+}
+
+int32_t
+get_type_depth(uint16_t type)
+{
+  switch (type)
+  {
+    case 3:
+    case 6:
+      return 8;
+    case 1:
+    case 4:
+      return 16;
+    case 2:
+    case 5:
+      return 32;
+    default:
+      assert(false);
+      return 0;
+  }
+}
+
+
+// This cannot be reliably determined by the data and needs to be
+// tracked manually in the splat yaml.
+void
+guess_resolution(uint16_t type,
+                 int32_t decompressed_size,
+                 int32_t* width,
+                 int32_t* height)
+{
+  switch (type)
+  {
+    case 1:
       switch (decompressed_size)
       {
         // clang-format off
@@ -490,11 +529,8 @@ get_type_params(uint16_t type,
         default:   *width = 32; *height = decompressed_size / *width / 2;
           // clang-format on
       }
-      *format = "rgba";
-      *depth = 16;
-      return true;
+      return;
     case 2:
-      // guess at dims
       switch (decompressed_size)
       {
         // clang-format off
@@ -507,11 +543,8 @@ get_type_params(uint16_t type,
         default:   *width = 32; *height = decompressed_size / *width / 4;
           // clang-format on
       }
-      *format = "rgba";
-      *depth = 32;
-      return true;
+      return;
     case 3:
-      // guess at dims
       switch (decompressed_size)
       {
         // clang-format off
@@ -521,11 +554,8 @@ get_type_params(uint16_t type,
         default:   *width = 32; *height = decompressed_size / *width;
           // clang-format on
       }
-      *format = "ia";
-      *depth = 8;
-      return true;
+      return;
     case 4:
-      // guess at dims
       switch (decompressed_size)
       {
         // clang-format off
@@ -536,11 +566,8 @@ get_type_params(uint16_t type,
         default:   *width = 32; *height = decompressed_size / *width / 2;
           // clang-format on
       }
-      *format = "ia";
-      *depth = 16;
-      return true;
+      return;
     case 5:
-      // guess at dims
       switch (decompressed_size)
       {
         // clang-format off
@@ -551,33 +578,28 @@ get_type_params(uint16_t type,
         default:   *width = 32; *height = decompressed_size / *width / 4;
           // clang-format on
       }
-      *format = "rgba";
-      *depth = 32;
-      return true;
+      return;
     case 6:
-      // guess at dims
-      *depth = 8;
       *width = 16;
-      *height = (decompressed_size * 8 / *depth) / *width;
-      *format = "ia";
-      return true;
+      *height = decompressed_size / *width;
+      return;
     default:
-      return false;
+      assert(false);
   }
 }
 
 static bool
 convert_to_png(char* fname, uint16_t len, uint16_t type)
 {
-  char* format = NULL;
-  int32_t width = 0, height = 0, depth = 0;
-  bool type_valid =
-    get_type_params(type, len, &width, &height, &depth, &format);
-
-  if (!type_valid)
+  if (type == 0)
   {
     return false;
   }
+
+  int32_t width = 0, height = 0;
+  guess_resolution(type, len, &width, &height);
+
+  int32_t depth = get_type_depth(type);
 
   char pngname[512];
   generate_filename(fname, pngname, "png");
@@ -661,15 +683,14 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
     int32_t decompressed_size =
       decompress_block(&block, &decompressed_bytes, rom_bytes);
 
-    char* format = NULL;
-    int32_t width = 0, height = 0, depth = 0;
-    bool type_valid = get_type_params(
-      type, decompressed_size, &width, &height, &depth, &format);
+    int32_t width = 0, height = 0;
+    guess_resolution(type, decompressed_size, &width, &height);
 
-    assert(type_valid);
+    int32_t depth = get_type_depth(type);
 
     char format_str[16];
-    sprintf(format_str, "(%s%d)", format, depth);
+    const char* format_name = get_type_format_name(type);
+    sprintf(format_str, "(%s%d)", format_name, depth);
 
     printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %4d -> %4d bytes\n",
            start + ROM_OFFSET,
@@ -687,7 +708,7 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
             "%s/%06X.%s%d",
             rom_dir_path,
             start + ROM_OFFSET,
-            format,
+            format_name,
             depth);
     write_file(out_path_decompressed, decompressed_bytes, decompressed_size);
 
