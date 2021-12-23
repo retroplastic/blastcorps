@@ -741,15 +741,14 @@ main(int argc, char* argv[])
                 start + ROM_OFFSET,
                 type);
         }
-        printf(
-          "   (0x%06X, 0x%06X, \"blast\", %d, ((0x0, %6s, %2d, %2d, %2d))),\n",
-          start + ROM_OFFSET,
-          start + ROM_OFFSET + len,
-          type,
-          format,
-          depth,
-          width,
-          height);
+        printf("[0x%06X, 0x%06X] blast%d (%6s) %2dx%2d@%2d\n",
+               start + ROM_OFFSET,
+               start + ROM_OFFSET + len,
+               type,
+               format,
+               width,
+               height,
+               depth);
       }
       write_file(out_fname, out, out_size);
       // attempt to convert to PNG
