@@ -592,33 +592,15 @@ convert_to_png(char* fname, unsigned short len, unsigned short type)
 }
 
 void
-print_usage()
-{
-  printf("Usage:\n");
-  printf("./blast <rom_path>\n");
-}
-
-int
-main(int argc, char* argv[])
+decompress_rom(const char* rom_path, unsigned char* data, long size)
 {
   block_t block;
   char out_fname[512];
-  unsigned char* data;
-  long size;
   int out_size;
   unsigned int off;
   unsigned char* out;
   int width, height, depth;
   char* format;
-
-  if (argc < 2)
-  {
-    print_usage();
-    return 1;
-  }
-
-  // read in Blast Corps ROM
-  size = read_file(argv[1], &data);
 
   // loop through from 0x4CE0 to 0xCCE0
   for (off = ROM_OFFSET; off < END_OFFSET; off += 8)
@@ -635,7 +617,7 @@ main(int argc, char* argv[])
       block.w8 = type;
       // printf("%X (%X) %X %d\n", start, start+ROM_OFFSET, len, type);
       out_size = proc_802A57DC(&block, &out, data);
-      sprintf(out_fname, "%s.%06X.%d.bin", argv[1], start, type);
+      sprintf(out_fname, "%s.%06X.%d.bin", rom_path, start, type);
       // printf("writing %s: %04X -> %04X\n", out_fname, len, out_size);
       depth = 0;
       switch (type)
@@ -758,6 +740,31 @@ main(int argc, char* argv[])
       convert_to_png(out_fname, out_size, type);
     }
   }
+}
+
+void
+print_usage()
+{
+  printf("Usage:\n");
+  printf("./blast <rom_path>\n");
+}
+
+int
+main(int argc, char* argv[])
+{
+  unsigned char* data;
+  long size;
+
+  if (argc < 2)
+  {
+    print_usage();
+    return 1;
+  }
+
+  // read in Blast Corps ROM
+  size = read_file(argv[1], &data);
+
+  decompress_rom(argv[1], data, size);
 
   free(data);
 
