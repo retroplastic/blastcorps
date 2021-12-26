@@ -650,7 +650,8 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
             rom_dir_path,
             start + ROM_OFFSET,
             type);
-    write_file(out_path_compressed, &rom_bytes[start + ROM_OFFSET], compressed_size);
+    write_file(
+      out_path_compressed, &rom_bytes[start + ROM_OFFSET], compressed_size);
 
     if (type == BLAST0)
     {
@@ -746,7 +747,25 @@ main(int argc, char* argv[])
   else if (argc == 3)
   {
     // convert single file
-    convert_to_png(argv[1], size, atoi(argv[2]));
+    // convert_to_png(argv[1], size, atoi(argv[2]));
+    blast_t type = atoi(argv[2]);
+    printf("Opening %s\n", argv[1]);
+
+    uint8_t* decompressed_bytes = malloc(100 * size);
+    int32_t decompressed_size =
+      decompress_block(rom_bytes, size, type, decompressed_bytes, NULL);
+
+    int32_t depth = get_type_depth(type);
+    const char* format_name = get_type_format_name(type);
+
+    // Write decompressed file
+    char out_path_decompressed[512];
+
+    sprintf(out_path_decompressed, "%s.%s%d", argv[1], format_name, depth);
+
+    printf("Writing %s\n", out_path_decompressed);
+
+    write_file(out_path_decompressed, decompressed_bytes, decompressed_size);
   }
 
   free(rom_bytes);
