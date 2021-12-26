@@ -1,4 +1,5 @@
 from segtypes.n64.segment import N64Segment
+from segtypes.n64.rgba16 import N64SegRgba16
 from util import options
 import struct
 from enum import Enum
@@ -60,7 +61,7 @@ def decode_blast0(compressed_bytes):
             slice_to = slice_from + loop_back_length
             result_ints.extend(result_ints[slice_from:slice_to])
 
-    decoded_bytes = bytearray(b"")
+    decoded_bytes = bytearray()
     for result_int in result_ints:
         b = struct.pack(">H", result_int)
         decoded_bytes.extend(b)
@@ -75,6 +76,9 @@ class N64SegBlast(N64Segment):
         address = "%06X" % self.yaml[0]
 
         blast_type = Blast(self.yaml[3])
+
+        width = self.yaml[5]
+        height = self.yaml[6]
 
         print(address, blast_type)
 
@@ -93,3 +97,11 @@ class N64SegBlast(N64Segment):
         decoded_bytes = decode_blast0(encoded_bytes)
         with open(decoded_file_path, 'wb') as f:
             f.write(decoded_bytes)
+
+        writer_class = N64SegRgba16
+
+        png_writer = writer_class.get_writer(width, height)
+        png_file_path = options.get_asset_path() / self.dir / f"{address}.png"
+
+        with open(png_file_path, "wb") as f:
+            png_writer.write_array(f, writer_class.parse_image(decoded_bytes, width, height, False, True))
