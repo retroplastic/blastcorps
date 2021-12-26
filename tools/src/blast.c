@@ -650,7 +650,7 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
             rom_dir_path,
             start + ROM_OFFSET,
             type);
-    write_file(out_path_compressed, rom_bytes, compressed_size);
+    write_file(out_path_compressed, &rom_bytes[start + ROM_OFFSET], compressed_size);
 
     if (type == BLAST0)
     {
