@@ -59,8 +59,15 @@ def blast_get_png_writer(blast_type: Blast) -> N64SegImg:
             return None
 
 
-# Based on 802A5AE0 (061320)
+# 802A5E10 (061650)
+# just a memcpy from a0 to a3
 def decode_blast0(encoded: bytes) -> bytes:
+    # TODO
+    return encoded
+
+
+# Based on 802A5AE0 (061320)
+def decode_blast1(encoded: bytes) -> bytes:
     result_ints = []
 
     for unpacked in struct.iter_unpack(">H", encoded):
@@ -87,10 +94,52 @@ def decode_blast0(encoded: bytes) -> bytes:
     return decoded_bytes
 
 
+# 802A5B90 (0613D0)
+def decode_blast2(encoded: bytes) -> bytes:
+    # TODO
+    return encoded
+
+
+# 802A5A2C (06126C)
+def decode_blast3(encoded: bytes) -> bytes:
+    # TODO
+    return encoded
+
+
+# 802A5C5C (06149C)
+def decode_blast4(encoded: bytes, lut) -> bytes:
+    # TODO
+    return encoded
+
+
+# 802A5D34 (061574)
+def decode_blast5(encoded: bytes, lut) -> bytes:
+    # TODO
+    return encoded
+
+
+# 802A5958 (061198)
+def decode_blast6(encoded: bytes) -> bytes:
+    # TODO
+    return encoded
+
+
 def decode_blast(blast_type: Blast, encoded: bytes) -> bytes:
     match blast_type:
-        case Blast.BLAST1_RGBA16:
+        case Blast.BLAST0:
             return decode_blast0(encoded)
+        case Blast.BLAST1_RGBA16:
+            return decode_blast1(encoded)
+        case Blast.BLAST2_RGBA32:
+            return decode_blast2(encoded)
+        case Blast.BLAST3_IA8:
+            return decode_blast3(encoded)
+        case Blast.BLAST4_IA16:
+            return decode_blast4(encoded, None)
+        case Blast.BLAST5_RGBA32:
+            return decode_blast5(encoded, None)
+        case Blast.BLAST6_IA8:
+            return decode_blast6(encoded)
 
 
 class N64SegBlast(N64Segment):
