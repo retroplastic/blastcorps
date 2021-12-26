@@ -182,8 +182,50 @@ def decode_blast5(encoded: bytes, lut) -> bytes:
 
 # 802A5958 (061198)
 def decode_blast6(encoded: bytes) -> bytes:
-    # TODO
-    return encoded
+    result_ints = []
+
+    for unpacked in struct.iter_unpack(">H", encoded):
+        current = unpacked[0]
+
+        if current & 0x8000 == 0:
+            res_bytes = bytearray()
+
+            t1 = current >> 8
+            t2 = t1 & 0x38
+            t1 = t1 & 0x07
+            t2 <<= 2
+            t1 <<= 1
+            t1 |= t2
+
+            b = struct.pack(">B", t1)
+            res_bytes.extend(b)  # sb
+
+            t1 = current & 0xFF
+            t2 = t1 & 0x38
+            t1 = t1 & 0x07
+            t2 <<= 2
+            t1 <<= 1
+            t1 |= t2
+
+            b = struct.pack(">B", t1)
+            res_bytes.extend(b)  # sb
+
+            res_int = struct.unpack(">H", res_bytes)[0]
+            result_ints.append(res_int)
+        else:
+            loop_back_length = current & 0x1F
+            loop_back_offset = (current & 0x7FFF) >> 5
+
+            slice_from = len(result_ints) - int(loop_back_offset / 2)
+            slice_to = slice_from + loop_back_length
+            result_ints.extend(result_ints[slice_from:slice_to])
+
+    decoded_bytes = bytearray()
+    for result_int in result_ints:
+        b = struct.pack(">H", result_int)
+        decoded_bytes.extend(b)
+
+    return decoded_bytes
 
 
 def decode_blast(blast_type: Blast, encoded: bytes) -> bytes:
