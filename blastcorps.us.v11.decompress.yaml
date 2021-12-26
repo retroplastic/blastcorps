@@ -47,6 +47,8 @@ segments:
   - [0x1F11F0, blast, foo8, 4, ia16, 64, 32]
   - [0x1F178C]
 
+  - [0x2065C8, blast, foo9, 5, rgba32, 32, 32]
+  - [0x206BEC]
 
   - [0x2E6008, bin, blast1_rgba16_32_32_some_explosion_part]
   - [0x2E6438, bin, blast1_rgba16_32_32_guy_happy]

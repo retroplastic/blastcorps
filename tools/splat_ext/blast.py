@@ -217,8 +217,45 @@ def decode_blast4(encoded: bytes, lut: bytes) -> bytes:
 
 # 802A5D34 (061574)
 def decode_blast5(encoded: bytes, lut: bytes) -> bytes:
-    # TODO
-    return encoded
+    result_ints = []
+
+    for unpacked in struct.iter_unpack(">H", encoded):
+        current = unpacked[0]
+
+        if current & 0x8000 == 0:
+            t1 = current >> 4
+            t1 = t1 << 1
+
+            lookup_bytes = lut[t1:t1 + 2]
+            t1 = struct.unpack(">H", lookup_bytes)[0]
+
+            current &= 0xF
+            current <<= 4
+            t2 = t1 & 0x7C00
+            t3 = t1 & 0x03E0
+            t2 <<= 0x11
+            t3 <<= 0xE
+            t2 |= t3
+            t3 = t1 & 0x1F
+            t3 <<= 0xB
+            t2 |= t3
+            t2 |= current
+
+            result_ints.append(t2)
+        else:
+            loop_back_length = current & 0x1F
+            loop_back_offset = (current & 0x7FE0) >> 4
+
+            slice_from = len(result_ints) - int(loop_back_offset / 4)
+            slice_to = slice_from + loop_back_length
+            result_ints.extend(result_ints[slice_from:slice_to])
+
+    decoded_bytes = bytearray()
+    for result_int in result_ints:
+        b = struct.pack(">I", result_int)
+        decoded_bytes.extend(b)
+
+    return decoded_bytes
 
 
 # 802A5958 (061198)
