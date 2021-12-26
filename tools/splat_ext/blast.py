@@ -1,5 +1,9 @@
 from segtypes.n64.segment import N64Segment
 from segtypes.n64.rgba16 import N64SegRgba16
+from segtypes.n64.rgba32 import N64SegRgba32
+from segtypes.n64.ia8 import N64SegIa8
+from segtypes.n64.ia16 import N64SegIa16
+from segtypes.n64.img import N64SegImg
 from util import options
 import struct
 from enum import Enum
@@ -38,14 +42,28 @@ def blast_get_format(blast_type: Blast) -> str:
 
 
 def blast_get_decoded_extension(blast_type: Blast) -> str:
-    print("Got", blast_type)
     return "%s%d" % (blast_get_format(blast_type), blast_get_depth(blast_type))
 
 
-def decode_blast0(compressed_bytes):
+def blast_get_png_writer(blast_type: Blast) -> N64SegImg:
+    match blast_type:
+        case Blast.BLAST1_RGBA16:
+            return N64SegRgba16
+        case (Blast.BLAST2_RGBA32 | Blast.BLAST5_RGBA32):
+            return N64SegRgba32
+        case (Blast.BLAST3_IA8 | Blast.BLAST6_IA8):
+            return N64SegIa8
+        case Blast.BLAST4_IA16:
+            return N64SegIa16
+        case _:
+            return None
+
+
+# Based on 802A5AE0 (061320)
+def decode_blast0(encoded: bytes) -> bytes:
     result_ints = []
 
-    for unpacked in struct.iter_unpack(">H", compressed_bytes):
+    for unpacked in struct.iter_unpack(">H", encoded):
         current = unpacked[0]
 
         if current & 0x8000 == 0:
@@ -69,39 +87,39 @@ def decode_blast0(compressed_bytes):
     return decoded_bytes
 
 
+def decode_blast(blast_type: Blast, encoded: bytes) -> bytes:
+    match blast_type:
+        case Blast.BLAST1_RGBA16:
+            return decode_blast0(encoded)
+
+
 class N64SegBlast(N64Segment):
     def split(self, rom_bytes):
-        print(self.yaml)
-
         address = "%06X" % self.yaml[0]
-
-        blast_type = Blast(self.yaml[3])
-
-        width = self.yaml[5]
-        height = self.yaml[6]
-
-        print(address, blast_type)
 
         # Write encoded file
         encoded_ext = "blast%d" % self.yaml[3]
         encoded_file_path = options.get_asset_path() / self.dir / f"{address}.{encoded_ext}"
         encoded_bytes = rom_bytes[self.rom_start: self.rom_end]
-        print("Writing", encoded_file_path)
         with open(encoded_file_path, 'wb') as f:
             f.write(encoded_bytes)
 
-        # Decode and write decoded file
+        # Decode
+        blast_type = Blast(self.yaml[3])
+        decoded_bytes = decode_blast(blast_type, encoded_bytes)
+
+        # Write decoded file
         decoded_ext = blast_get_decoded_extension(blast_type)
         decoded_file_path = options.get_asset_path() / self.dir / f"{address}.{decoded_ext}"
-        print("Writing", decoded_file_path)
-        decoded_bytes = decode_blast0(encoded_bytes)
         with open(decoded_file_path, 'wb') as f:
             f.write(decoded_bytes)
 
-        writer_class = N64SegRgba16
+        # Write PNG
+        width = self.yaml[5]
+        height = self.yaml[6]
 
+        writer_class = blast_get_png_writer(blast_type)
         png_writer = writer_class.get_writer(width, height)
         png_file_path = options.get_asset_path() / self.dir / f"{address}.png"
-
         with open(png_file_path, "wb") as f:
             png_writer.write_array(f, writer_class.parse_image(decoded_bytes, width, height, False, True))
