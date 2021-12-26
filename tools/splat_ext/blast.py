@@ -169,13 +169,54 @@ def decode_blast3(encoded: bytes) -> bytes:
 
 
 # 802A5C5C (06149C)
-def decode_blast4(encoded: bytes, lut) -> bytes:
-    # TODO
-    return encoded
+def decode_blast4(encoded: bytes, lut: bytes) -> bytes:
+    result_ints = []
+
+    for unpacked in struct.iter_unpack(">H", encoded):
+        current = unpacked[0]
+
+        if current & 0x8000 == 0:
+            res_bytes = bytearray()
+
+            t1 = current >> 8
+            t2 = t1 & 0xFE
+            lookup_bytes = lut[t2:t2+2]
+            t2 = struct.unpack(">H", lookup_bytes)[0]
+            t1 &= 1
+            t2 <<= 1
+            t1 |= t2
+            b = struct.pack(">H", t1)
+            res_bytes.extend(b)
+
+            t1 = current & 0xFE
+            lookup_bytes = lut[t1:t1+2]
+            t1 = struct.unpack(">H", lookup_bytes)[0]
+            current &= 1
+            t1 <<= 1
+            t1 |= current
+            b = struct.pack(">H", t1)
+            res_bytes.extend(b)
+
+            res_int = struct.unpack(">I", res_bytes)[0]
+            result_ints.append(res_int)
+        else:
+            loop_back_length = current & 0x1F
+            loop_back_offset = (current & 0x7FE0) >> 4
+
+            slice_from = len(result_ints) - int(loop_back_offset / 4)
+            slice_to = slice_from + loop_back_length
+            result_ints.extend(result_ints[slice_from:slice_to])
+
+    decoded_bytes = bytearray()
+    for result_int in result_ints:
+        b = struct.pack(">I", result_int)
+        decoded_bytes.extend(b)
+
+    return decoded_bytes
 
 
 # 802A5D34 (061574)
-def decode_blast5(encoded: bytes, lut) -> bytes:
+def decode_blast5(encoded: bytes, lut: bytes) -> bytes:
     # TODO
     return encoded
 
@@ -238,12 +279,16 @@ def decode_blast(blast_type: Blast, encoded: bytes) -> bytes:
             return decode_blast2(encoded)
         case Blast.BLAST3_IA8:
             return decode_blast3(encoded)
-        case Blast.BLAST4_IA16:
-            return decode_blast4(encoded, None)
-        case Blast.BLAST5_RGBA32:
-            return decode_blast5(encoded, None)
         case Blast.BLAST6_IA8:
             return decode_blast6(encoded)
+
+
+def decode_blast_lookup(blast_type: Blast, encoded: bytes, lut: bytes) -> bytes:
+    match blast_type:
+        case Blast.BLAST4_IA16:
+            return decode_blast4(encoded, lut)
+        case Blast.BLAST5_RGBA32:
+            return decode_blast5(encoded, lut)
 
 
 class N64SegBlast(N64Segment):
@@ -259,7 +304,20 @@ class N64SegBlast(N64Segment):
 
         # Decode
         blast_type = Blast(self.yaml[3])
-        decoded_bytes = decode_blast(blast_type, encoded_bytes)
+
+        match blast_type:
+            case Blast.BLAST4_IA16:
+                lut_path = options.get_asset_path() / self.dir / "lookup_table_128_0.bin"
+                with open(lut_path, 'rb') as f:
+                    lut = f.read()
+                decoded_bytes = decode_blast_lookup(blast_type, encoded_bytes, lut)
+            case Blast.BLAST5_RGBA32:
+                lut_path = options.get_asset_path() / self.dir / "lookup_table_256_2.bin"
+                with open(lut_path, 'rb') as f:
+                    lut = f.read()
+                decoded_bytes = decode_blast_lookup(blast_type, encoded_bytes, lut)
+            case _:
+                decoded_bytes = decode_blast(blast_type, encoded_bytes)
 
         # Write decoded file
         decoded_ext = blast_get_decoded_extension(blast_type)
@@ -275,4 +333,8 @@ class N64SegBlast(N64Segment):
         png_writer = writer_class.get_writer(width, height)
         png_file_path = options.get_asset_path() / self.dir / f"{address}.png"
         with open(png_file_path, "wb") as f:
-            png_writer.write_array(f, writer_class.parse_image(decoded_bytes, width, height, False, True))
+            match blast_type:
+                case Blast.BLAST4_IA16:
+                    png_writer.write_array(f, decoded_bytes)
+                case _:
+                    png_writer.write_array(f, writer_class.parse_image(decoded_bytes, width, height, False, True))
