@@ -755,13 +755,19 @@ main(int argc, char* argv[])
     int32_t decompressed_size =
       decompress_block(rom_bytes, size, type, decompressed_bytes, NULL);
 
-    int32_t depth = get_type_depth(type);
-    const char* format_name = get_type_format_name(type);
-
     // Write decompressed file
     char out_path_decompressed[512];
 
-    sprintf(out_path_decompressed, "%s.%s%d", argv[1], format_name, depth);
+    if (type == BLAST0)
+    {
+      sprintf(out_path_decompressed, "%s.unblast0", argv[1]);
+    }
+    else
+    {
+      int32_t depth = get_type_depth(type);
+      const char* format_name = get_type_format_name(type);
+      sprintf(out_path_decompressed, "%s.%s%d", argv[1], format_name, depth);
+    }
 
     printf("Writing %s\n", out_path_decompressed);
 
