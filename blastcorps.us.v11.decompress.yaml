@@ -22,6 +22,13 @@ segments:
   - [0xD380, bin, some_rgba16_text1.blast]
   - [0xD4F0, bin]
   
+  - [0x10D230, blast, foo0, 1, rgba16, 32, 64]
+  - [0x10D8DC]
+  - [0x10D8E0, blast, foo1, 2, rgba32, 16, 32]
+  - [0x10DB4C]
+  - [0x10DB50, blast, foo2, 1, rgba16, 16, 16]
+  - [0x10DCEE]
+
   - [0x2E6008, bin, blast1_rgba16_32_32_some_explosion_part]
   - [0x2E6438, bin, blast1_rgba16_32_32_guy_happy]
   - [0x2E68C0, bin, blast1_rgba16_32_32_guy_angry]
