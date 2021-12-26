@@ -29,6 +29,11 @@ segments:
   - [0x10DB50, blast, foo2, 1, rgba16, 16, 16]
   - [0x10DCEE]
 
+  - [0x14E3AA]
+  - [0x14E3B0, blast, foo4, 3, ia8, 64, 64]
+  - [0x14EEAC]
+
+
   - [0x2E6008, bin, blast1_rgba16_32_32_some_explosion_part]
   - [0x2E6438, bin, blast1_rgba16_32_32_guy_happy]
   - [0x2E68C0, bin, blast1_rgba16_32_32_guy_angry]
