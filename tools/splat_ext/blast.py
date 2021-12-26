@@ -1,6 +1,44 @@
 from segtypes.n64.segment import N64Segment
 from util import options
 import struct
+from enum import Enum
+
+
+class Blast(Enum):
+    BLAST0 = 0
+    BLAST1_RGBA16 = 1
+    BLAST2_RGBA32 = 2
+    BLAST3_IA8 = 3
+    BLAST4_IA16 = 4
+    BLAST5_RGBA32 = 5
+    BLAST6_IA8 = 6
+
+
+def blast_get_depth(blast_type: Blast) -> int:
+    match blast_type:
+        case (Blast.BLAST3_IA8 | Blast.BLAST6_IA8):
+            return 8
+        case (Blast.BLAST1_RGBA16 | Blast.BLAST4_IA16):
+            return 16
+        case (Blast.BLAST2_RGBA32 | Blast.BLAST5_RGBA32):
+            return 32
+        case _:
+            return 0
+
+
+def blast_get_format(blast_type: Blast) -> str:
+    match blast_type:
+        case (Blast.BLAST1_RGBA16 | Blast.BLAST2_RGBA32 | Blast.BLAST5_RGBA32):
+            return "rgba"
+        case (Blast.BLAST3_IA8 | Blast.BLAST4_IA16 | Blast.BLAST6_IA8):
+            return "ia"
+        case _:
+            return ""
+
+
+def blast_get_decoded_extension(blast_type: Blast) -> str:
+    print("Got", blast_type)
+    return "%s%d" % (blast_get_format(blast_type), blast_get_depth(blast_type))
 
 
 def decode_blast0(compressed_bytes):
@@ -34,11 +72,24 @@ class N64SegBlast(N64Segment):
     def split(self, rom_bytes):
         print(self.yaml)
 
-        decoded_file_path = options.get_asset_path() / self.dir / f"{self.name}.unblast"
-        print(decoded_file_path)
+        address = "%06X" % self.yaml[0]
 
-        compressed_bytes = rom_bytes[self.rom_start: self.rom_end]
+        blast_type = Blast(self.yaml[3])
 
-        decoded_bytes = decode_blast0(compressed_bytes)
+        print(address, blast_type)
+
+        # Write encoded file
+        encoded_ext = "blast%d" % self.yaml[3]
+        encoded_file_path = options.get_asset_path() / self.dir / f"{address}.{encoded_ext}"
+        encoded_bytes = rom_bytes[self.rom_start: self.rom_end]
+        print("Writing", encoded_file_path)
+        with open(encoded_file_path, 'wb') as f:
+            f.write(encoded_bytes)
+
+        # Decode and write decoded file
+        decoded_ext = blast_get_decoded_extension(blast_type)
+        decoded_file_path = options.get_asset_path() / self.dir / f"{address}.{decoded_ext}"
+        print("Writing", decoded_file_path)
+        decoded_bytes = decode_blast0(encoded_bytes)
         with open(decoded_file_path, 'wb') as f:
             f.write(decoded_bytes)
