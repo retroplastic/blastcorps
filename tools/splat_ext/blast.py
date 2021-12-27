@@ -368,12 +368,12 @@ class N64SegBlast(N64Segment):
 
         match blast_type:
             case Blast.BLAST4_IA16:
-                lut_path = options.get_asset_path() / self.dir / "lookup_table_128_0.bin"
+                lut_path = options.get_asset_path() / self.dir / "047480.lut128.bin"
                 with open(lut_path, 'rb') as f:
                     lut = f.read()
                 decoded_bytes = decode_blast_lookup(blast_type, encoded_bytes, lut)
             case Blast.BLAST5_RGBA32:
-                lut_path = options.get_asset_path() / self.dir / "lookup_table_256_2.bin"
+                lut_path = options.get_asset_path() / self.dir / "152970.lut256.bin"
                 with open(lut_path, 'rb') as f:
                     lut = f.read()
                 decoded_bytes = decode_blast_lookup(blast_type, encoded_bytes, lut)
