@@ -125,6 +125,9 @@ list_blasts(uint8_t* bytes, size_t size)
 
     last_to = start + ROM_OFFSET + compressed_size;
   }
+
+  // Print last to
+  printf("  - [0x%06X]\n", last_to);
 }
 
 int
