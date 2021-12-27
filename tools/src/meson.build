@@ -1,5 +1,10 @@
 blast_sources = files([
-  'blast.c', 'n64graphics.c', 'utils.c'
+  'blast.h',
+  'blast.c',
+  'n64graphics.h',
+  'n64graphics.c',
+  'utils.h',
+  'utils.c'
 ])
 lib = static_library('blast', blast_sources)
 
@@ -22,3 +27,8 @@ unblast_sources = files([
   'unblast.c'
 ])
 executable('unblast', unblast_sources, link_whole: lib)
+
+all_sources = [
+  blast_sources, gen_level_table_sources, gen_splat_yaml_sources,
+  unblast_rom_sources, unblast_sources
+]
