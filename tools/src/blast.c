@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "blast.h"
 #include "n64graphics.h"
 #include "utils.h"
 
@@ -334,17 +335,6 @@ decode_block6(uint8_t* in, int32_t length, uint8_t* out)
   return len;
 }
 
-typedef enum
-{
-  BLAST0 = 0,
-  BLAST1_RGBA16,
-  BLAST2_RGBA32,
-  BLAST3_IA8,
-  BLAST4_IA16,
-  BLAST5_RGBA32,
-  BLAST6_IA8
-} blast_t;
-
 // 802A57DC (06101C)
 // a0 is only real parameters in ROM
 int32_t
@@ -417,13 +407,6 @@ get_type_depth(blast_t type)
 
 // This cannot be reliably determined by the data and needs to be
 // tracked manually in the splat yaml.
-
-typedef struct
-{
-  uint32_t w;
-  uint32_t h;
-} res_t;
-
 res_t
 guess_resolution(blast_t type, int32_t size)
 {
@@ -495,7 +478,7 @@ guess_resolution(blast_t type, int32_t size)
   }
 }
 
-static bool
+bool
 convert_to_png(char* fname, uint16_t len, blast_t type)
 {
   if (type == BLAST0)
@@ -538,190 +521,4 @@ convert_to_png(char* fname, uint16_t len, blast_t type)
     default:
       return false;
   }
-}
-
-void
-decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
-{
-  char* rom_dir_path = strdup(rom_path);
-  dirname(rom_dir_path);
-
-  // loop through from 0x4CE0 to 0xCCE0
-  for (uint32_t address = ROM_OFFSET; address < END_OFFSET; address += 8)
-  {
-    uint32_t start = read_u32_be(&rom_bytes[address]);
-    uint16_t compressed_size = read_u16_be(&rom_bytes[address + 4]);
-    blast_t type = read_u16_be(&rom_bytes[address + 6]);
-
-    assert(rom_size >= start);
-
-    // TODO: there are large sections of len=0, possibly LUTs for 4 & 5?
-    if (compressed_size == 0)
-    {
-      continue;
-    }
-
-    // Write compressed file
-    char out_path_compressed[512];
-    sprintf(out_path_compressed,
-            "%s/%06X.blast%d",
-            rom_dir_path,
-            start + ROM_OFFSET,
-            type);
-    write_file(
-      out_path_compressed, &rom_bytes[start + ROM_OFFSET], compressed_size);
-
-    if (type == BLAST0)
-    {
-      printf("[0x%06X, 0x%06X] blast0 %5d bytes\n",
-             start + ROM_OFFSET,
-             start + ROM_OFFSET + compressed_size,
-             compressed_size);
-      continue;
-    }
-
-    // TODO: need to figure out where last param is set for decoders 4 and 5
-    uint8_t* lut;
-    switch (type)
-    {
-      case BLAST4_IA16:
-        lut = &rom_bytes[0x047480];
-        break;
-      case BLAST5_RGBA32:
-        // 0x0998E0
-        // 0x1E2C00
-        lut = &rom_bytes[0x152970];
-        break;
-      default:
-        lut = NULL;
-    }
-
-    uint8_t* decompressed_bytes = malloc(100 * compressed_size);
-    int32_t decompressed_size = decompress_block(&rom_bytes[start + ROM_OFFSET],
-                                                 compressed_size,
-                                                 type,
-                                                 decompressed_bytes,
-                                                 lut);
-
-    res_t res = guess_resolution(type, decompressed_size);
-
-    int32_t depth = get_type_depth(type);
-
-    char format_str[16];
-    const char* format_name = get_type_format_name(type);
-    sprintf(format_str, "(%s%d)", format_name, depth);
-
-    printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %4d -> %4d bytes\n",
-           start + ROM_OFFSET,
-           start + ROM_OFFSET + compressed_size,
-           type,
-           format_str,
-           res.w,
-           res.h,
-           compressed_size,
-           decompressed_size);
-
-    // Write decompressed file
-    char out_path_decompressed[512];
-    sprintf(out_path_decompressed,
-            "%s/%06X.%s%d",
-            rom_dir_path,
-            start + ROM_OFFSET,
-            format_name,
-            depth);
-    write_file(out_path_decompressed, decompressed_bytes, decompressed_size);
-
-    // attempt to convert to PNG
-    convert_to_png(out_path_decompressed, decompressed_size, type);
-  }
-}
-
-void
-print_usage()
-{
-  printf("Usage:\n");
-  printf("Unpack whole rom:\n");
-  printf("./blast <rom_path>\n");
-  printf("Decode blast encoded file:\n");
-  printf("./blast <file_path> <blast_compression_id>\n");
-  printf("Decode blast encoded file. With LUT for blast 4 and 5:\n");
-  printf("./blast <file_path> <blast_compression_id> <lut_file_path>\n");
-}
-
-int
-main(int argc, char* argv[])
-{
-  if (argc < 2 || argc > 4)
-  {
-    print_usage();
-    return EXIT_FAILURE;
-  }
-
-  // read in Blast Corps ROM
-  uint8_t* rom_bytes;
-  size_t size = read_file(argv[1], &rom_bytes);
-
-  if (argc == 2)
-  {
-    // decompress whole rom
-    decompress_rom(argv[1], rom_bytes, size);
-  }
-  else if (argc > 2)
-  {
-    blast_t type = atoi(argv[2]);
-    printf("Opening %s\n", argv[1]);
-
-    if (argc != 4 && (type == BLAST4_IA16 || type == BLAST5_RGBA32))
-    {
-      printf(
-        "ERROR: You need to provide a LUT file for blast4 and blast5 files.\n");
-      print_usage();
-      return EXIT_FAILURE;
-    }
-
-    uint8_t* lut_bytes = NULL;
-    if (argc == 4)
-    {
-      printf("Opening LUT at %s\n", argv[3]);
-      size_t lut_size = read_file(argv[3], &lut_bytes);
-      if (type == BLAST4_IA16 && lut_size != 128)
-      {
-        printf(
-          "WARNING: Lookup table for blast4 is %ld bytes instead of 128.\n",
-          lut_size);
-      }
-      else if (type == BLAST5_RGBA32 && lut_size != 256)
-      {
-        printf(
-          "WARNING: Lookup table for blast5 is %ld bytes instead of 256.\n",
-          lut_size);
-      }
-    }
-
-    uint8_t* decompressed_bytes = malloc(100 * size);
-    int32_t decompressed_size =
-      decompress_block(rom_bytes, size, type, decompressed_bytes, lut_bytes);
-
-    // Write decompressed file
-    char out_path_decompressed[512];
-
-    if (type == BLAST0)
-    {
-      sprintf(out_path_decompressed, "%s.unblast0", argv[1]);
-    }
-    else
-    {
-      int32_t depth = get_type_depth(type);
-      const char* format_name = get_type_format_name(type);
-      sprintf(out_path_decompressed, "%s.%s%d", argv[1], format_name, depth);
-    }
-
-    printf("Writing %s\n", out_path_decompressed);
-
-    write_file(out_path_decompressed, decompressed_bytes, decompressed_size);
-  }
-
-  free(rom_bytes);
-
-  return EXIT_SUCCESS;
 }
