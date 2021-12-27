@@ -16,7 +16,9 @@
 void
 decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
 {
-  char* rom_dir_path = strdup(rom_path);
+  char rom_dir_path[300];
+
+  strcpy(rom_dir_path,rom_path);
   dirname(rom_dir_path);
 
   // loop through from 0x4CE0 to 0xCCE0
