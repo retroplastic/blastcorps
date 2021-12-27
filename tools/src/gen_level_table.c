@@ -227,7 +227,6 @@ int main(int argc, char *argv[])
 {
    unsigned char *text;
    unsigned char *data;
-   int text_size;
    int data_size;
    unsigned text_offset;
    unsigned instruction;
@@ -243,7 +242,7 @@ int main(int argc, char *argv[])
 
    memset(level_table, 0, sizeof(level_table));
    
-   text_size = read_file(argv[1], &text);
+   size_t text_size = read_file(argv[1], &text);
    if (text_size <= 0) {
       ERROR("Error opening \"%s\"\n", argv[1]);
       return EXIT_FAILURE;
