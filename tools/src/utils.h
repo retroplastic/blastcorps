@@ -33,7 +33,6 @@
     (buf)[1] = ((val)) & 0xFF;                                                 \
   } while (0)
 
-
 #define ERROR(...) fprintf(stderr, __VA_ARGS__)
 
 // functions

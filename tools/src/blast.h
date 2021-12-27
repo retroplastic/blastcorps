@@ -21,10 +21,7 @@ typedef struct
 } res_t;
 
 int32_t
-decode_blast(uint8_t* src,
-             uint32_t size,
-             blast_t type,
-             uint8_t* result_bytes);
+decode_blast(uint8_t* src, uint32_t size, blast_t type, uint8_t* result_bytes);
 
 int32_t
 decode_blast_lookup(uint8_t* src,
