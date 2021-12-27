@@ -353,6 +353,12 @@ def decode_blast_lookup(blast_type: Blast, encoded: bytes, lut: bytes) -> bytes:
 
 
 class N64SegBlast(N64Segment):
+    def get_latest_lut256(self):
+        lut_dir_path = options.get_asset_path() / self.dir
+        lut_files = list(lut_dir_path.glob("*.lut256.bin"))
+        lut_files.sort()
+        return lut_files[-1]
+
     def split(self, rom_bytes):
         address = "%06X" % self.yaml[0]
 
@@ -373,7 +379,10 @@ class N64SegBlast(N64Segment):
                     lut = f.read()
                 decoded_bytes = decode_blast_lookup(blast_type, encoded_bytes, lut)
             case Blast.BLAST5_RGBA32:
+                # TODO: Figure out proper LUT assignment
                 lut_path = options.get_asset_path() / self.dir / "152970.lut256.bin"
+                if not lut_path.exists():
+                    lut_path = self.get_latest_lut256()
                 with open(lut_path, 'rb') as f:
                     lut = f.read()
                 decoded_bytes = decode_blast_lookup(blast_type, encoded_bytes, lut)
