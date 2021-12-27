@@ -101,9 +101,19 @@ list_blasts(uint8_t* bytes, size_t size)
              res.w,
              res.h);
     }
+    else if (compressed_size == 128)
+    {
+      // Portential lookup table for blast4.
+      printf("  - [0x%06X, bin, %06X.lut128]\n", from, from);
+    }
+    else if (compressed_size == 256)
+    {
+      // Potential lookup table for blast5.
+      printf("  - [0x%06X, bin, %06X.lut256]\n", from, from);
+    }
     else
     {
-      printf("  - [0x%06X, blast, %06X.blast%d, %d]\n", from, from, type, type);
+      printf("  - [0x%06X, blast, %06X.blast0, 0]\n", from, from);
     }
 
     last_to = start + ROM_OFFSET + compressed_size;
