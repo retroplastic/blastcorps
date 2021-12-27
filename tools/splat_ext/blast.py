@@ -390,8 +390,8 @@ class N64SegBlast(N64Segment):
             return
 
         # Write PNG
-        width = self.yaml[5]
-        height = self.yaml[6]
+        width = self.yaml[4]
+        height = self.yaml[5]
 
         writer_class = blast_get_png_writer(blast_type)
         png_writer = writer_class.get_writer(width, height)

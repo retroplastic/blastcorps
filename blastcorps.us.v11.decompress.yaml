@@ -27,11 +27,11 @@ segments:
   - [0x0998E0, bin, lookup_table_256_0]
   - [0x0999E0]
 
-  - [0x10D230, blast, foo0, 1, rgba16, 32, 64]
+  - [0x10D230, blast, foo0, 1, 32, 64]
   - [0x10D8DC]
-  - [0x10D8E0, blast, foo1, 2, rgba32, 16, 32]
+  - [0x10D8E0, blast, foo1, 2, 16, 32]
   - [0x10DB4C]
-  - [0x10DB50, blast, foo2, 1, rgba16, 16, 16]
+  - [0x10DB50, blast, foo2, 1, 16, 16]
   - [0x10DCEE]
 
   - [0x1E2C00, bin, lookup_table_256_1]
@@ -40,32 +40,32 @@ segments:
   - [0x152A70]
 
   - [0x14E3AA]
-  - [0x14E3B0, blast, foo4, 3, ia8, 64, 64]
+  - [0x14E3B0, blast, foo4, 3, 64, 64]
   - [0x14EEAC]
 
 
-  - [0x1F11F0, blast, foo8, 4, ia16, 64, 32]
+  - [0x1F11F0, blast, foo8, 4, 64, 32]
   - [0x1F178C]
 
-  - [0x2065C8, blast, foo9, 5, rgba32, 32, 32]
+  - [0x2065C8, blast, foo9, 5, 32, 32]
   - [0x206BEC]
 
   - [0x2E6008, bin, blast1_rgba16_32_32_some_explosion_part]
   - [0x2E6438, bin, blast1_rgba16_32_32_guy_happy]
   - [0x2E68C0, bin, blast1_rgba16_32_32_guy_angry]
   - [0x2E6D3A]
-  - [0x2E6D40, blast, guy_very_angry, 1, rgba16, 32, 32]
+  - [0x2E6D40, blast, guy_very_angry, 1, 32, 32]
   - [0x2E7222]
   - [0x2E7228, bin, blast1_rgba16_something2]
   - [0x2E7730]
 
-  - [0x350148, blast, foo5, 6, foo, 16, 32]
+  - [0x350148, blast, foo5, 6, 16, 32]
   - [0x3501AE]
-  - [0x3501B0, blast, foo6, 6, foo, 16, 32]
-  - [0x3502A8, blast, foo7, 6, foo, 16, 32]
+  - [0x3501B0, blast, foo6, 6, 16, 32]
+  - [0x3502A8, blast, foo7, 6, 16, 32]
   - [0x350358]
 
-  - [0x350948, blast, foo10, 0, ia8, 64, 511]
+  - [0x350948, blast, foo10, 0, 64, 511]
   - [0x358947]
 
   #- [0x2E1328, bin, blast1_rgba16_32_32_some_explosion_part]
