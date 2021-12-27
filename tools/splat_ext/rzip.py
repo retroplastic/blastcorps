@@ -6,10 +6,10 @@ from util import log
 import subprocess
 import gzip
 
-class N64SegGzip(N64Segment):
+class N64SegRzip(N64Segment):
     def out_path(self) -> Optional[Path]:
         return options.get_asset_path() / self.dir / f"{self.name}.gz"
-        
+
     def split(self, rom_bytes):
         path = self.out_path()
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -22,7 +22,7 @@ class N64SegGzip(N64Segment):
             f.write(compressed_bytes)
         self.log(f"Wrote {self.name} to {path}")
 
-        subprocess.call(["gunzip", "-k", "-N", "-f", path])
+        subprocess.call(["gzip", "-d", "-k", "-N", "-f", path])
 
         # TODO: Grab file name from gzip and write proper timestamp
         """
