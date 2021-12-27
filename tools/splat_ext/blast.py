@@ -68,19 +68,8 @@ def blast_get_png_writer(blast_type: Blast) -> N64SegImg:
 def decode_blast0(encoded: bytes) -> bytes:
     decoded = bytearray()
 
-    in_pos = 0
-
-    length = len(encoded)
-    length >>= 3
-
-    while length != 0:
-        for i in range(8):
-            # Python 3 needs a range to extract a single byte
-            a_byte = encoded[in_pos + i: in_pos + i + 1]
-            decoded.extend(a_byte)
-
-        in_pos += 8
-        length -= 1
+    for pos in range(len(encoded) >> 3):
+        decoded.extend(encoded[pos * 8: (pos + 1) * 8])
 
     # Fill with zeros to encoded length
     zeros_to_fill = len(encoded) - len(decoded)
@@ -90,244 +79,159 @@ def decode_blast0(encoded: bytes) -> bytes:
     return decoded
 
 
-# Based on 802A5AE0 (061320)
-def decode_blast1(encoded: bytes) -> bytes:
+def decode_blast_generic(encoded: bytes, decode_single_fun, element_size: int,
+                         pack_type: str, loop_back_and: int, loop_back_shift: int) -> bytes:
     result_ints = []
 
     for unpacked in struct.iter_unpack(">H", encoded):
         current = unpacked[0]
 
         if current & 0x8000 == 0:
-            t1 = (current & 0xFFC0) << 1
-            current &= 0x3F
-            current |= t1
-            result_ints.append(current)
+            res = decode_single_fun(current)
+            result_ints.append(res)
         else:
             loop_back_length = current & 0x1F
-            loop_back_offset = (current & 0x7FFF) >> 5
+            loop_back_offset = (current & loop_back_and) >> loop_back_shift
 
-            slice_from = len(result_ints) - int(loop_back_offset / 2)
+            slice_from = len(result_ints) - int(loop_back_offset / element_size)
             slice_to = slice_from + loop_back_length
             result_ints.extend(result_ints[slice_from:slice_to])
 
     decoded_bytes = bytearray()
     for result_int in result_ints:
-        b = struct.pack(">H", result_int)
+        b = struct.pack(pack_type, result_int)
         decoded_bytes.extend(b)
 
     return decoded_bytes
+
+
+# Based on 802A5AE0 (061320)
+def decode_blast1(encoded: bytes) -> bytes:
+    def single(current: int) -> int:
+        t1 = (current & 0xFFC0) << 1
+        current &= 0x3F
+        current |= t1
+        return current
+    return decode_blast_generic(encoded, single, 2, ">H", 0x7FFF, 5)
 
 
 # 802A5B90 (0613D0)
 def decode_blast2(encoded: bytes) -> bytes:
-    result_ints = []
-
-    for unpacked in struct.iter_unpack(">H", encoded):
-        current = unpacked[0]
-
-        if current & 0x8000 == 0:
-            t1 = current & 0x7800
-            t2 = current & 0x0780
-            t1 <<= 0x11
-            t2 <<= 0xD
-            t1 |= t2
-            t2 = current & 0x78
-            t2 <<= 0x9
-            t1 |= t2
-            t2 = current & 0x7
-            t2 <<= 0x5
-            t1 |= t2
-            result_ints.append(t1)
-        else:
-            loop_back_length = current & 0x1F
-            loop_back_offset = (current & 0x7FE0) >> 4
-
-            slice_from = len(result_ints) - int(loop_back_offset / 4)
-            slice_to = slice_from + loop_back_length
-            result_ints.extend(result_ints[slice_from:slice_to])
-
-    decoded_bytes = bytearray()
-    for result_int in result_ints:
-        b = struct.pack(">I", result_int)
-        decoded_bytes.extend(b)
-
-    return decoded_bytes
+    def single(current: int) -> int:
+        t1 = current & 0x7800
+        t2 = current & 0x0780
+        t1 <<= 0x11
+        t2 <<= 0xD
+        t1 |= t2
+        t2 = current & 0x78
+        t2 <<= 0x9
+        t1 |= t2
+        t2 = current & 0x7
+        t2 <<= 0x5
+        t1 |= t2
+        return t1
+    return decode_blast_generic(encoded, single, 4, ">I", 0x7FE0, 4)
 
 
 # 802A5A2C (06126C)
 def decode_blast3(encoded: bytes) -> bytes:
-    result_ints = []
+    def single(current: int) -> int:
+        res_bytes = bytearray()
 
-    for unpacked in struct.iter_unpack(">H", encoded):
-        current = unpacked[0]
+        t1 = current >> 8
+        t1 <<= 1
+        b = struct.pack(">B", t1)
+        res_bytes.extend(b)  # sb
 
-        if current & 0x8000 == 0:
-            res_bytes = bytearray()
+        t1 = current & 0xFF
+        t1 <<= 1
+        b = struct.pack(">B", t1)
+        res_bytes.extend(b)  # sb
 
-            t1 = current >> 8
-            t1 <<= 1
-            b = struct.pack(">B", t1)
-            res_bytes.extend(b)  # sb
-
-            t1 = current & 0xFF
-            t1 <<= 1
-            b = struct.pack(">B", t1)
-            res_bytes.extend(b)  # sb
-
-            res_int = struct.unpack(">H", res_bytes)[0]
-            result_ints.append(res_int)
-        else:
-            loop_back_length = current & 0x1F
-            loop_back_offset = (current & 0x7FFF) >> 5
-
-            slice_from = len(result_ints) - int(loop_back_offset / 2)
-            slice_to = slice_from + loop_back_length
-            result_ints.extend(result_ints[slice_from:slice_to])
-
-    decoded_bytes = bytearray()
-    for result_int in result_ints:
-        b = struct.pack(">H", result_int)
-        decoded_bytes.extend(b)
-
-    return decoded_bytes
+        return struct.unpack(">H", res_bytes)[0]
+    return decode_blast_generic(encoded, single, 2, ">H", 0x7FFF, 5)
 
 
 # 802A5C5C (06149C)
 def decode_blast4(encoded: bytes, lut: bytes) -> bytes:
-    result_ints = []
+    def single(current: int) -> int:
+        res_bytes = bytearray()
 
-    for unpacked in struct.iter_unpack(">H", encoded):
-        current = unpacked[0]
+        t1 = current >> 8
+        t2 = t1 & 0xFE
+        lookup_bytes = lut[t2:t2 + 2]
+        t2 = struct.unpack(">H", lookup_bytes)[0]
+        t1 &= 1
+        t2 <<= 1
+        t1 |= t2
+        b = struct.pack(">H", t1)
+        res_bytes.extend(b)
 
-        if current & 0x8000 == 0:
-            res_bytes = bytearray()
+        t1 = current & 0xFE
+        lookup_bytes = lut[t1:t1 + 2]
+        t1 = struct.unpack(">H", lookup_bytes)[0]
+        current &= 1
+        t1 <<= 1
+        t1 |= current
+        b = struct.pack(">H", t1)
+        res_bytes.extend(b)
 
-            t1 = current >> 8
-            t2 = t1 & 0xFE
-            lookup_bytes = lut[t2:t2+2]
-            t2 = struct.unpack(">H", lookup_bytes)[0]
-            t1 &= 1
-            t2 <<= 1
-            t1 |= t2
-            b = struct.pack(">H", t1)
-            res_bytes.extend(b)
-
-            t1 = current & 0xFE
-            lookup_bytes = lut[t1:t1+2]
-            t1 = struct.unpack(">H", lookup_bytes)[0]
-            current &= 1
-            t1 <<= 1
-            t1 |= current
-            b = struct.pack(">H", t1)
-            res_bytes.extend(b)
-
-            res_int = struct.unpack(">I", res_bytes)[0]
-            result_ints.append(res_int)
-        else:
-            loop_back_length = current & 0x1F
-            loop_back_offset = (current & 0x7FE0) >> 4
-
-            slice_from = len(result_ints) - int(loop_back_offset / 4)
-            slice_to = slice_from + loop_back_length
-            result_ints.extend(result_ints[slice_from:slice_to])
-
-    decoded_bytes = bytearray()
-    for result_int in result_ints:
-        b = struct.pack(">I", result_int)
-        decoded_bytes.extend(b)
-
-    return decoded_bytes
+        return struct.unpack(">I", res_bytes)[0]
+    return decode_blast_generic(encoded, single, 4, ">I", 0x7FE0, 4)
 
 
 # 802A5D34 (061574)
 def decode_blast5(encoded: bytes, lut: bytes) -> bytes:
-    result_ints = []
+    def single(current: int) -> int:
+        t1 = current >> 4
+        t1 = t1 << 1
 
-    for unpacked in struct.iter_unpack(">H", encoded):
-        current = unpacked[0]
+        lookup_bytes = lut[t1:t1 + 2]
+        t1 = struct.unpack(">H", lookup_bytes)[0]
 
-        if current & 0x8000 == 0:
-            t1 = current >> 4
-            t1 = t1 << 1
+        current &= 0xF
+        current <<= 4
+        t2 = t1 & 0x7C00
+        t3 = t1 & 0x03E0
+        t2 <<= 0x11
+        t3 <<= 0xE
+        t2 |= t3
+        t3 = t1 & 0x1F
+        t3 <<= 0xB
+        t2 |= t3
+        t2 |= current
 
-            lookup_bytes = lut[t1:t1 + 2]
-            t1 = struct.unpack(">H", lookup_bytes)[0]
-
-            current &= 0xF
-            current <<= 4
-            t2 = t1 & 0x7C00
-            t3 = t1 & 0x03E0
-            t2 <<= 0x11
-            t3 <<= 0xE
-            t2 |= t3
-            t3 = t1 & 0x1F
-            t3 <<= 0xB
-            t2 |= t3
-            t2 |= current
-
-            result_ints.append(t2)
-        else:
-            loop_back_length = current & 0x1F
-            loop_back_offset = (current & 0x7FE0) >> 4
-
-            slice_from = len(result_ints) - int(loop_back_offset / 4)
-            slice_to = slice_from + loop_back_length
-            result_ints.extend(result_ints[slice_from:slice_to])
-
-    decoded_bytes = bytearray()
-    for result_int in result_ints:
-        b = struct.pack(">I", result_int)
-        decoded_bytes.extend(b)
-
-    return decoded_bytes
+        return t2
+    return decode_blast_generic(encoded, single, 4, ">I", 0x7FE0, 4)
 
 
 # 802A5958 (061198)
 def decode_blast6(encoded: bytes) -> bytes:
-    result_ints = []
+    def single(current: int) -> int:
+        res_bytes = bytearray()
 
-    for unpacked in struct.iter_unpack(">H", encoded):
-        current = unpacked[0]
+        t1 = current >> 8
+        t2 = t1 & 0x38
+        t1 = t1 & 0x07
+        t2 <<= 2
+        t1 <<= 1
+        t1 |= t2
 
-        if current & 0x8000 == 0:
-            res_bytes = bytearray()
+        b = struct.pack(">B", t1)
+        res_bytes.extend(b)  # sb
 
-            t1 = current >> 8
-            t2 = t1 & 0x38
-            t1 = t1 & 0x07
-            t2 <<= 2
-            t1 <<= 1
-            t1 |= t2
+        t1 = current & 0xFF
+        t2 = t1 & 0x38
+        t1 = t1 & 0x07
+        t2 <<= 2
+        t1 <<= 1
+        t1 |= t2
 
-            b = struct.pack(">B", t1)
-            res_bytes.extend(b)  # sb
+        b = struct.pack(">B", t1)
+        res_bytes.extend(b)  # sb
 
-            t1 = current & 0xFF
-            t2 = t1 & 0x38
-            t1 = t1 & 0x07
-            t2 <<= 2
-            t1 <<= 1
-            t1 |= t2
-
-            b = struct.pack(">B", t1)
-            res_bytes.extend(b)  # sb
-
-            res_int = struct.unpack(">H", res_bytes)[0]
-            result_ints.append(res_int)
-        else:
-            loop_back_length = current & 0x1F
-            loop_back_offset = (current & 0x7FFF) >> 5
-
-            slice_from = len(result_ints) - int(loop_back_offset / 2)
-            slice_to = slice_from + loop_back_length
-            result_ints.extend(result_ints[slice_from:slice_to])
-
-    decoded_bytes = bytearray()
-    for result_int in result_ints:
-        b = struct.pack(">H", result_int)
-        decoded_bytes.extend(b)
-
-    return decoded_bytes
+        return struct.unpack(">H", res_bytes)[0]
+    return decode_blast_generic(encoded, single, 2, ">H", 0x7FFF, 5)
 
 
 def decode_blast(blast_type: Blast, encoded: bytes) -> bytes:
