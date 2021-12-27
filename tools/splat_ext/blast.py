@@ -81,25 +81,22 @@ def decode_blast0(encoded: bytes) -> bytes:
 
 def decode_blast_generic(encoded: bytes, decode_single_fun, element_size: int,
                          loop_back_and: int, loop_back_shift: int) -> bytes:
-    result_bytes = []
+    decoded_bytes = bytearray()
 
     for unpacked in struct.iter_unpack(">H", encoded):
         current = unpacked[0]
 
         if current & 0x8000 == 0:
             res = decode_single_fun(current)
-            result_bytes.append(res)
+            decoded_bytes.extend(res)
         else:
             loop_back_length = current & 0x1F
             loop_back_offset = (current & loop_back_and) >> loop_back_shift
 
-            slice_from = len(result_bytes) - int(loop_back_offset / element_size)
-            slice_to = slice_from + loop_back_length
-            result_bytes.extend(result_bytes[slice_from:slice_to])
+            slice_from = len(decoded_bytes) - loop_back_offset
+            slice_to = slice_from + loop_back_length * element_size
 
-    decoded_bytes = bytearray()
-    for result_byte in result_bytes:
-        decoded_bytes.extend(result_byte)
+            decoded_bytes.extend(decoded_bytes[slice_from:slice_to])
 
     return decoded_bytes
 
