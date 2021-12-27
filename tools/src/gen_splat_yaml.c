@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "blast.h"
 #include "utils.h"
 
 // list_gzips is based on SubDrag's GEDecompressor.
@@ -46,7 +47,7 @@ list_blasts(uint8_t* bytes, size_t size)
   {
     uint32_t start = read_u32_be(&bytes[address]);
     uint16_t compressed_size = read_u16_be(&bytes[address + 4]);
-    uint16_t type = read_u16_be(&bytes[address + 6]);
+    blast_t type = read_u16_be(&bytes[address + 6]);
 
     assert(size >= start);
 
@@ -64,15 +65,46 @@ list_blasts(uint8_t* bytes, size_t size)
       printf("  - [0x%06X] # %d bytes\n", last_to, space_size);
     }
 
-    // TODO: Guess resolution
-    printf("  - [0x%06X, blast, %06X.blast%d, %d, %d, %d] # %d bytes\n",
-           from,
-           from,
-           type,
-           type,
-           64,
-           64,
-           compressed_size);
+    res_t res = { 0, 0 };
+    if (type != BLAST0)
+    {
+      // TODO: need to figure out where last param is set for decoders 4 and 5
+      uint8_t* lut;
+      switch (type)
+      {
+        case BLAST4_IA16:
+          lut = &bytes[0x047480];
+          break;
+        case BLAST5_RGBA32:
+          // 0x0998E0
+          // 0x1E2C00
+          lut = &bytes[0x152970];
+          break;
+        default:
+          lut = NULL;
+      }
+
+      uint8_t* decompressed_bytes = malloc(100 * compressed_size);
+      int32_t decompressed_size = decompress_block(&bytes[start + ROM_OFFSET],
+                                                   compressed_size,
+                                                   type,
+                                                   decompressed_bytes,
+                                                   lut);
+
+      res = guess_resolution(type, decompressed_size);
+
+      printf("  - [0x%06X, blast, %06X.blast%d, %d, %d, %d]\n",
+             from,
+             from,
+             type,
+             type,
+             res.w,
+             res.h);
+    }
+    else
+    {
+      printf("  - [0x%06X, blast, %06X.blast%d, %d]\n", from, from, type, type);
+    }
 
     last_to = start + ROM_OFFSET + compressed_size;
   }
