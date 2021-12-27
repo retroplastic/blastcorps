@@ -80,44 +80,43 @@ def decode_blast0(encoded: bytes) -> bytes:
 
 
 def decode_blast_generic(encoded: bytes, decode_single_fun, element_size: int,
-                         pack_type: str, loop_back_and: int, loop_back_shift: int) -> bytes:
-    result_ints = []
+                         loop_back_and: int, loop_back_shift: int) -> bytes:
+    result_bytes = []
 
     for unpacked in struct.iter_unpack(">H", encoded):
         current = unpacked[0]
 
         if current & 0x8000 == 0:
             res = decode_single_fun(current)
-            result_ints.append(res)
+            result_bytes.append(res)
         else:
             loop_back_length = current & 0x1F
             loop_back_offset = (current & loop_back_and) >> loop_back_shift
 
-            slice_from = len(result_ints) - int(loop_back_offset / element_size)
+            slice_from = len(result_bytes) - int(loop_back_offset / element_size)
             slice_to = slice_from + loop_back_length
-            result_ints.extend(result_ints[slice_from:slice_to])
+            result_bytes.extend(result_bytes[slice_from:slice_to])
 
     decoded_bytes = bytearray()
-    for result_int in result_ints:
-        b = struct.pack(pack_type, result_int)
-        decoded_bytes.extend(b)
+    for result_byte in result_bytes:
+        decoded_bytes.extend(result_byte)
 
     return decoded_bytes
 
 
 # Based on 802A5AE0 (061320)
 def decode_blast1(encoded: bytes) -> bytes:
-    def single(current: int) -> int:
+    def single(current: int) -> bytes:
         t1 = (current & 0xFFC0) << 1
         current &= 0x3F
         current |= t1
-        return current
-    return decode_blast_generic(encoded, single, 2, ">H", 0x7FFF, 5)
+        return struct.pack(">H", current)
+    return decode_blast_generic(encoded, single, 2, 0x7FFF, 5)
 
 
 # 802A5B90 (0613D0)
 def decode_blast2(encoded: bytes) -> bytes:
-    def single(current: int) -> int:
+    def single(current: int) -> bytes:
         t1 = current & 0x7800
         t2 = current & 0x0780
         t1 <<= 0x11
@@ -129,26 +128,25 @@ def decode_blast2(encoded: bytes) -> bytes:
         t2 = current & 0x7
         t2 <<= 0x5
         t1 |= t2
-        return t1
-    return decode_blast_generic(encoded, single, 4, ">I", 0x7FE0, 4)
+        return struct.pack(">I", t1)
+    return decode_blast_generic(encoded, single, 4, 0x7FE0, 4)
 
 
 # 802A5A2C (06126C)
 def decode_blast3(encoded: bytes) -> bytes:
-    def single(current: int) -> int:
+    def single(current: int) -> bytes:
         part0 = current >> 8
         part0 <<= 1
         part1 = current & 0xFF
         part1 <<= 1
 
-        b = struct.pack(">BB", part0, part1)
-        return struct.unpack(">H", b)[0]
-    return decode_blast_generic(encoded, single, 2, ">H", 0x7FFF, 5)
+        return struct.pack(">BB", part0, part1)
+    return decode_blast_generic(encoded, single, 2, 0x7FFF, 5)
 
 
 # 802A5C5C (06149C)
 def decode_blast4(encoded: bytes, lut: bytes) -> bytes:
-    def single(current: int) -> int:
+    def single(current: int) -> bytes:
         part0 = current >> 8
         t2 = part0 & 0xFE
         lookup_bytes = lut[t2:t2 + 2]
@@ -163,15 +161,13 @@ def decode_blast4(encoded: bytes, lut: bytes) -> bytes:
         current &= 1
         part1 <<= 1
         part1 |= current
-        b = struct.pack(">HH", part0, part1)
-
-        return struct.unpack(">I", b)[0]
-    return decode_blast_generic(encoded, single, 4, ">I", 0x7FE0, 4)
+        return struct.pack(">HH", part0, part1)
+    return decode_blast_generic(encoded, single, 4, 0x7FE0, 4)
 
 
 # 802A5D34 (061574)
 def decode_blast5(encoded: bytes, lut: bytes) -> bytes:
-    def single(current: int) -> int:
+    def single(current: int) -> bytes:
         t1 = current >> 4
         t1 = t1 << 1
 
@@ -190,13 +186,13 @@ def decode_blast5(encoded: bytes, lut: bytes) -> bytes:
         t2 |= t3
         t2 |= current
 
-        return t2
-    return decode_blast_generic(encoded, single, 4, ">I", 0x7FE0, 4)
+        return struct.pack(">I", t2)
+    return decode_blast_generic(encoded, single, 4, 0x7FE0, 4)
 
 
 # 802A5958 (061198)
 def decode_blast6(encoded: bytes) -> bytes:
-    def single(current: int) -> int:
+    def single(current: int) -> bytes:
         part0 = current >> 8
         t2 = part0 & 0x38
         part0 &= 0x07
@@ -211,10 +207,8 @@ def decode_blast6(encoded: bytes) -> bytes:
         part1 <<= 1
         part1 |= t2
 
-        b = struct.pack(">BB", part0, part1)
-
-        return struct.unpack(">H", b)[0]
-    return decode_blast_generic(encoded, single, 2, ">H", 0x7FFF, 5)
+        return struct.pack(">BB", part0, part1)
+    return decode_blast_generic(encoded, single, 2, 0x7FFF, 5)
 
 
 def decode_blast(blast_type: Blast, encoded: bytes) -> bytes:
