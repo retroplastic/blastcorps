@@ -338,11 +338,7 @@ decode_blast6(uint8_t* in, int32_t length, uint8_t* out)
 // 802A57DC (06101C)
 // a0 is only real parameters in ROM
 int32_t
-decode_blast(uint8_t* src,
-             uint32_t size,
-             blast_t type,
-             uint8_t* result_bytes,
-             uint8_t* lut)
+decode_blast(uint8_t* src, uint32_t size, blast_t type, uint8_t* result_bytes)
 {
   switch (type)
   {
@@ -354,12 +350,27 @@ decode_blast(uint8_t* src,
       return decode_blast2(src, size, result_bytes);
     case BLAST3_IA8:
       return decode_blast3(src, size, result_bytes);
+    case BLAST6_IA8:
+      return decode_blast6(src, size, result_bytes);
+    default:
+      assert(false);
+      return -1;
+  }
+}
+
+int32_t
+decode_blast_lookup(uint8_t* src,
+                    uint32_t size,
+                    blast_t type,
+                    uint8_t* result_bytes,
+                    uint8_t* lut)
+{
+  switch (type)
+  {
     case BLAST4_IA16:
       return decode_blast4(src, size, result_bytes, lut);
     case BLAST5_RGBA32:
       return decode_blast5(src, size, result_bytes, lut);
-    case BLAST6_IA8:
-      return decode_blast6(src, size, result_bytes);
     default:
       assert(false);
       return -1;

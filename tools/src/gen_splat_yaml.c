@@ -72,31 +72,41 @@ list_blasts(uint8_t* bytes, size_t size)
       printf("  - [0x%06X] # %d bytes\n", last_to, space_size);
     }
 
-    res_t res = { 0, 0 };
     if (type != BLAST0)
     {
-      // TODO: need to figure out where last param is set for decoders 4 and 5
-      uint8_t* lut;
-      switch (type)
-      {
-        case BLAST4_IA16:
-          lut = &bytes[0x047480];
-          break;
-        case BLAST5_RGBA32:
-          // 0x0998E0
-          // 0x1E2C00
-          lut = &bytes[0x152970];
-          break;
-        default:
-          lut = NULL;
-      }
-
+      int32_t decompressed_size = 0;
       uint8_t* decompressed_bytes = malloc(100 * compressed_size);
-      int32_t decompressed_size = decode_blast(&bytes[start + ROM_OFFSET],
-                                               compressed_size,
-                                               type,
-                                               decompressed_bytes,
-                                               lut);
+      res_t res = { 0, 0 };
+      if (type == BLAST4_IA16 || type == BLAST5_RGBA32)
+      {
+        // TODO: need to figure out where last param is set for decoders 4 and 5
+        uint8_t* lut;
+        switch (type)
+        {
+          case BLAST4_IA16:
+            lut = &bytes[0x047480];
+            break;
+          case BLAST5_RGBA32:
+            // 0x0998E0
+            // 0x1E2C00
+            lut = &bytes[0x152970];
+            break;
+          default:
+            lut = NULL;
+        }
+        decompressed_size = decode_blast_lookup(&bytes[start + ROM_OFFSET],
+                                                compressed_size,
+                                                type,
+                                                decompressed_bytes,
+                                                lut);
+      }
+      else
+      {
+        decompressed_size = decode_blast(&bytes[start + ROM_OFFSET],
+                                         compressed_size,
+                                         type,
+                                         decompressed_bytes);
+      }
 
       res = guess_resolution(type, decompressed_size);
 

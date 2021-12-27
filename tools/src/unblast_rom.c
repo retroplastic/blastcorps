@@ -53,28 +53,38 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
       continue;
     }
 
-    // TODO: need to figure out where last param is set for decoders 4 and 5
-    uint8_t* lut;
-    switch (type)
-    {
-      case BLAST4_IA16:
-        lut = &rom_bytes[0x047480];
-        break;
-      case BLAST5_RGBA32:
-        // 0x0998E0
-        // 0x1E2C00
-        lut = &rom_bytes[0x152970];
-        break;
-      default:
-        lut = NULL;
-    }
-
+    int32_t decompressed_size = 0;
     uint8_t* decompressed_bytes = malloc(100 * compressed_size);
-    int32_t decompressed_size = decode_blast(&rom_bytes[start + ROM_OFFSET],
-                                             compressed_size,
-                                             type,
-                                             decompressed_bytes,
-                                             lut);
+    if (type == BLAST4_IA16 || type == BLAST5_RGBA32)
+    {
+      // TODO: need to figure out where last param is set for decoders 4 and 5
+      uint8_t* lut;
+      switch (type)
+      {
+        case BLAST4_IA16:
+          lut = &rom_bytes[0x047480];
+          break;
+        case BLAST5_RGBA32:
+          // 0x0998E0
+          // 0x1E2C00
+          lut = &rom_bytes[0x152970];
+          break;
+        default:
+          lut = NULL;
+      }
+      decompressed_size = decode_blast_lookup(&rom_bytes[start + ROM_OFFSET],
+                                              compressed_size,
+                                              type,
+                                              decompressed_bytes,
+                                              lut);
+    }
+    else
+    {
+      decompressed_size = decode_blast(&rom_bytes[start + ROM_OFFSET],
+                                       compressed_size,
+                                       type,
+                                       decompressed_bytes);
+    }
 
     res_t res = guess_resolution(type, decompressed_size);
 

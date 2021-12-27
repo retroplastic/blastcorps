@@ -44,9 +44,12 @@ main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  uint8_t* lut_bytes = NULL;
+  int32_t decompressed_size = 0;
+  uint8_t* decompressed_bytes = malloc(100 * size);
+
   if (argc == 4)
   {
+    uint8_t* lut_bytes = NULL;
     printf("Opening LUT at %s\n", argv[3]);
     size_t lut_size = read_file(argv[3], &lut_bytes);
     if (type == BLAST4_IA16 && lut_size != 128)
@@ -59,11 +62,14 @@ main(int argc, char* argv[])
       printf("WARNING: Lookup table for blast5 is %ld bytes instead of 256.\n",
              lut_size);
     }
+    decompressed_size =
+      decode_blast_lookup(rom_bytes, size, type, decompressed_bytes, lut_bytes);
   }
+  else
+  {
 
-  uint8_t* decompressed_bytes = malloc(100 * size);
-  int32_t decompressed_size =
-    decode_blast(rom_bytes, size, type, decompressed_bytes, lut_bytes);
+    decompressed_size = decode_blast(rom_bytes, size, type, decompressed_bytes);
+  }
 
   // Write decompressed file
   char out_path_decompressed[512];
