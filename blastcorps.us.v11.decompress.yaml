@@ -65,6 +65,9 @@ segments:
   - [0x3502A8, blast, foo7, 6, foo, 16, 32]
   - [0x350358]
 
+  - [0x350948, blast, foo10, 0, ia8, 64, 511]
+  - [0x358947]
+
   #- [0x2E1328, bin, blast1_rgba16_32_32_some_explosion_part]
   #- [0x2E1758, bin, blast1_rgba16_32_32_guy_happy]
   #- [0x2E1BE0, bin, blast1_rgba16_32_32_guy_angry]

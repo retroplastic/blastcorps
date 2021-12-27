@@ -42,7 +42,11 @@ def blast_get_format(blast_type: Blast) -> str:
 
 
 def blast_get_decoded_extension(blast_type: Blast) -> str:
-    return "%s%d" % (blast_get_format(blast_type), blast_get_depth(blast_type))
+    match blast_type:
+        case Blast.BLAST0:
+            return "unblast0"
+        case _:
+            return "%s%d" % (blast_get_format(blast_type), blast_get_depth(blast_type))
 
 
 def blast_get_png_writer(blast_type: Blast) -> N64SegImg:
@@ -62,8 +66,28 @@ def blast_get_png_writer(blast_type: Blast) -> N64SegImg:
 # 802A5E10 (061650)
 # just a memcpy from a0 to a3
 def decode_blast0(encoded: bytes) -> bytes:
-    # TODO
-    return encoded
+    decoded = bytearray()
+
+    in_pos = 0
+
+    length = len(encoded)
+    length >>= 3
+
+    while length != 0:
+        for i in range(8):
+            # Python 3 needs a range to extract a single byte
+            a_byte = encoded[in_pos + i: in_pos + i + 1]
+            decoded.extend(a_byte)
+
+        in_pos += 8
+        length -= 1
+
+    # Fill with zeros to encoded length
+    zeros_to_fill = len(encoded) - len(decoded)
+    zeros = bytearray(zeros_to_fill)
+    decoded.extend(zeros)
+
+    return decoded
 
 
 # Based on 802A5AE0 (061320)
@@ -361,6 +385,9 @@ class N64SegBlast(N64Segment):
         decoded_file_path = options.get_asset_path() / self.dir / f"{address}.{decoded_ext}"
         with open(decoded_file_path, 'wb') as f:
             f.write(decoded_bytes)
+
+        if blast_type == Blast.BLAST0:
+            return
 
         # Write PNG
         width = self.yaml[5]
