@@ -8,3 +8,8 @@ project('blastcorps', 'c',
 )
 
 subdir('tools/src')
+
+run_target('format', command : ['clang-format', '-i',
+                                blast_sources, gen_level_table_sources,
+                                gen_splat_yaml_sources, unblast_rom_sources,
+                                unblast_sources])
