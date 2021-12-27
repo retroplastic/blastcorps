@@ -92,11 +92,11 @@ list_blasts(uint8_t* bytes, size_t size)
       }
 
       uint8_t* decompressed_bytes = malloc(100 * compressed_size);
-      int32_t decompressed_size = decompress_block(&bytes[start + ROM_OFFSET],
-                                                   compressed_size,
-                                                   type,
-                                                   decompressed_bytes,
-                                                   lut);
+      int32_t decompressed_size = decode_blast(&bytes[start + ROM_OFFSET],
+                                               compressed_size,
+                                               type,
+                                               decompressed_bytes,
+                                               lut);
 
       res = guess_resolution(type, decompressed_size);
 

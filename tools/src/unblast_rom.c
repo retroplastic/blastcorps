@@ -70,11 +70,11 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
     }
 
     uint8_t* decompressed_bytes = malloc(100 * compressed_size);
-    int32_t decompressed_size = decompress_block(&rom_bytes[start + ROM_OFFSET],
-                                                 compressed_size,
-                                                 type,
-                                                 decompressed_bytes,
-                                                 lut);
+    int32_t decompressed_size = decode_blast(&rom_bytes[start + ROM_OFFSET],
+                                             compressed_size,
+                                             type,
+                                             decompressed_bytes,
+                                             lut);
 
     res_t res = guess_resolution(type, decompressed_size);
 

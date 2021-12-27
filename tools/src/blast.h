@@ -21,11 +21,11 @@ typedef struct
 } res_t;
 
 int32_t
-decompress_block(uint8_t* src,
-                 uint32_t size,
-                 blast_t type,
-                 uint8_t* result_bytes,
-                 uint8_t* lut);
+decode_blast(uint8_t* src,
+             uint32_t size,
+             blast_t type,
+             uint8_t* result_bytes,
+             uint8_t* lut);
 
 // This cannot be reliably determined by the data and needs to be
 // tracked manually in the splat yaml.

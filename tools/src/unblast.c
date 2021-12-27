@@ -63,7 +63,7 @@ main(int argc, char* argv[])
 
   uint8_t* decompressed_bytes = malloc(100 * size);
   int32_t decompressed_size =
-    decompress_block(rom_bytes, size, type, decompressed_bytes, lut_bytes);
+    decode_blast(rom_bytes, size, type, decompressed_bytes, lut_bytes);
 
   // Write decompressed file
   char out_path_decompressed[512];

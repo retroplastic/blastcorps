@@ -16,7 +16,7 @@
 // 802A5E10 (061650)
 // just a memcpy from a0 to a3
 int32_t
-decode_block0(uint8_t* in, int32_t length, uint8_t* out)
+decode_blast0(uint8_t* in, int32_t length, uint8_t* out)
 {
   int32_t ret_len = length;
   length >>= 3; // a1 - gets number of dwords
@@ -36,7 +36,7 @@ decode_block0(uint8_t* in, int32_t length, uint8_t* out)
 
 // 802A5AE0 (061320)
 int32_t
-decode_block1(uint8_t* in, int32_t length, uint8_t* out)
+decode_blast1(uint8_t* in, int32_t length, uint8_t* out)
 {
   uint16_t t0, t1, t3;
   uint8_t* t2;
@@ -77,7 +77,7 @@ decode_block1(uint8_t* in, int32_t length, uint8_t* out)
 
 // 802A5B90 (0613D0)
 int32_t
-decode_block2(uint8_t* in, int32_t length, uint8_t* out)
+decode_blast2(uint8_t* in, int32_t length, uint8_t* out)
 {
   uint8_t* look;
   uint16_t t0;
@@ -128,7 +128,7 @@ decode_block2(uint8_t* in, int32_t length, uint8_t* out)
 
 // 802A5A2C (06126C)
 int32_t
-decode_block3(uint8_t* in, int32_t length, uint8_t* out)
+decode_blast3(uint8_t* in, int32_t length, uint8_t* out)
 {
   uint16_t t0, t1, t3;
   uint8_t* t2;
@@ -172,7 +172,7 @@ decode_block3(uint8_t* in, int32_t length, uint8_t* out)
 
 // 802A5C5C (06149C)
 int32_t
-decode_block4(uint8_t* in, int32_t length, uint8_t* out, uint8_t* lut)
+decode_blast4(uint8_t* in, int32_t length, uint8_t* out, uint8_t* lut)
 {
   uint8_t* look;
   uint32_t t3;
@@ -228,7 +228,7 @@ decode_block4(uint8_t* in, int32_t length, uint8_t* out, uint8_t* lut)
 
 // 802A5D34 (061574)
 int32_t
-decode_block5(uint8_t* in, int32_t length, uint8_t* out, uint8_t* lut)
+decode_blast5(uint8_t* in, int32_t length, uint8_t* out, uint8_t* lut)
 {
   uint8_t* tmp;
   uint16_t t0, t1;
@@ -283,7 +283,7 @@ decode_block5(uint8_t* in, int32_t length, uint8_t* out, uint8_t* lut)
 
 // 802A5958 (061198)
 int32_t
-decode_block6(uint8_t* in, int32_t length, uint8_t* out)
+decode_blast6(uint8_t* in, int32_t length, uint8_t* out)
 {
   uint16_t t0, t1, t3;
   int32_t len = 0;
@@ -338,28 +338,28 @@ decode_block6(uint8_t* in, int32_t length, uint8_t* out)
 // 802A57DC (06101C)
 // a0 is only real parameters in ROM
 int32_t
-decompress_block(uint8_t* src,
-                 uint32_t size,
-                 blast_t type,
-                 uint8_t* result_bytes,
-                 uint8_t* lut)
+decode_blast(uint8_t* src,
+             uint32_t size,
+             blast_t type,
+             uint8_t* result_bytes,
+             uint8_t* lut)
 {
   switch (type)
   {
     case BLAST0:
-      return decode_block0(src, size, result_bytes);
+      return decode_blast0(src, size, result_bytes);
     case BLAST1_RGBA16:
-      return decode_block1(src, size, result_bytes);
+      return decode_blast1(src, size, result_bytes);
     case BLAST2_RGBA32:
-      return decode_block2(src, size, result_bytes);
+      return decode_blast2(src, size, result_bytes);
     case BLAST3_IA8:
-      return decode_block3(src, size, result_bytes);
+      return decode_blast3(src, size, result_bytes);
     case BLAST4_IA16:
-      return decode_block4(src, size, result_bytes, lut);
+      return decode_blast4(src, size, result_bytes, lut);
     case BLAST5_RGBA32:
-      return decode_block5(src, size, result_bytes, lut);
+      return decode_blast5(src, size, result_bytes, lut);
     case BLAST6_IA8:
-      return decode_block6(src, size, result_bytes);
+      return decode_blast6(src, size, result_bytes);
     default:
       assert(false);
       return -1;
