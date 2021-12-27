@@ -6,7 +6,11 @@ blast_sources = files([
   'utils.h',
   'utils.c'
 ])
-lib = static_library('blast', blast_sources)
+
+stb_includes = include_directories('stb', is_system: true)
+
+lib = static_library('blast', [blast_sources, 'stb.c'],
+                     include_directories: [stb_includes])
 
 gen_level_table_sources = files([
   'gen_level_table.c'
