@@ -57,6 +57,13 @@ list_blasts(uint8_t* bytes, size_t size)
       continue;
     }
 
+    // TODO: Figure out why 0x318CA0 has multiple entries
+    // Skip all entries for 0x318CA0, but the last one
+    if (start + ROM_OFFSET == 0x318CA0 && compressed_size != 256)
+    {
+      continue;
+    }
+
     uint32_t from = start + ROM_OFFSET;
 
     if (last_to != 0 && last_to != from)
