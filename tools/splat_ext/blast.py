@@ -136,47 +136,36 @@ def decode_blast2(encoded: bytes) -> bytes:
 # 802A5A2C (06126C)
 def decode_blast3(encoded: bytes) -> bytes:
     def single(current: int) -> int:
-        res_bytes = bytearray()
+        part0 = current >> 8
+        part0 <<= 1
+        part1 = current & 0xFF
+        part1 <<= 1
 
-        t1 = current >> 8
-        t1 <<= 1
-        b = struct.pack(">B", t1)
-        res_bytes.extend(b)  # sb
-
-        t1 = current & 0xFF
-        t1 <<= 1
-        b = struct.pack(">B", t1)
-        res_bytes.extend(b)  # sb
-
-        return struct.unpack(">H", res_bytes)[0]
+        b = struct.pack(">BB", part0, part1)
+        return struct.unpack(">H", b)[0]
     return decode_blast_generic(encoded, single, 2, ">H", 0x7FFF, 5)
 
 
 # 802A5C5C (06149C)
 def decode_blast4(encoded: bytes, lut: bytes) -> bytes:
     def single(current: int) -> int:
-        res_bytes = bytearray()
-
-        t1 = current >> 8
-        t2 = t1 & 0xFE
+        part0 = current >> 8
+        t2 = part0 & 0xFE
         lookup_bytes = lut[t2:t2 + 2]
         t2 = struct.unpack(">H", lookup_bytes)[0]
-        t1 &= 1
+        part0 &= 1
         t2 <<= 1
-        t1 |= t2
-        b = struct.pack(">H", t1)
-        res_bytes.extend(b)
+        part0 |= t2
 
-        t1 = current & 0xFE
-        lookup_bytes = lut[t1:t1 + 2]
-        t1 = struct.unpack(">H", lookup_bytes)[0]
+        part1 = current & 0xFE
+        lookup_bytes = lut[part1:part1 + 2]
+        part1 = struct.unpack(">H", lookup_bytes)[0]
         current &= 1
-        t1 <<= 1
-        t1 |= current
-        b = struct.pack(">H", t1)
-        res_bytes.extend(b)
+        part1 <<= 1
+        part1 |= current
+        b = struct.pack(">HH", part0, part1)
 
-        return struct.unpack(">I", res_bytes)[0]
+        return struct.unpack(">I", b)[0]
     return decode_blast_generic(encoded, single, 4, ">I", 0x7FE0, 4)
 
 
@@ -208,29 +197,23 @@ def decode_blast5(encoded: bytes, lut: bytes) -> bytes:
 # 802A5958 (061198)
 def decode_blast6(encoded: bytes) -> bytes:
     def single(current: int) -> int:
-        res_bytes = bytearray()
-
-        t1 = current >> 8
-        t2 = t1 & 0x38
-        t1 = t1 & 0x07
+        part0 = current >> 8
+        t2 = part0 & 0x38
+        part0 &= 0x07
         t2 <<= 2
-        t1 <<= 1
-        t1 |= t2
+        part0 <<= 1
+        part0 |= t2
 
-        b = struct.pack(">B", t1)
-        res_bytes.extend(b)  # sb
-
-        t1 = current & 0xFF
-        t2 = t1 & 0x38
-        t1 = t1 & 0x07
+        part1 = current & 0xFF
+        t2 = part1 & 0x38
+        part1 &= 0x07
         t2 <<= 2
-        t1 <<= 1
-        t1 |= t2
+        part1 <<= 1
+        part1 |= t2
 
-        b = struct.pack(">B", t1)
-        res_bytes.extend(b)  # sb
+        b = struct.pack(">BB", part0, part1)
 
-        return struct.unpack(">H", res_bytes)[0]
+        return struct.unpack(">H", b)[0]
     return decode_blast_generic(encoded, single, 2, ">H", 0x7FFF, 5)
 
 
