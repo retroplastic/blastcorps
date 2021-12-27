@@ -44,15 +44,6 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
     write_file(
       out_path_compressed, &rom_bytes[start + ROM_OFFSET], compressed_size);
 
-    if (type == BLAST0)
-    {
-      printf("[0x%06X, 0x%06X] blast0 %5d bytes\n",
-             start + ROM_OFFSET,
-             start + ROM_OFFSET + compressed_size,
-             compressed_size);
-      continue;
-    }
-
     int32_t decompressed_size = 0;
     uint8_t* decompressed_bytes = malloc(100 * compressed_size);
     if (type == BLAST4_IA16 || type == BLAST5_RGBA32)
@@ -86,12 +77,40 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
                                        decompressed_bytes);
     }
 
-    res_t res = guess_resolution(type, decompressed_size);
+    // Write decompressed file
+    char out_path_decompressed[512];
+
+    if (type == BLAST0)
+    {
+      sprintf(out_path_decompressed,
+              "%s/%06X.unblast0",
+              rom_dir_path,
+              start + ROM_OFFSET);
+
+      write_file(out_path_decompressed, decompressed_bytes, decompressed_size);
+
+      printf("[0x%06X, 0x%06X] blast0 %5d bytes\n",
+             start + ROM_OFFSET,
+             start + ROM_OFFSET + compressed_size,
+             compressed_size);
+      continue;
+    }
 
     int32_t depth = get_type_depth(type);
+    const char* format_name = get_type_format_name(type);
+
+    sprintf(out_path_decompressed,
+            "%s/%06X.%s%d",
+            rom_dir_path,
+            start + ROM_OFFSET,
+            format_name,
+            depth);
+
+    write_file(out_path_decompressed, decompressed_bytes, decompressed_size);
+
+    res_t res = guess_resolution(type, decompressed_size);
 
     char format_str[16];
-    const char* format_name = get_type_format_name(type);
     sprintf(format_str, "(%s%d)", format_name, depth);
 
     printf("[0x%06X, 0x%06X] blast%d %8s %2dx%2d %4d -> %4d bytes\n",
@@ -104,17 +123,7 @@ decompress_rom(const char* rom_path, uint8_t* rom_bytes, size_t rom_size)
            compressed_size,
            decompressed_size);
 
-    // Write decompressed file
-    char out_path_decompressed[512];
-    sprintf(out_path_decompressed,
-            "%s/%06X.%s%d",
-            rom_dir_path,
-            start + ROM_OFFSET,
-            format_name,
-            depth);
-    write_file(out_path_decompressed, decompressed_bytes, decompressed_size);
-
-    // attempt to convert to PNG
+    // Write PNG
     convert_to_png(out_path_decompressed, decompressed_size, type);
   }
 }
