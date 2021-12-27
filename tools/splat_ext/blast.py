@@ -395,7 +395,9 @@ class N64SegBlast(N64Segment):
 
         writer_class = blast_get_png_writer(blast_type)
         png_writer = writer_class.get_writer(width, height)
-        png_file_path = options.get_asset_path() / self.dir / f"{address}.png"
+        png_dir_path = options.get_asset_path() / self.dir / f"blast{self.yaml[3]}"
+        png_dir_path.mkdir(exist_ok=True)
+        png_file_path = png_dir_path / f"{address}.png"
         with open(png_file_path, "wb") as f:
             match blast_type:
                 case Blast.BLAST4_IA16:
