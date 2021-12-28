@@ -15,9 +15,8 @@ segments:
   - name:  boot
     type:  bin
     start: 0x00000040
-  - [0x1000, bin, init.us.v11]
-  - [0x4CE0, bin]                           # offsets table (0x8000 long)
-
+  - [0x001000, bin, init.us.v11]
+  - [0x004CE0, bin]                           # offsets table (0x8000 long)
   - [0x00CCE0, bin, 00CCE0.lut256]
   - [0x00CDE0, blast, 00CDE0.blast1, 1, 32, 32]
   - [0x00D37E] # 2 bytes
@@ -25,7 +24,7 @@ segments:
   - [0x00D4EA] # 6 bytes
   - [0x00D4F0, blast, 00D4F0.blast1, 1, 32, 32]
   - [0x00D94E] # 2 bytes
-  - [0x00D950, blast, 00D950.blast1, 1, 16, 16]
+  - [0x00D950, blast, 00D950.blast1, 1, 32, 8]
   - [0x00DB06] # 2 bytes
   - [0x00DB08, blast, 00DB08.blast1, 1, 32, 32]
   - [0x00E038, blast, 00E038.blast1, 1, 32, 32]
@@ -34,7 +33,7 @@ segments:
   - [0x00EA5E] # 2 bytes
   - [0x00EA60, blast, 00EA60.blast1, 1, 32, 32]
   - [0x00F04A] # 6 bytes
-  - [0x00F050, blast, 00F050.blast1, 1, 32, 32]
+  - [0x00F050, blast, 00F050.blast1, 1, 16, 64]
   - [0x00F64C] # 4 bytes
   - [0x00F650, blast, 00F650.blast1, 1, 32, 32]
   - [0x00FC2A] # 6 bytes
@@ -44,11 +43,11 @@ segments:
   - [0x010564] # 4 bytes
   - [0x010568, blast, 010568.blast1, 1, 32, 32]
   - [0x010AD6] # 2 bytes
-  - [0x010AD8, blast, 010AD8.blast1, 1, 32, 32]
+  - [0x010AD8, blast, 010AD8.blast1, 1, 64, 16]
   - [0x010F1A] # 6 bytes
-  - [0x010F20, blast, 010F20.blast1, 1, 32, 32]
+  - [0x010F20, blast, 010F20.blast1, 1, 64, 16]
   - [0x0112FE] # 2 bytes
-  - [0x011300, blast, 011300.blast1, 1, 16, 32]
+  - [0x011300, blast, 011300.blast1, 1, 64, 8]
   - [0x011570, blast, 011570.blast5, 5, 32, 32]
   - [0x01168A] # 6 bytes
   - [0x011690, blast, 011690.blast5, 5, 32, 32]
@@ -1307,7 +1306,7 @@ segments:
   - [0x08B108, blast, 08B108.blast1, 1, 64, 32]
   - [0x08BC5C] # 4 bytes
   - [0x08BC60, blast, 08BC60.blast1, 1, 64, 32]
-  - [0x08C898, blast, 08C898.blast1, 1, 64, 32]
+  - [0x08C898, blast, 08C898.blast1, 1, 128, 16]
   - [0x08D4C8, blast, 08D4C8.blast1, 1, 64, 32]
   - [0x08DA0A] # 6 bytes
   - [0x08DA10, blast, 08DA10.blast1, 1, 64, 32]
@@ -1567,14 +1566,14 @@ segments:
   - [0x0B6A48, blast, 0B6A48.blast1, 1, 64, 32]
   - [0x0B7554] # 4 bytes
   - [0x0B7558, blast, 0B7558.blast1, 1, 64, 32]
-  - [0x0B79A0, blast, 0B79A0.blast1, 1, 64, 32]
+  - [0x0B79A0, blast, 0B79A0.blast1, 1, 32, 64]
   - [0x0B8444] # 4 bytes
-  - [0x0B8448, blast, 0B8448.blast1, 1, 64, 32]
-  - [0x0B8CF0, blast, 0B8CF0.blast1, 1, 64, 32]
+  - [0x0B8448, blast, 0B8448.blast1, 1, 32, 64]
+  - [0x0B8CF0, blast, 0B8CF0.blast1, 1, 32, 64]
   - [0x0B95BA] # 6 bytes
   - [0x0B95C0, blast, 0B95C0.blast1, 1, 64, 32]
   - [0x0B99D4] # 4 bytes
-  - [0x0B99D8, blast, 0B99D8.blast1, 1, 64, 32]
+  - [0x0B99D8, blast, 0B99D8.blast1, 1, 128, 16]
   - [0x0BA4D4] # 4 bytes
   - [0x0BA4D8, blast, 0BA4D8.blast1, 1, 64, 32]
   - [0x0BAC4C] # 4 bytes
@@ -1584,15 +1583,15 @@ segments:
   - [0x0BB5EE] # 2 bytes
   - [0x0BB5F0, blast, 0BB5F0.blast1, 1, 64, 32]
   - [0x0BBF4C] # 4 bytes
-  - [0x0BBF50, blast, 0BBF50.blast1, 1, 64, 32]
+  - [0x0BBF50, blast, 0BBF50.blast1, 1, 32, 64]
   - [0x0BCB7C] # 4 bytes
-  - [0x0BCB80, blast, 0BCB80.blast1, 1, 64, 32]
+  - [0x0BCB80, blast, 0BCB80.blast1, 1, 32, 64]
   - [0x0BD756] # 2 bytes
-  - [0x0BD758, blast, 0BD758.blast1, 1, 64, 32]
+  - [0x0BD758, blast, 0BD758.blast1, 1, 32, 64]
   - [0x0BDFE8, blast, 0BDFE8.blast1, 1, 64, 32]
   - [0x0BE9F2] # 6 bytes
   - [0x0BE9F8, blast, 0BE9F8.blast1, 1, 64, 32]
-  - [0x0BF168, blast, 0BF168.blast1, 1, 64, 32]
+  - [0x0BF168, blast, 0BF168.blast1, 1, 32, 64]
   - [0x0BF6D2] # 6 bytes
   - [0x0BF6D8, blast, 0BF6D8.blast1, 1, 64, 32]
   - [0x0BFCE2] # 6 bytes
@@ -1608,38 +1607,38 @@ segments:
   - [0x0C2C92] # 6 bytes
   - [0x0C2C98, blast, 0C2C98.blast1, 1, 64, 32]
   - [0x0C35A4] # 4 bytes
-  - [0x0C35A8, blast, 0C35A8.blast1, 1, 64, 32]
-  - [0x0C3C90, blast, 0C3C90.blast1, 1, 64, 32]
-  - [0x0C4298, blast, 0C4298.blast1, 1, 64, 32]
-  - [0x0C4BB8, blast, 0C4BB8.blast1, 1, 64, 32]
+  - [0x0C35A8, blast, 0C35A8.blast1, 1, 32, 64]
+  - [0x0C3C90, blast, 0C3C90.blast1, 1, 32, 64]
+  - [0x0C4298, blast, 0C4298.blast1, 1, 32, 64]
+  - [0x0C4BB8, blast, 0C4BB8.blast1, 1, 32, 64]
   - [0x0C525C] # 4 bytes
-  - [0x0C5260, blast, 0C5260.blast1, 1, 64, 32]
+  - [0x0C5260, blast, 0C5260.blast1, 1, 32, 64]
   - [0x0C5536] # 2 bytes
-  - [0x0C5538, blast, 0C5538.blast1, 1, 64, 32]
+  - [0x0C5538, blast, 0C5538.blast1, 1, 32, 64]
   - [0x0C5C78, blast, 0C5C78.blast1, 1, 64, 32]
   - [0x0C670A] # 6 bytes
-  - [0x0C6710, blast, 0C6710.blast1, 1, 64, 32]
+  - [0x0C6710, blast, 0C6710.blast1, 1, 32, 64]
   - [0x0C7276] # 2 bytes
-  - [0x0C7278, blast, 0C7278.blast1, 1, 64, 32]
+  - [0x0C7278, blast, 0C7278.blast1, 1, 32, 64]
   - [0x0C7E80, blast, 0C7E80.blast1, 1, 64, 32]
   - [0x0C87A2] # 6 bytes
   - [0x0C87A8, blast, 0C87A8.blast1, 1, 64, 32]
   - [0x0C91E0, blast, 0C91E0.blast1, 1, 64, 32]
   - [0x0C9DD4] # 4 bytes
-  - [0x0C9DD8, blast, 0C9DD8.blast1, 1, 64, 32]
+  - [0x0C9DD8, blast, 0C9DD8.blast1, 1, 32, 64]
   - [0x0CA25A] # 6 bytes
   - [0x0CA260, blast, 0CA260.blast1, 1, 64, 32]
   - [0x0CADD6] # 2 bytes
-  - [0x0CADD8, blast, 0CADD8.blast1, 1, 64, 32]
+  - [0x0CADD8, blast, 0CADD8.blast1, 1, 128, 16]
   - [0x0CB6C8, blast, 0CB6C8.blast1, 1, 64, 32]
   - [0x0CBFB2] # 6 bytes
-  - [0x0CBFB8, blast, 0CBFB8.blast1, 1, 64, 32]
-  - [0x0CC748, blast, 0CC748.blast1, 1, 64, 32]
-  - [0x0CCE18, blast, 0CCE18.blast1, 1, 64, 32]
+  - [0x0CBFB8, blast, 0CBFB8.blast1, 1, 32, 64]
+  - [0x0CC748, blast, 0CC748.blast1, 1, 32, 64]
+  - [0x0CCE18, blast, 0CCE18.blast1, 1, 128, 16]
   - [0x0CD7AC] # 4 bytes
   - [0x0CD7B0, blast, 0CD7B0.blast1, 1, 64, 32]
   - [0x0CDFF2] # 6 bytes
-  - [0x0CDFF8, blast, 0CDFF8.blast1, 1, 64, 32]
+  - [0x0CDFF8, blast, 0CDFF8.blast1, 1, 32, 64]
   - [0x0CE5FE] # 2 bytes
   - [0x0CE600, blast, 0CE600.blast1, 1, 64, 32]
   - [0x0CE998, blast, 0CE998.blast1, 1, 32, 32]
@@ -1650,11 +1649,11 @@ segments:
   - [0x0CFA46] # 2 bytes
   - [0x0CFA48, blast, 0CFA48.blast1, 1, 32, 32]
   - [0x0CFDF2] # 6 bytes
-  - [0x0CFDF8, blast, 0CFDF8.blast1, 1, 32, 32]
+  - [0x0CFDF8, blast, 0CFDF8.blast1, 1, 64, 16]
   - [0x0D0284] # 4 bytes
   - [0x0D0288, blast, 0D0288.blast1, 1, 64, 32]
   - [0x0D0B1E] # 2 bytes
-  - [0x0D0B20, blast, 0D0B20.blast1, 1, 64, 32]
+  - [0x0D0B20, blast, 0D0B20.blast1, 1, 128, 16]
   - [0x0D159A] # 6 bytes
   - [0x0D15A0, blast, 0D15A0.blast1, 1, 64, 32]
   - [0x0D1A16] # 2 bytes
@@ -1662,9 +1661,9 @@ segments:
   - [0x0D237C] # 4 bytes
   - [0x0D2380, blast, 0D2380.blast1, 1, 32, 32]
   - [0x0D2762] # 6 bytes
-  - [0x0D2768, blast, 0D2768.blast1, 1, 64, 32]
+  - [0x0D2768, blast, 0D2768.blast1, 1, 128, 16]
   - [0x0D303E] # 2 bytes
-  - [0x0D3040, blast, 0D3040.blast1, 1, 64, 32]
+  - [0x0D3040, blast, 0D3040.blast1, 1, 32, 64]
   - [0x0D333A] # 6 bytes
   - [0x0D3340, blast, 0D3340.blast1, 1, 64, 32]
   - [0x0D3C3C] # 4 bytes
@@ -1676,10 +1675,10 @@ segments:
   - [0x0D54D0, blast, 0D54D0.blast1, 1, 64, 32]
   - [0x0D5BA6] # 2 bytes
   - [0x0D5BA8, blast, 0D5BA8.blast1, 1, 32, 32]
-  - [0x0D6018, blast, 0D6018.blast1, 1, 16, 32]
+  - [0x0D6018, blast, 0D6018.blast1, 1, 32, 16]
   - [0x0D6200, blast, 0D6200.blast1, 1, 16, 16]
   - [0x0D629E] # 2 bytes
-  - [0x0D62A0, blast, 0D62A0.blast1, 1, 16, 32]
+  - [0x0D62A0, blast, 0D62A0.blast1, 1, 32, 16]
   - [0x0D6424] # 4 bytes
   - [0x0D6428, blast, 0D6428.blast1, 1, 16, 16]
   - [0x0D6614] # 4 bytes
@@ -1695,22 +1694,22 @@ segments:
   - [0x0D96C4] # 4 bytes
   - [0x0D96C8, blast, 0D96C8.blast1, 1, 64, 32]
   - [0x0DA35E] # 2 bytes
-  - [0x0DA360, blast, 0DA360.blast1, 1, 64, 32]
+  - [0x0DA360, blast, 0DA360.blast1, 1, 32, 64]
   - [0x0DAA7C] # 4 bytes
-  - [0x0DAA80, blast, 0DAA80.blast1, 1, 64, 32]
+  - [0x0DAA80, blast, 0DAA80.blast1, 1, 32, 64]
   - [0x0DB172] # 6 bytes
   - [0x0DB178, blast, 0DB178.blast3, 3, 64, 64]
   - [0x0DBCFE] # 2 bytes
   - [0x0DBD00, blast, 0DBD00.blast3, 3, 64, 64]
   - [0x0DC844] # 4 bytes
-  - [0x0DC848, blast, 0DC848.blast1, 1, 64, 32]
+  - [0x0DC848, blast, 0DC848.blast1, 1, 32, 64]
   - [0x0DCECA] # 6 bytes
   - [0x0DCED0, blast, 0DCED0.blast1, 1, 64, 32]
-  - [0x0DD8B0, blast, 0DD8B0.blast1, 1, 16, 32]
+  - [0x0DD8B0, blast, 0DD8B0.blast1, 1, 32, 16]
   - [0x0DD9C6] # 2 bytes
   - [0x0DD9C8, blast, 0DD9C8.blast1, 1, 64, 32]
   - [0x0DE514] # 4 bytes
-  - [0x0DE518, blast, 0DE518.blast1, 1, 64, 32]
+  - [0x0DE518, blast, 0DE518.blast1, 1, 32, 64]
   - [0x0DEED6] # 2 bytes
   - [0x0DEED8, blast, 0DEED8.blast1, 1, 64, 32]
   - [0x0DF808, blast, 0DF808.blast1, 1, 64, 32]
@@ -1719,55 +1718,95 @@ segments:
   - [0x0E0C38, blast, 0E0C38.blast1, 1, 64, 32]
   - [0x0E146A] # 6 bytes
   - [0x0E1470, blast, 0E1470.blast1, 1, 64, 32]
-  - [0x0E1C88, blast, 0E1C88.blast1, 1, 64, 32]
+  - [0x0E1C88, blast, 0E1C88.blast1, 1, 128, 16]
   - [0x0E258A] # 6 bytes
-  - [0x0E2590, blast, 0E2590.blast1, 1, 64, 32]
+  - [0x0E2590, blast, 0E2590.blast1, 1, 128, 16]
   - [0x0E2C8A] # 6 bytes
   - [0x0E2C90, blast, 0E2C90.blast1, 1, 64, 32]
   - [0x0E3426] # 2 bytes
-  - [0x0E3428, blast, 0E3428.blast1, 1, 64, 32]
+  - [0x0E3428, blast, 0E3428.blast1, 1, 128, 16]
   - [0x0E3B7C] # 4 bytes
-  - [0x0E3B80, blast, 0E3B80.blast1, 1, 32, 42]
-  - [0x0E4058, blast, 0E4058.blast1, 1, 32, 42]
+  - name:  0E3B80.blast1
+    type:  blast
+    start: 0x0E3B80
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - name:  0E4058.blast1
+    type:  blast
+    start: 0x0E4058
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x0E4656] # 2 bytes
-  - [0x0E4658, blast, 0E4658.blast1, 1, 64, 32]
+  - [0x0E4658, blast, 0E4658.blast1, 1, 32, 64]
   - [0x0E4AE2] # 6 bytes
   - [0x0E4AE8, blast, 0E4AE8.blast1, 1, 64, 32]
   - [0x0E57B4] # 4 bytes
   - [0x0E57B8, blast, 0E57B8.blast1, 1, 64, 32]
   - [0x0E633C] # 4 bytes
-  - [0x0E6340, blast, 0E6340.blast1, 1, 32, 48]
+  - [0x0E6340, blast, 0E6340.blast1, 1, 16, 96]
   - [0x0E6BCC] # 4 bytes
-  - [0x0E6BD0, blast, 0E6BD0.blast1, 1, 32, 42]
+  - name:  0E6BD0.blast1
+    type:  blast
+    start: 0x0E6BD0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x0E720A] # 6 bytes
-  - [0x0E7210, blast, 0E7210.blast1, 1, 64, 32]
+  - [0x0E7210, blast, 0E7210.blast1, 1, 128, 16]
   - [0x0E783E] # 2 bytes
-  - [0x0E7840, blast, 0E7840.blast1, 1, 64, 32]
+  - [0x0E7840, blast, 0E7840.blast1, 1, 32, 64]
   - [0x0E7F64] # 4 bytes
   - [0x0E7F68, blast, 0E7F68.blast1, 1, 64, 32]
   - [0x0E85FE] # 2 bytes
   - [0x0E8600, blast, 0E8600.blast1, 1, 64, 32]
-  - [0x0E8F80, blast, 0E8F80.blast1, 1, 64, 32]
+  - [0x0E8F80, blast, 0E8F80.blast1, 1, 32, 64]
   - [0x0E974C] # 4 bytes
   - [0x0E9750, blast, 0E9750.blast1, 1, 64, 32]
-  - [0x0EA2D8, blast, 0EA2D8.blast1, 1, 32, 42]
-  - [0x0EAB48, blast, 0EAB48.blast1, 1, 64, 32]
-  - [0x0EB1D0, blast, 0EB1D0.blast1, 1, 64, 32]
+  - name:  0EA2D8.blast1
+    type:  blast
+    start: 0x0EA2D8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - [0x0EAB48, blast, 0EAB48.blast1, 1, 128, 16]
+  - [0x0EB1D0, blast, 0EB1D0.blast1, 1, 128, 16]
   - [0x0EB826] # 2 bytes
-  - [0x0EB828, blast, 0EB828.blast1, 1, 32, 32]
+  - [0x0EB828, blast, 0EB828.blast1, 1, 64, 16]
   - [0x0EBCAE] # 2 bytes
-  - [0x0EBCB0, blast, 0EBCB0.blast1, 1, 32, 32]
+  - [0x0EBCB0, blast, 0EBCB0.blast1, 1, 64, 16]
   - [0x0EC136] # 2 bytes
-  - [0x0EC138, blast, 0EC138.blast1, 1, 32, 21]
+  - name:  0EC138.blast1
+    type:  blast
+    start: 0x0EC138
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x0EC406] # 2 bytes
-  - [0x0EC408, blast, 0EC408.blast1, 1, 16, 32]
+  - [0x0EC408, blast, 0EC408.blast1, 1, 32, 16]
   - [0x0EC5C2] # 6 bytes
-  - [0x0EC5C8, blast, 0EC5C8.blast0, 0]
-  - [0x0ED5C8, blast, 0ED5C8.blast0, 0]
-  - [0x0EE5C8, blast, 0EE5C8.blast0, 0]
-  - [0x0EF5C8, blast, 0EF5C8.blast1, 1, 32, 32]
+  - [0x0EC5C8, blast, 0EC5C8.blast0, 0] # 4096 bytes
+  - [0x0ED5C8, blast, 0ED5C8.blast0, 0] # 4096 bytes
+  - [0x0EE5C8, blast, 0EE5C8.blast0, 0] # 4096 bytes
+  - [0x0EF5C8, blast, 0EF5C8.blast1, 1, 16, 64]
   - [0x0EFC44] # 4 bytes
-  - [0x0EFC48, blast, 0EFC48.blast1, 1, 64, 32]
+  - [0x0EFC48, blast, 0EFC48.blast1, 1, 32, 64]
   - [0x0F037A] # 6 bytes
   - [0x0F0380, blast, 0F0380.blast1, 1, 64, 32]
   - [0x0F0E74] # 4 bytes
@@ -1778,97 +1817,121 @@ segments:
   - [0x0F2248, blast, 0F2248.blast1, 1, 16, 16]
   - [0x0F2408, blast, 0F2408.blast1, 1, 16, 16]
   - [0x0F25B6] # 2 bytes
-  - [0x0F25B8, blast, 0F25B8.blast1, 1, 16, 32]
+  - [0x0F25B8, blast, 0F25B8.blast1, 1, 32, 16]
   - [0x0F27A6] # 2 bytes
-  - [0x0F27A8, blast, 0F27A8.blast1, 1, 16, 32]
+  - [0x0F27A8, blast, 0F27A8.blast1, 1, 32, 16]
   - [0x0F2A62] # 6 bytes
   - [0x0F2A68, blast, 0F2A68.blast1, 1, 16, 16]
   - [0x0F2BA2] # 6 bytes
-  - [0x0F2BA8, blast, 0F2BA8.blast1, 1, 16, 32]
+  - [0x0F2BA8, blast, 0F2BA8.blast1, 1, 32, 16]
   - [0x0F2E22] # 6 bytes
-  - [0x0F2E28, blast, 0F2E28.blast1, 1, 16, 32]
+  - [0x0F2E28, blast, 0F2E28.blast1, 1, 32, 16]
   - [0x0F310A] # 6 bytes
-  - [0x0F3110, blast, 0F3110.blast1, 1, 64, 32]
-  - [0x0F3940, blast, 0F3940.blast1, 1, 64, 32]
+  - [0x0F3110, blast, 0F3110.blast1, 1, 32, 64]
+  - [0x0F3940, blast, 0F3940.blast1, 1, 32, 64]
   - [0x0F3E90, blast, 0F3E90.blast1, 1, 64, 32]
   - [0x0F4616] # 2 bytes
   - [0x0F4618, blast, 0F4618.blast1, 1, 64, 32]
   - [0x0F4F04] # 4 bytes
-  - [0x0F4F08, blast, 0F4F08.blast1, 1, 64, 32]
+  - [0x0F4F08, blast, 0F4F08.blast1, 1, 128, 16]
   - [0x0F52BC] # 4 bytes
   - [0x0F52C0, blast, 0F52C0.blast1, 1, 64, 32]
   - [0x0F5910, blast, 0F5910.blast1, 1, 64, 32]
-  - [0x0F5F10, blast, 0F5F10.blast1, 1, 64, 32]
+  - [0x0F5F10, blast, 0F5F10.blast1, 1, 32, 64]
   - [0x0F6486] # 2 bytes
-  - [0x0F6488, blast, 0F6488.blast1, 1, 64, 32]
+  - [0x0F6488, blast, 0F6488.blast1, 1, 32, 64]
   - [0x0F671C] # 4 bytes
   - [0x0F6720, blast, 0F6720.blast1, 1, 64, 32]
-  - [0x0F6C98, blast, 0F6C98.blast1, 1, 32, 42]
+  - name:  0F6C98.blast1
+    type:  blast
+    start: 0x0F6C98
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x0F71E4] # 4 bytes
   - [0x0F71E8, blast, 0F71E8.blast1, 1, 64, 32]
   - [0x0F7AFC] # 4 bytes
-  - [0x0F7B00, blast, 0F7B00.blast1, 1, 32, 42]
+  - name:  0F7B00.blast1
+    type:  blast
+    start: 0x0F7B00
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x0F82AA] # 6 bytes
-  - [0x0F82B0, blast, 0F82B0.blast1, 1, 64, 32]
+  - [0x0F82B0, blast, 0F82B0.blast1, 1, 32, 64]
   - [0x0F8AC0, blast, 0F8AC0.blast1, 1, 32, 32]
   - [0x0F8EA4] # 4 bytes
   - [0x0F8EA8, blast, 0F8EA8.blast1, 1, 64, 32]
   - [0x0F9852] # 6 bytes
-  - [0x0F9858, blast, 0F9858.blast1, 1, 64, 32]
+  - [0x0F9858, blast, 0F9858.blast1, 1, 32, 64]
   - [0x0FA44E] # 2 bytes
   - [0x0FA450, blast, 0FA450.blast1, 1, 64, 32]
   - [0x0FADDA] # 6 bytes
-  - [0x0FADE0, blast, 0FADE0.blast1, 1, 64, 32]
+  - [0x0FADE0, blast, 0FADE0.blast1, 1, 32, 64]
   - [0x0FB640, blast, 0FB640.blast1, 1, 64, 32]
   - [0x0FC036] # 2 bytes
-  - [0x0FC038, blast, 0FC038.blast1, 1, 64, 32]
+  - [0x0FC038, blast, 0FC038.blast1, 1, 128, 16]
   - [0x0FC4BA] # 6 bytes
   - [0x0FC4C0, blast, 0FC4C0.blast1, 1, 64, 32]
   - [0x0FCDF2] # 6 bytes
-  - [0x0FCDF8, blast, 0FCDF8.blast1, 1, 64, 32]
+  - [0x0FCDF8, blast, 0FCDF8.blast1, 1, 32, 64]
   - [0x0FD5BE] # 2 bytes
-  - [0x0FD5C0, blast, 0FD5C0.blast1, 1, 64, 32]
+  - [0x0FD5C0, blast, 0FD5C0.blast1, 1, 32, 64]
   - [0x0FDEBE] # 2 bytes
-  - [0x0FDEC0, blast, 0FDEC0.blast1, 1, 16, 32]
+  - [0x0FDEC0, blast, 0FDEC0.blast1, 1, 64, 8]
   - [0x0FDFD2] # 6 bytes
-  - [0x0FDFD8, blast, 0FDFD8.blast1, 1, 64, 32]
+  - [0x0FDFD8, blast, 0FDFD8.blast1, 1, 32, 64]
   - [0x0FE592] # 6 bytes
-  - [0x0FE598, blast, 0FE598.blast1, 1, 32, 32]
+  - [0x0FE598, blast, 0FE598.blast1, 1, 64, 16]
   - [0x0FE77A] # 6 bytes
-  - [0x0FE780, blast, 0FE780.blast1, 1, 32, 32]
+  - [0x0FE780, blast, 0FE780.blast1, 1, 16, 64]
   - [0x0FEE0A] # 6 bytes
-  - [0x0FEE10, blast, 0FEE10.blast1, 1, 32, 32]
-  - [0x0FF480, blast, 0FF480.blast1, 1, 64, 32]
+  - [0x0FEE10, blast, 0FEE10.blast1, 1, 16, 64]
+  - [0x0FF480, blast, 0FF480.blast1, 1, 128, 16]
   - [0x0FFA24] # 4 bytes
-  - [0x0FFA28, blast, 0FFA28.blast1, 1, 64, 32]
+  - [0x0FFA28, blast, 0FFA28.blast1, 1, 128, 16]
   - [0x100196] # 2 bytes
-  - [0x100198, blast, 100198.blast1, 1, 32, 42]
+  - name:  100198.blast1
+    type:  blast
+    start: 0x100198
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x100AA4] # 4 bytes
   - [0x100AA8, blast, 100AA8.blast1, 1, 64, 32]
   - [0x101012] # 6 bytes
-  - [0x101018, blast, 101018.blast1, 1, 64, 32]
+  - [0x101018, blast, 101018.blast1, 1, 32, 64]
   - [0x101ACA] # 6 bytes
-  - [0x101AD0, blast, 101AD0.blast1, 1, 32, 32]
-  - [0x102150, blast, 102150.blast1, 1, 32, 32]
+  - [0x101AD0, blast, 101AD0.blast1, 1, 16, 64]
+  - [0x102150, blast, 102150.blast1, 1, 16, 64]
   - [0x1027DC] # 4 bytes
-  - [0x1027E0, blast, 1027E0.blast1, 1, 32, 32]
+  - [0x1027E0, blast, 1027E0.blast1, 1, 16, 64]
   - [0x102E4C] # 4 bytes
   - [0x102E50, blast, 102E50.blast1, 1, 32, 32]
   - [0x1031AA] # 6 bytes
-  - [0x1031B0, blast, 1031B0.blast1, 1, 64, 32]
+  - [0x1031B0, blast, 1031B0.blast1, 1, 128, 16]
   - [0x103E02] # 6 bytes
-  - [0x103E08, blast, 103E08.blast1, 1, 64, 32]
+  - [0x103E08, blast, 103E08.blast1, 1, 32, 64]
   - [0x104794] # 4 bytes
-  - [0x104798, blast, 104798.blast1, 1, 64, 32]
-  - [0x105270, blast, 105270.blast1, 1, 64, 32]
+  - [0x104798, blast, 104798.blast1, 1, 32, 64]
+  - [0x105270, blast, 105270.blast1, 1, 128, 16]
   - [0x105BFA] # 6 bytes
   - [0x105C00, blast, 105C00.blast1, 1, 64, 32]
   - [0x10637C] # 4 bytes
-  - [0x106380, blast, 106380.blast1, 1, 64, 32]
+  - [0x106380, blast, 106380.blast1, 1, 32, 64]
   - [0x106CFA] # 6 bytes
   - [0x106D00, blast, 106D00.blast1, 1, 64, 32]
-  - [0x107708, blast, 107708.blast1, 1, 64, 32]
-  - [0x1081E8, blast, 1081E8.blast1, 1, 16, 32]
+  - [0x107708, blast, 107708.blast1, 1, 32, 64]
+  - [0x1081E8, blast, 1081E8.blast1, 1, 32, 16]
   - [0x1082CC] # 4 bytes
   - [0x1082D0, blast, 1082D0.blast1, 1, 64, 32]
   - [0x10904C] # 4 bytes
@@ -1876,7 +1939,7 @@ segments:
   - [0x109782] # 6 bytes
   - [0x109788, blast, 109788.blast1, 1, 64, 32]
   - [0x109F8E] # 2 bytes
-  - [0x109F90, blast, 109F90.blast1, 1, 32, 32]
+  - [0x109F90, blast, 109F90.blast1, 1, 64, 16]
   - [0x10A53A] # 6 bytes
   - [0x10A540, blast, 10A540.blast1, 1, 64, 32]
   - [0x10B072] # 6 bytes
@@ -1888,7 +1951,7 @@ segments:
   - [0x10C740, blast, 10C740.blast1, 1, 32, 32]
   - [0x10CACE] # 2 bytes
   - [0x10CAD0, blast, 10CAD0.blast1, 1, 64, 32]
-  - [0x10D230, blast, 10D230.blast1, 1, 64, 32]
+  - [0x10D230, blast, 10D230.blast1, 1, 32, 64]
   - [0x10D8DC] # 4 bytes
   - [0x10D8E0, blast, 10D8E0.blast2, 2, 16, 32]
   - [0x10DB4C] # 4 bytes
@@ -1902,25 +1965,25 @@ segments:
   - [0x10F868, blast, 10F868.blast1, 1, 64, 32]
   - [0x10FFA6] # 2 bytes
   - [0x10FFA8, blast, 10FFA8.blast1, 1, 64, 32]
-  - [0x1102D8, blast, 1102D8.blast1, 1, 64, 32]
+  - [0x1102D8, blast, 1102D8.blast1, 1, 128, 16]
   - [0x110E28, blast, 110E28.blast1, 1, 64, 32]
   - [0x1117EE] # 2 bytes
   - [0x1117F0, blast, 1117F0.blast1, 1, 64, 32]
-  - [0x112060, blast, 112060.blast1, 1, 64, 32]
+  - [0x112060, blast, 112060.blast1, 1, 32, 64]
   - [0x112926] # 2 bytes
-  - [0x112928, blast, 112928.blast1, 1, 64, 32]
+  - [0x112928, blast, 112928.blast1, 1, 32, 64]
   - [0x1131BA] # 6 bytes
-  - [0x1131C0, blast, 1131C0.blast1, 1, 64, 32]
+  - [0x1131C0, blast, 1131C0.blast1, 1, 16, 128]
   - [0x11397E] # 2 bytes
   - [0x113980, blast, 113980.blast1, 1, 64, 32]
   - [0x1142E8, blast, 1142E8.blast1, 1, 64, 32]
   - [0x114CBA] # 6 bytes
-  - [0x114CC0, blast, 114CC0.blast1, 1, 64, 32]
+  - [0x114CC0, blast, 114CC0.blast1, 1, 32, 64]
   - [0x11582C] # 4 bytes
   - [0x115830, blast, 115830.blast1, 1, 64, 32]
   - [0x116154] # 4 bytes
   - [0x116158, blast, 116158.blast1, 1, 64, 32]
-  - [0x116758, blast, 116758.blast1, 1, 64, 32]
+  - [0x116758, blast, 116758.blast1, 1, 128, 16]
   - [0x11736C] # 4 bytes
   - [0x117370, blast, 117370.blast1, 1, 64, 32]
   - [0x117F02] # 6 bytes
@@ -1928,11 +1991,11 @@ segments:
   - [0x118A0E] # 2 bytes
   - [0x118A10, blast, 118A10.blast1, 1, 64, 32]
   - [0x1195DA] # 6 bytes
-  - [0x1195E0, blast, 1195E0.blast1, 1, 64, 32]
+  - [0x1195E0, blast, 1195E0.blast1, 1, 128, 16]
   - [0x11A262] # 6 bytes
-  - [0x11A268, blast, 11A268.blast1, 1, 64, 32]
+  - [0x11A268, blast, 11A268.blast1, 1, 128, 16]
   - [0x11AB2A] # 6 bytes
-  - [0x11AB30, blast, 11AB30.blast1, 1, 64, 32]
+  - [0x11AB30, blast, 11AB30.blast1, 1, 128, 16]
   - [0x11B752] # 6 bytes
   - [0x11B758, blast, 11B758.blast1, 1, 64, 32]
   - [0x11C2E6] # 2 bytes
@@ -1940,10 +2003,10 @@ segments:
   - [0x11CC84] # 4 bytes
   - [0x11CC88, blast, 11CC88.blast1, 1, 64, 32]
   - [0x11D966] # 2 bytes
-  - [0x11D968, blast, 11D968.blast1, 1, 64, 32]
+  - [0x11D968, blast, 11D968.blast1, 1, 128, 16]
   - [0x11E50A] # 6 bytes
-  - [0x11E510, blast, 11E510.blast1, 1, 64, 32]
-  - [0x11EBB8, blast, 11EBB8.blast1, 1, 64, 32]
+  - [0x11E510, blast, 11E510.blast1, 1, 32, 64]
+  - [0x11EBB8, blast, 11EBB8.blast1, 1, 32, 64]
   - [0x11EF84] # 4 bytes
   - [0x11EF88, blast, 11EF88.blast1, 1, 64, 32]
   - [0x11FA26] # 2 bytes
@@ -1955,19 +2018,27 @@ segments:
   - [0x12182A] # 6 bytes
   - [0x121830, blast, 121830.blast1, 1, 64, 32]
   - [0x121F86] # 2 bytes
-  - [0x121F88, blast, 121F88.blast1, 1, 64, 32]
+  - [0x121F88, blast, 121F88.blast1, 1, 32, 64]
   - [0x122896] # 2 bytes
-  - [0x122898, blast, 122898.blast1, 1, 64, 32]
-  - [0x123578, blast, 123578.blast1, 1, 64, 32]
+  - [0x122898, blast, 122898.blast1, 1, 32, 64]
+  - [0x123578, blast, 123578.blast1, 1, 32, 64]
   - [0x123FB2] # 6 bytes
-  - [0x123FB8, blast, 123FB8.blast1, 1, 64, 32]
-  - [0x1245E8, blast, 1245E8.blast1, 1, 64, 32]
+  - [0x123FB8, blast, 123FB8.blast1, 1, 128, 16]
+  - [0x1245E8, blast, 1245E8.blast1, 1, 32, 64]
   - [0x124C38, blast, 124C38.blast1, 1, 64, 32]
-  - [0x125688, blast, 125688.blast1, 1, 32, 32]
+  - [0x125688, blast, 125688.blast1, 1, 64, 16]
   - [0x125DB4] # 4 bytes
   - [0x125DB8, blast, 125DB8.blast1, 1, 64, 32]
   - [0x1262A2] # 6 bytes
-  - [0x1262A8, blast, 1262A8.blast1, 1, 32, 42]
+  - name:  1262A8.blast1
+    type:  blast
+    start: 0x1262A8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x126820, blast, 126820.blast1, 1, 64, 32]
   - [0x126E2A] # 6 bytes
   - [0x126E30, blast, 126E30.blast1, 1, 64, 32]
@@ -1991,7 +2062,7 @@ segments:
   - [0x12B7A2] # 6 bytes
   - [0x12B7A8, blast, 12B7A8.blast1, 1, 32, 32]
   - [0x12BD54] # 4 bytes
-  - [0x12BD58, blast, 12BD58.blast1, 1, 16, 32]
+  - [0x12BD58, blast, 12BD58.blast1, 1, 32, 16]
   - [0x12BF42] # 6 bytes
   - [0x12BF48, blast, 12BF48.blast1, 1, 64, 32]
   - [0x12C682] # 6 bytes
@@ -2010,23 +2081,23 @@ segments:
   - [0x130128, blast, 130128.blast1, 1, 16, 32]
   - [0x130328, blast, 130328.blast1, 1, 32, 32]
   - [0x130854] # 4 bytes
-  - [0x130858, blast, 130858.blast1, 1, 16, 32]
+  - [0x130858, blast, 130858.blast1, 1, 32, 16]
   - [0x130A80, blast, 130A80.blast1, 1, 16, 16]
   - [0x130C32] # 6 bytes
   - [0x130C38, blast, 130C38.blast1, 1, 64, 32]
   - [0x131364] # 4 bytes
   - [0x131368, blast, 131368.blast1, 1, 16, 32]
-  - [0x1314F8, blast, 1314F8.blast1, 1, 64, 32]
+  - [0x1314F8, blast, 1314F8.blast1, 1, 128, 16]
   - [0x1320A0, blast, 1320A0.blast1, 1, 64, 32]
   - [0x1329A0, blast, 1329A0.blast1, 1, 64, 32]
   - [0x132E6C] # 4 bytes
   - [0x132E70, blast, 132E70.blast1, 1, 64, 32]
   - [0x13350C] # 4 bytes
-  - [0x133510, blast, 133510.blast1, 1, 32, 32]
+  - [0x133510, blast, 133510.blast1, 1, 64, 16]
   - [0x1337AA] # 6 bytes
-  - [0x1337B0, blast, 1337B0.blast1, 1, 32, 32]
+  - [0x1337B0, blast, 1337B0.blast1, 1, 64, 16]
   - [0x133A54] # 4 bytes
-  - [0x133A58, blast, 133A58.blast1, 1, 32, 32]
+  - [0x133A58, blast, 133A58.blast1, 1, 64, 16]
   - [0x133D02] # 6 bytes
   - [0x133D08, blast, 133D08.blast1, 1, 32, 32]
   - [0x133F7A] # 6 bytes
@@ -2041,7 +2112,7 @@ segments:
   - [0x135DC2] # 6 bytes
   - [0x135DC8, blast, 135DC8.blast1, 1, 16, 16]
   - [0x135E9A] # 6 bytes
-  - [0x135EA0, blast, 135EA0.blast1, 1, 16, 32]
+  - [0x135EA0, blast, 135EA0.blast1, 1, 64, 8]
   - [0x136222] # 6 bytes
   - [0x136228, blast, 136228.blast1, 1, 32, 32]
   - [0x136512] # 6 bytes
@@ -2052,7 +2123,7 @@ segments:
   - [0x136D4C] # 4 bytes
   - [0x136D50, blast, 136D50.blast1, 1, 16, 32]
   - [0x136FF4] # 4 bytes
-  - [0x136FF8, blast, 136FF8.blast1, 1, 16, 32]
+  - [0x136FF8, blast, 136FF8.blast1, 1, 32, 16]
   - [0x1371B6] # 2 bytes
   - [0x1371B8, blast, 1371B8.blast1, 1, 16, 32]
   - [0x1374DE] # 2 bytes
@@ -2064,14 +2135,14 @@ segments:
   - [0x1386AE] # 2 bytes
   - [0x1386B0, blast, 1386B0.blast1, 1, 64, 32]
   - [0x139146] # 2 bytes
-  - [0x139148, blast, 139148.blast1, 1, 32, 32]
+  - [0x139148, blast, 139148.blast1, 1, 64, 16]
   - [0x1396FC] # 4 bytes
-  - [0x139700, blast, 139700.blast1, 1, 64, 32]
+  - [0x139700, blast, 139700.blast1, 1, 128, 16]
   - [0x139FE6] # 2 bytes
-  - [0x139FE8, blast, 139FE8.blast1, 1, 16, 32]
-  - [0x13A210, blast, 13A210.blast1, 1, 64, 32]
+  - [0x139FE8, blast, 139FE8.blast1, 1, 32, 16]
+  - [0x13A210, blast, 13A210.blast1, 1, 32, 64]
   - [0x13AAB6] # 2 bytes
-  - [0x13AAB8, blast, 13AAB8.blast1, 1, 64, 32]
+  - [0x13AAB8, blast, 13AAB8.blast1, 1, 32, 64]
   - [0x13B318, blast, 13B318.blast1, 1, 64, 32]
   - [0x13BDD6] # 2 bytes
   - [0x13BDD8, blast, 13BDD8.blast1, 1, 32, 32]
@@ -2113,26 +2184,26 @@ segments:
   - [0x1418A6] # 2 bytes
   - [0x1418A8, blast, 1418A8.blast1, 1, 64, 32]
   - [0x14242C] # 4 bytes
-  - [0x142430, blast, 142430.blast1, 1, 64, 32]
-  - [0x142F90, blast, 142F90.blast1, 1, 64, 32]
+  - [0x142430, blast, 142430.blast1, 1, 128, 16]
+  - [0x142F90, blast, 142F90.blast1, 1, 32, 64]
   - [0x1438B8, blast, 1438B8.blast1, 1, 64, 32]
-  - [0x144250, blast, 144250.blast1, 1, 16, 16]
-  - [0x144410, blast, 144410.blast1, 1, 16, 32]
+  - [0x144250, blast, 144250.blast1, 1, 32, 8]
+  - [0x144410, blast, 144410.blast1, 1, 64, 8]
   - [0x144718, blast, 144718.blast1, 1, 32, 32]
   - [0x144C14] # 4 bytes
-  - [0x144C18, blast, 144C18.blast1, 1, 16, 32]
+  - [0x144C18, blast, 144C18.blast1, 1, 32, 16]
   - [0x144F5C] # 4 bytes
-  - [0x144F60, blast, 144F60.blast1, 1, 64, 32]
+  - [0x144F60, blast, 144F60.blast1, 1, 32, 64]
   - [0x1455E0, blast, 1455E0.blast1, 1, 64, 32]
   - [0x145E36] # 2 bytes
   - [0x145E38, blast, 145E38.blast1, 1, 64, 32]
   - [0x1465B8, blast, 1465B8.blast1, 1, 64, 32]
   - [0x146CEA] # 6 bytes
-  - [0x146CF0, blast, 146CF0.blast1, 1, 64, 32]
+  - [0x146CF0, blast, 146CF0.blast1, 1, 128, 16]
   - [0x1477B2] # 6 bytes
-  - [0x1477B8, blast, 1477B8.blast1, 1, 64, 32]
+  - [0x1477B8, blast, 1477B8.blast1, 1, 128, 16]
   - [0x147F5E] # 2 bytes
-  - [0x147F60, blast, 147F60.blast0, 0]
+  - [0x147F60, blast, 147F60.blast0, 0] # 2048 bytes
   - [0x148760, blast, 148760.blast1, 1, 64, 32]
   - [0x1491BE] # 2 bytes
   - [0x1491C0, blast, 1491C0.blast1, 1, 16, 16]
@@ -2140,11 +2211,11 @@ segments:
   - [0x149A2A] # 6 bytes
   - [0x149A30, blast, 149A30.blast1, 1, 64, 32]
   - [0x14A384] # 4 bytes
-  - [0x14A388, blast, 14A388.blast1, 1, 64, 32]
+  - [0x14A388, blast, 14A388.blast1, 1, 32, 64]
   - [0x14A9A6] # 2 bytes
-  - [0x14A9A8, blast, 14A9A8.blast1, 1, 64, 32]
+  - [0x14A9A8, blast, 14A9A8.blast1, 1, 32, 64]
   - [0x14B4C6] # 2 bytes
-  - [0x14B4C8, blast, 14B4C8.blast1, 1, 64, 32]
+  - [0x14B4C8, blast, 14B4C8.blast1, 1, 32, 64]
   - [0x14BFD6] # 2 bytes
   - [0x14BFD8, blast, 14BFD8.blast1, 1, 64, 32]
   - [0x14CC5E] # 2 bytes
@@ -2173,7 +2244,7 @@ segments:
   - [0x151628, blast, 151628.blast1, 1, 32, 32]
   - [0x151866] # 2 bytes
   - [0x151868, blast, 151868.blast1, 1, 32, 32]
-  - [0x151C00, blast, 151C00.blast0, 0]
+  - [0x151C00, blast, 151C00.blast0, 0] # 2048 bytes
   - [0x152400, blast, 152400.blast1, 1, 32, 32]
   - [0x15296E] # 2 bytes
   - [0x152970, bin, 152970.lut256]
@@ -2195,7 +2266,7 @@ segments:
   - [0x154B36] # 2 bytes
   - [0x154B38, blast, 154B38.blast1, 1, 32, 32]
   - [0x1550B4] # 4 bytes
-  - [0x1550B8, blast, 1550B8.blast1, 1, 32, 32]
+  - [0x1550B8, blast, 1550B8.blast1, 1, 64, 16]
   - [0x155582] # 6 bytes
   - [0x155588, blast, 155588.blast5, 5, 32, 32]
   - [0x1556B4] # 4 bytes
@@ -2234,13 +2305,21 @@ segments:
   - [0x15C60C] # 4 bytes
   - [0x15C610, blast, 15C610.blast1, 1, 32, 43]
   - [0x15CD66] # 2 bytes
-  - [0x15CD68, blast, 15CD68.blast1, 1, 32, 42]
+  - name:  15CD68.blast1
+    type:  blast
+    start: 0x15CD68
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x15D6AC] # 4 bytes
   - [0x15D6B0, blast, 15D6B0.blast1, 1, 32, 21]
   - [0x15DAEA] # 6 bytes
   - [0x15DAF0, blast, 15DAF0.blast1, 1, 64, 32]
   - [0x15E70A] # 6 bytes
-  - [0x15E710, blast, 15E710.blast1, 1, 64, 32]
+  - [0x15E710, blast, 15E710.blast1, 1, 128, 16]
   - [0x15F36A] # 6 bytes
   - [0x15F370, blast, 15F370.blast1, 1, 64, 32]
   - [0x15F4BA] # 6 bytes
@@ -2322,7 +2401,15 @@ segments:
   - [0x16EAE6] # 2 bytes
   - [0x16EAE8, blast, 16EAE8.blast4, 4, 32, 64]
   - [0x16EBAC] # 4 bytes
-  - [0x16EBB0, blast, 16EBB0.blast1, 1, 32, 42]
+  - name:  16EBB0.blast1
+    type:  blast
+    start: 0x16EBB0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x16F3A6] # 2 bytes
   - [0x16F3A8, blast, 16F3A8.blast4, 4, 32, 64]
   - [0x16F646] # 2 bytes
@@ -2381,7 +2468,15 @@ segments:
   - [0x172644] # 4 bytes
   - [0x172648, blast, 172648.blast4, 4, 32, 64]
   - [0x17278A] # 6 bytes
-  - [0x172790, blast, 172790.blast1, 1, 32, 42]
+  - name:  172790.blast1
+    type:  blast
+    start: 0x172790
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x17316E] # 2 bytes
   - [0x173170, blast, 173170.blast4, 4, 32, 64]
   - [0x173488, blast, 173488.blast4, 4, 32, 64]
@@ -2416,54 +2511,110 @@ segments:
   - [0x1776AE] # 2 bytes
   - [0x1776B0, blast, 1776B0.blast4, 4, 32, 64]
   - [0x17790C] # 4 bytes
-  - [0x177910, blast, 177910.blast1, 1, 16, 32]
+  - [0x177910, blast, 177910.blast1, 1, 32, 16]
   - [0x177BDE] # 2 bytes
   - [0x177BE0, blast, 177BE0.blast1, 1, 16, 16]
   - [0x177D82] # 6 bytes
-  - [0x177D88, blast, 177D88.blast1, 1, 16, 32]
+  - [0x177D88, blast, 177D88.blast1, 1, 32, 16]
   - [0x177FEC] # 4 bytes
-  - [0x177FF0, blast, 177FF0.blast1, 1, 16, 32]
+  - [0x177FF0, blast, 177FF0.blast1, 1, 32, 16]
   - [0x1783B4] # 4 bytes
-  - [0x1783B8, blast, 1783B8.blast1, 1, 16, 32]
+  - [0x1783B8, blast, 1783B8.blast1, 1, 32, 16]
   - [0x178758, blast, 178758.blast1, 1, 16, 16]
   - [0x178932] # 6 bytes
-  - [0x178938, blast, 178938.blast1, 1, 16, 32]
+  - [0x178938, blast, 178938.blast1, 1, 32, 16]
   - [0x178BCC] # 4 bytes
   - [0x178BD0, blast, 178BD0.blast1, 1, 16, 16]
-  - [0x178D50, blast, 178D50.blast1, 1, 16, 32]
+  - [0x178D50, blast, 178D50.blast1, 1, 32, 16]
   - [0x178FDE] # 2 bytes
-  - [0x178FE0, blast, 178FE0.blast1, 1, 32, 10]
+  - [0x178FE0, blast, 178FE0.blast1, 1, 43, 8]
   - [0x1791BA] # 6 bytes
-  - [0x1791C0, blast, 1791C0.blast1, 1, 32, 10]
+  - [0x1791C0, blast, 1791C0.blast1, 1, 43, 8]
   - [0x1793FE] # 2 bytes
-  - [0x179400, blast, 179400.blast1, 1, 32, 10]
+  - [0x179400, blast, 179400.blast1, 1, 43, 8]
   - [0x179592] # 6 bytes
-  - [0x179598, blast, 179598.blast1, 1, 32, 21]
-  - [0x179968, blast, 179968.blast1, 1, 32, 21]
+  - name:  179598.blast1
+    type:  blast
+    start: 0x179598
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
+  - name:  179968.blast1
+    type:  blast
+    start: 0x179968
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x179CEA] # 6 bytes
-  - [0x179CF0, blast, 179CF0.blast1, 1, 32, 10]
+  - [0x179CF0, blast, 179CF0.blast1, 1, 16, 20]
   - [0x179E76] # 2 bytes
-  - [0x179E78, blast, 179E78.blast1, 1, 32, 42]
+  - name:  179E78.blast1
+    type:  blast
+    start: 0x179E78
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x17A4B4] # 4 bytes
   - [0x17A4B8, blast, 17A4B8.blast1, 1, 64, 32]
   - [0x17A9FE] # 2 bytes
   - [0x17AA00, blast, 17AA00.blast1, 1, 64, 32]
   - [0x17B160, blast, 17B160.blast1, 1, 32, 32]
   - [0x17B4D2] # 6 bytes
-  - [0x17B4D8, blast, 17B4D8.blast1, 1, 16, 32]
-  - [0x17B830, blast, 17B830.blast1, 1, 16, 32]
+  - [0x17B4D8, blast, 17B4D8.blast1, 1, 32, 16]
+  - [0x17B830, blast, 17B830.blast1, 1, 32, 16]
   - [0x17BB08, blast, 17BB08.blast1, 1, 16, 16]
   - [0x17BCC6] # 2 bytes
-  - [0x17BCC8, blast, 17BCC8.blast1, 1, 32, 42]
+  - name:  17BCC8.blast1
+    type:  blast
+    start: 0x17BCC8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x17C4E0, blast, 17C4E0.blast1, 1, 64, 32]
   - [0x17CD96] # 2 bytes
-  - [0x17CD98, blast, 17CD98.blast1, 1, 32, 42]
+  - name:  17CD98.blast1
+    type:  blast
+    start: 0x17CD98
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x17D42E] # 2 bytes
   - [0x17D430, blast, 17D430.blast1, 1, 64, 32]
   - [0x17DC06] # 2 bytes
-  - [0x17DC08, blast, 17DC08.blast1, 1, 32, 42]
+  - name:  17DC08.blast1
+    type:  blast
+    start: 0x17DC08
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x17E414] # 4 bytes
-  - [0x17E418, blast, 17E418.blast1, 1, 32, 42]
+  - name:  17E418.blast1
+    type:  blast
+    start: 0x17E418
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x17EBAE] # 2 bytes
   - [0x17EBB0, blast, 17EBB0.blast1, 1, 64, 32]
   - [0x17F464] # 4 bytes
@@ -2484,31 +2635,71 @@ segments:
   - [0x183154] # 4 bytes
   - [0x183158, blast, 183158.blast1, 1, 64, 32]
   - [0x183964] # 4 bytes
-  - [0x183968, blast, 183968.blast1, 1, 64, 32]
+  - [0x183968, blast, 183968.blast1, 1, 128, 16]
   - [0x183F7E] # 2 bytes
-  - [0x183F80, blast, 183F80.blast1, 1, 64, 32]
+  - [0x183F80, blast, 183F80.blast1, 1, 32, 64]
   - [0x1841E2] # 6 bytes
-  - [0x1841E8, blast, 1841E8.blast1, 1, 64, 32]
+  - [0x1841E8, blast, 1841E8.blast1, 1, 16, 128]
   - [0x18433E] # 2 bytes
-  - [0x184340, blast, 184340.blast1, 1, 64, 32]
+  - [0x184340, blast, 184340.blast1, 1, 32, 64]
   - [0x1845EE] # 2 bytes
-  - [0x1845F0, blast, 1845F0.blast1, 1, 16, 32]
+  - [0x1845F0, blast, 1845F0.blast1, 1, 32, 16]
   - [0x184964] # 4 bytes
-  - [0x184968, blast, 184968.blast1, 1, 32, 32]
+  - [0x184968, blast, 184968.blast1, 1, 64, 16]
   - [0x184F6E] # 2 bytes
-  - [0x184F70, blast, 184F70.blast1, 1, 32, 32]
+  - [0x184F70, blast, 184F70.blast1, 1, 64, 16]
   - [0x185604] # 4 bytes
-  - [0x185608, blast, 185608.blast1, 1, 32, 42]
+  - name:  185608.blast1
+    type:  blast
+    start: 0x185608
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x185E76] # 2 bytes
-  - [0x185E78, blast, 185E78.blast1, 1, 32, 42]
+  - name:  185E78.blast1
+    type:  blast
+    start: 0x185E78
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x18670E] # 2 bytes
-  - [0x186710, blast, 186710.blast1, 1, 32, 42]
+  - name:  186710.blast1
+    type:  blast
+    start: 0x186710
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x186D66] # 2 bytes
-  - [0x186D68, blast, 186D68.blast1, 1, 32, 42]
-  - [0x1875E0, blast, 1875E0.blast1, 1, 32, 42]
+  - name:  186D68.blast1
+    type:  blast
+    start: 0x186D68
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - name:  1875E0.blast1
+    type:  blast
+    start: 0x1875E0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x187B98, blast, 187B98.blast1, 1, 64, 32]
   - [0x188122] # 6 bytes
-  - [0x188128, blast, 188128.blast1, 1, 32, 32]
+  - [0x188128, blast, 188128.blast1, 1, 16, 64]
   - [0x188768, blast, 188768.blast1, 1, 64, 32]
   - [0x189112] # 6 bytes
   - [0x189118, blast, 189118.blast1, 1, 64, 32]
@@ -2525,7 +2716,15 @@ segments:
   - [0x18A85E] # 2 bytes
   - [0x18A860, blast, 18A860.blast1, 1, 32, 32]
   - [0x18AD2E] # 2 bytes
-  - [0x18AD30, blast, 18AD30.blast1, 1, 32, 42]
+  - name:  18AD30.blast1
+    type:  blast
+    start: 0x18AD30
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x18B35C] # 4 bytes
   - [0x18B360, blast, 18B360.blast1, 1, 64, 32]
   - [0x18BFCC] # 4 bytes
@@ -2548,25 +2747,33 @@ segments:
   - [0x1914CA] # 6 bytes
   - [0x1914D0, blast, 1914D0.blast1, 1, 64, 32]
   - [0x191D92] # 6 bytes
-  - [0x191D98, blast, 191D98.blast1, 1, 64, 32]
+  - [0x191D98, blast, 191D98.blast1, 1, 32, 64]
   - [0x1921EA] # 6 bytes
   - [0x1921F0, blast, 1921F0.blast1, 1, 32, 32]
   - [0x1924F6] # 2 bytes
-  - [0x1924F8, blast, 1924F8.blast1, 1, 64, 32]
+  - [0x1924F8, blast, 1924F8.blast1, 1, 32, 64]
   - [0x192972] # 6 bytes
   - [0x192978, blast, 192978.blast1, 1, 64, 32]
   - [0x1932A6] # 2 bytes
-  - [0x1932A8, blast, 1932A8.blast1, 1, 64, 32]
+  - [0x1932A8, blast, 1932A8.blast1, 1, 128, 16]
   - [0x1939E4] # 4 bytes
-  - [0x1939E8, blast, 1939E8.blast1, 1, 64, 32]
+  - [0x1939E8, blast, 1939E8.blast1, 1, 128, 16]
   - [0x1940CC] # 4 bytes
   - [0x1940D0, blast, 1940D0.blast1, 1, 64, 32]
-  - [0x194B28, blast, 194B28.blast1, 1, 32, 42]
+  - name:  194B28.blast1
+    type:  blast
+    start: 0x194B28
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x195522] # 6 bytes
   - [0x195528, blast, 195528.blast1, 1, 16, 16]
   - [0x1956C4] # 4 bytes
   - [0x1956C8, blast, 1956C8.blast1, 1, 16, 16]
-  - [0x1957C0, blast, 1957C0.blast0, 0]
+  - [0x1957C0, blast, 1957C0.blast0, 0] # 4096 bytes
   - [0x1967C0, bin, 1967C0.lut256]
   - [0x1968C0, blast, 1968C0.blast5, 5, 32, 32]
   - [0x196A50, blast, 196A50.blast5, 5, 32, 32]
@@ -2598,37 +2805,141 @@ segments:
   - [0x19A84A] # 6 bytes
   - [0x19A850, blast, 19A850.blast1, 1, 64, 32]
   - [0x19B36C] # 4 bytes
-  - [0x19B370, blast, 19B370.blast1, 1, 32, 42]
+  - name:  19B370.blast1
+    type:  blast
+    start: 0x19B370
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x19BB38, blast, 19BB38.blast1, 1, 64, 32]
   - [0x19C34E] # 2 bytes
-  - [0x19C350, blast, 19C350.blast1, 1, 32, 42]
+  - name:  19C350.blast1
+    type:  blast
+    start: 0x19C350
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x19C704] # 4 bytes
-  - [0x19C708, blast, 19C708.blast1, 1, 32, 42]
+  - name:  19C708.blast1
+    type:  blast
+    start: 0x19C708
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x19CB84] # 4 bytes
   - [0x19CB88, blast, 19CB88.blast1, 1, 32, 21]
   - [0x19D0A2] # 6 bytes
-  - [0x19D0A8, blast, 19D0A8.blast1, 1, 32, 42]
+  - name:  19D0A8.blast1
+    type:  blast
+    start: 0x19D0A8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x19D8AC] # 4 bytes
-  - [0x19D8B0, blast, 19D8B0.blast1, 1, 32, 42]
+  - name:  19D8B0.blast1
+    type:  blast
+    start: 0x19D8B0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x19DFC4] # 4 bytes
-  - [0x19DFC8, blast, 19DFC8.blast1, 1, 32, 42]
+  - name:  19DFC8.blast1
+    type:  blast
+    start: 0x19DFC8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x19E522] # 6 bytes
-  - [0x19E528, blast, 19E528.blast1, 1, 32, 42]
-  - [0x19EA08, blast, 19EA08.blast1, 1, 32, 43]
-  - [0x19F140, blast, 19F140.blast1, 1, 32, 42]
-  - [0x19F538, blast, 19F538.blast1, 1, 64, 32]
+  - name:  19E528.blast1
+    type:  blast
+    start: 0x19E528
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - [0x19EA08, blast, 19EA08.blast1, 1, 32, 28]
+  - name:  19F140.blast1
+    type:  blast
+    start: 0x19F140
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - [0x19F538, blast, 19F538.blast1, 1, 32, 64]
   - [0x1A004E] # 2 bytes
-  - [0x1A0050, blast, 1A0050.blast1, 1, 32, 42]
+  - name:  1A0050.blast1
+    type:  blast
+    start: 0x1A0050
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1A07E6] # 2 bytes
-  - [0x1A07E8, blast, 1A07E8.blast1, 1, 32, 42]
+  - name:  1A07E8.blast1
+    type:  blast
+    start: 0x1A07E8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1A0D52] # 6 bytes
-  - [0x1A0D58, blast, 1A0D58.blast1, 1, 32, 42]
+  - name:  1A0D58.blast1
+    type:  blast
+    start: 0x1A0D58
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1A135C] # 4 bytes
-  - [0x1A1360, blast, 1A1360.blast1, 1, 32, 42]
+  - name:  1A1360.blast1
+    type:  blast
+    start: 0x1A1360
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1A1AFA] # 6 bytes
   - [0x1A1B00, blast, 1A1B00.blast1, 1, 64, 32]
   - [0x1A1FFC] # 4 bytes
-  - [0x1A2000, blast, 1A2000.blast1, 1, 32, 42]
+  - name:  1A2000.blast1
+    type:  blast
+    start: 0x1A2000
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1A27B6] # 2 bytes
   - [0x1A27B8, blast, 1A27B8.blast1, 1, 32, 32]
   - [0x1A2D56] # 2 bytes
@@ -2644,19 +2955,67 @@ segments:
   - [0x1A3BC8, blast, 1A3BC8.blast1, 1, 16, 16]
   - [0x1A3D22] # 6 bytes
   - [0x1A3D28, blast, 1A3D28.blast1, 1, 16, 16]
-  - [0x1A3E58, blast, 1A3E58.blast0, 0]
-  - [0x1A4258, blast, 1A4258.blast1, 1, 32, 42]
+  - [0x1A3E58, blast, 1A3E58.blast0, 0] # 1024 bytes
+  - name:  1A4258.blast1
+    type:  blast
+    start: 0x1A4258
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1A4800, blast, 1A4800.blast1, 1, 64, 32]
   - [0x1A4DEA] # 6 bytes
-  - [0x1A4DF0, blast, 1A4DF0.blast1, 1, 32, 42]
+  - name:  1A4DF0.blast1
+    type:  blast
+    start: 0x1A4DF0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1A56BC] # 4 bytes
   - [0x1A56C0, blast, 1A56C0.blast1, 1, 64, 32]
   - [0x1A5BBA] # 6 bytes
-  - [0x1A5BC0, blast, 1A5BC0.blast1, 1, 32, 42]
-  - [0x1A62B0, blast, 1A62B0.blast1, 1, 32, 42]
+  - name:  1A5BC0.blast1
+    type:  blast
+    start: 0x1A5BC0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - name:  1A62B0.blast1
+    type:  blast
+    start: 0x1A62B0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1A6A82] # 6 bytes
-  - [0x1A6A88, blast, 1A6A88.blast1, 1, 32, 42]
-  - [0x1A6F30, blast, 1A6F30.blast1, 1, 32, 21]
+  - name:  1A6A88.blast1
+    type:  blast
+    start: 0x1A6A88
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - name:  1A6F30.blast1
+    type:  blast
+    start: 0x1A6F30
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x1A7234] # 4 bytes
   - [0x1A7238, blast, 1A7238.blast1, 1, 40, 40]
   - [0x1A7B20, blast, 1A7B20.blast1, 1, 40, 40]
@@ -2669,17 +3028,17 @@ segments:
   - [0x1AA780, blast, 1AA780.blast1, 1, 40, 40]
   - [0x1AB066] # 2 bytes
   - [0x1AB068, blast, 1AB068.blast1, 1, 40, 40]
-  - [0x1AB948, blast, 1AB948.blast1, 1, 32, 32]
+  - [0x1AB948, blast, 1AB948.blast1, 1, 64, 16]
   - [0x1ABE0C] # 4 bytes
-  - [0x1ABE10, blast, 1ABE10.blast1, 1, 32, 32]
-  - [0x1AC280, blast, 1AC280.blast1, 1, 32, 32]
-  - [0x1AC610, blast, 1AC610.blast1, 1, 32, 32]
+  - [0x1ABE10, blast, 1ABE10.blast1, 1, 64, 16]
+  - [0x1AC280, blast, 1AC280.blast1, 1, 64, 16]
+  - [0x1AC610, blast, 1AC610.blast1, 1, 64, 16]
   - [0x1AC91E] # 2 bytes
-  - [0x1AC920, blast, 1AC920.blast1, 1, 32, 32]
-  - [0x1ACC48, blast, 1ACC48.blast1, 1, 32, 32]
+  - [0x1AC920, blast, 1AC920.blast1, 1, 64, 16]
+  - [0x1ACC48, blast, 1ACC48.blast1, 1, 64, 16]
   - [0x1ACFA2] # 6 bytes
-  - [0x1ACFA8, blast, 1ACFA8.blast1, 1, 32, 32]
-  - [0x1AD320, blast, 1AD320.blast1, 1, 32, 32]
+  - [0x1ACFA8, blast, 1ACFA8.blast1, 1, 64, 16]
+  - [0x1AD320, blast, 1AD320.blast1, 1, 64, 16]
   - [0x1AD6CC] # 4 bytes
   - [0x1AD6D0, bin, 1AD6D0.lut256]
   - [0x1AD7D0, bin, 1AD7D0.lut256]
@@ -2687,18 +3046,34 @@ segments:
   - [0x1AD9D0, blast, 1AD9D0.blast4, 4, 32, 64]
   - [0x1ADB30, blast, 1ADB30.blast4, 4, 32, 64]
   - [0x1ADC84] # 4 bytes
-  - [0x1ADC88, blast, 1ADC88.blast0, 0]
-  - [0x1AE488, blast, 1AE488.blast0, 0]
+  - [0x1ADC88, blast, 1ADC88.blast0, 0] # 2048 bytes
+  - [0x1AE488, blast, 1AE488.blast0, 0] # 2048 bytes
   - [0x1AEC88, blast, 1AEC88.blast1, 1, 64, 32]
   - [0x1AF9E8, blast, 1AF9E8.blast1, 1, 64, 32]
   - [0x1B058C] # 4 bytes
   - [0x1B0590, blast, 1B0590.blast1, 1, 64, 32]
   - [0x1B0C94] # 4 bytes
-  - [0x1B0C98, blast, 1B0C98.blast1, 1, 32, 42]
+  - name:  1B0C98.blast1
+    type:  blast
+    start: 0x1B0C98
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1B1610, blast, 1B1610.blast1, 1, 32, 32]
   - [0x1B1CF6] # 2 bytes
   - [0x1B1CF8, blast, 1B1CF8.blast4, 4, 32, 64]
-  - [0x1B1F18, blast, 1B1F18.blast1, 1, 32, 42]
+  - name:  1B1F18.blast1
+    type:  blast
+    start: 0x1B1F18
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1B291A] # 6 bytes
   - [0x1B2920, blast, 1B2920.blast1, 1, 16, 16]
   - [0x1B2ACA] # 6 bytes
@@ -2832,29 +3207,61 @@ segments:
   - [0x1C3130, blast, 1C3130.blast4, 4, 32, 64]
   - [0x1C31EC] # 4 bytes
   - [0x1C31F0, blast, 1C31F0.blast4, 4, 32, 64]
-  - [0x1C32E0, blast, 1C32E0.blast1, 1, 64, 32]
+  - [0x1C32E0, blast, 1C32E0.blast1, 1, 32, 64]
   - [0x1C408E] # 2 bytes
-  - [0x1C4090, blast, 1C4090.blast1, 1, 64, 32]
+  - [0x1C4090, blast, 1C4090.blast1, 1, 32, 64]
   - [0x1C4C82] # 6 bytes
-  - [0x1C4C88, blast, 1C4C88.blast1, 1, 32, 42]
-  - [0x1C4E80, blast, 1C4E80.blast1, 1, 64, 32]
-  - [0x1C5798, blast, 1C5798.blast1, 1, 64, 32]
+  - name:  1C4C88.blast1
+    type:  blast
+    start: 0x1C4C88
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - [0x1C4E80, blast, 1C4E80.blast1, 1, 32, 64]
+  - [0x1C5798, blast, 1C5798.blast1, 1, 32, 64]
   - [0x1C5F86] # 2 bytes
-  - [0x1C5F88, blast, 1C5F88.blast1, 1, 64, 32]
+  - [0x1C5F88, blast, 1C5F88.blast1, 1, 32, 64]
   - [0x1C66F2] # 6 bytes
-  - [0x1C66F8, blast, 1C66F8.blast1, 1, 64, 32]
+  - [0x1C66F8, blast, 1C66F8.blast1, 1, 32, 64]
   - [0x1C7274] # 4 bytes
-  - [0x1C7278, blast, 1C7278.blast1, 1, 32, 42]
+  - name:  1C7278.blast1
+    type:  blast
+    start: 0x1C7278
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1C7A5A] # 6 bytes
   - [0x1C7A60, blast, 1C7A60.blast1, 1, 64, 32]
   - [0x1C8896] # 2 bytes
   - [0x1C8898, blast, 1C8898.blast4, 4, 32, 64]
   - [0x1C89B2] # 6 bytes
-  - [0x1C89B8, blast, 1C89B8.blast1, 1, 32, 42]
+  - name:  1C89B8.blast1
+    type:  blast
+    start: 0x1C89B8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1C8D86] # 2 bytes
   - [0x1C8D88, blast, 1C8D88.blast1, 1, 64, 32]
   - [0x1C970A] # 6 bytes
-  - [0x1C9710, blast, 1C9710.blast1, 1, 32, 42]
+  - name:  1C9710.blast1
+    type:  blast
+    start: 0x1C9710
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1C9E08, blast, 1C9E08.blast4, 4, 32, 64]
   - [0x1C9EA8, blast, 1C9EA8.blast1, 1, 64, 32]
   - [0x1CA80C] # 4 bytes
@@ -2866,14 +3273,46 @@ segments:
   - [0x1CC048, blast, 1CC048.blast1, 1, 32, 32]
   - [0x1CC79A] # 6 bytes
   - [0x1CC7A0, blast, 1CC7A0.blast1, 1, 32, 32]
-  - [0x1CCF20, blast, 1CCF20.blast1, 1, 32, 42]
+  - name:  1CCF20.blast1
+    type:  blast
+    start: 0x1CCF20
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1CD386] # 2 bytes
-  - [0x1CD388, blast, 1CD388.blast1, 1, 32, 42]
+  - name:  1CD388.blast1
+    type:  blast
+    start: 0x1CD388
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1CD9EE] # 2 bytes
   - [0x1CD9F0, blast, 1CD9F0.blast4, 4, 32, 64]
   - [0x1CDB04] # 4 bytes
-  - [0x1CDB08, blast, 1CDB08.blast1, 1, 32, 42]
-  - [0x1CE1D8, blast, 1CE1D8.blast1, 1, 32, 42]
+  - name:  1CDB08.blast1
+    type:  blast
+    start: 0x1CDB08
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - name:  1CE1D8.blast1
+    type:  blast
+    start: 0x1CE1D8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1CE93C] # 4 bytes
   - [0x1CE940, blast, 1CE940.blast4, 4, 32, 64]
   - [0x1CE9E6] # 2 bytes
@@ -2891,7 +3330,7 @@ segments:
   - [0x1CF88E] # 2 bytes
   - [0x1CF890, blast, 1CF890.blast4, 4, 32, 64]
   - [0x1CF942] # 6 bytes
-  - [0x1CF948, blast, 1CF948.blast1, 1, 16, 32]
+  - [0x1CF948, blast, 1CF948.blast1, 1, 32, 16]
   - [0x1CFA64] # 4 bytes
   - [0x1CFA68, blast, 1CFA68.blast4, 4, 32, 64]
   - [0x1CFB28, blast, 1CFB28.blast4, 4, 32, 64]
@@ -2917,17 +3356,17 @@ segments:
   - [0x1D0DF8, blast, 1D0DF8.blast5, 5, 32, 32]
   - [0x1D105C] # 4 bytes
   - [0x1D1060, blast, 1D1060.blast5, 5, 32, 32]
-  - [0x1D1328, blast, 1D1328.blast1, 1, 16, 32]
+  - [0x1D1328, blast, 1D1328.blast1, 1, 32, 16]
   - [0x1D144C] # 4 bytes
   - [0x1D1450, blast, 1D1450.blast1, 1, 64, 32]
   - [0x1D2224] # 4 bytes
-  - [0x1D2228, blast, 1D2228.blast1, 1, 64, 32]
+  - [0x1D2228, blast, 1D2228.blast1, 1, 32, 64]
   - [0x1D2B86] # 2 bytes
-  - [0x1D2B88, blast, 1D2B88.blast1, 1, 64, 32]
+  - [0x1D2B88, blast, 1D2B88.blast1, 1, 32, 64]
   - [0x1D3786] # 2 bytes
-  - [0x1D3788, blast, 1D3788.blast1, 1, 64, 32]
+  - [0x1D3788, blast, 1D3788.blast1, 1, 32, 64]
   - [0x1D462E] # 2 bytes
-  - [0x1D4630, blast, 1D4630.blast1, 1, 64, 32]
+  - [0x1D4630, blast, 1D4630.blast1, 1, 128, 16]
   - [0x1D4E62] # 6 bytes
   - [0x1D4E68, blast, 1D4E68.blast1, 1, 64, 32]
   - [0x1D560E] # 2 bytes
@@ -2942,7 +3381,15 @@ segments:
   - [0x1D66D0, blast, 1D66D0.blast5, 5, 32, 32]
   - [0x1D6962] # 6 bytes
   - [0x1D6968, blast, 1D6968.blast5, 5, 32, 32]
-  - [0x1D6C60, blast, 1D6C60.blast1, 1, 32, 42]
+  - name:  1D6C60.blast1
+    type:  blast
+    start: 0x1D6C60
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1D73F6] # 2 bytes
   - [0x1D73F8, blast, 1D73F8.blast5, 5, 32, 32]
   - [0x1D7608, blast, 1D7608.blast1, 1, 64, 32]
@@ -2974,9 +3421,9 @@ segments:
   - [0x1DB7CE] # 2 bytes
   - [0x1DB7D0, blast, 1DB7D0.blast5, 5, 32, 32]
   - [0x1DBA8A] # 6 bytes
-  - [0x1DBA90, blast, 1DBA90.blast1, 1, 32, 32]
+  - [0x1DBA90, blast, 1DBA90.blast1, 1, 64, 16]
   - [0x1DBD4C] # 4 bytes
-  - [0x1DBD50, blast, 1DBD50.blast1, 1, 32, 32]
+  - [0x1DBD50, blast, 1DBD50.blast1, 1, 64, 16]
   - [0x1DC2E2] # 6 bytes
   - [0x1DC2E8, blast, 1DC2E8.blast5, 5, 32, 32]
   - [0x1DC5E2] # 6 bytes
@@ -2989,27 +3436,27 @@ segments:
   - [0x1DD0F4] # 4 bytes
   - [0x1DD0F8, blast, 1DD0F8.blast5, 5, 32, 32]
   - [0x1DD39C] # 4 bytes
-  - [0x1DD3A0, blast, 1DD3A0.blast1, 1, 16, 16]
+  - [0x1DD3A0, blast, 1DD3A0.blast1, 1, 32, 8]
   - [0x1DD57A] # 6 bytes
   - [0x1DD580, bin, 1DD580.lut256]
   - [0x1DD680, blast, 1DD680.blast1, 1, 32, 32]
   - [0x1DDB64] # 4 bytes
-  - [0x1DDB68, blast, 1DDB68.blast1, 1, 64, 32]
+  - [0x1DDB68, blast, 1DDB68.blast1, 1, 32, 64]
   - [0x1DE362] # 6 bytes
   - [0x1DE368, blast, 1DE368.blast1, 1, 32, 32]
   - [0x1DE860, blast, 1DE860.blast1, 1, 32, 32]
-  - [0x1DEDF8, blast, 1DEDF8.blast1, 1, 16, 32]
-  - [0x1DF120, blast, 1DF120.blast1, 1, 16, 32]
+  - [0x1DEDF8, blast, 1DEDF8.blast1, 1, 32, 16]
+  - [0x1DF120, blast, 1DF120.blast1, 1, 32, 16]
   - [0x1DF320, blast, 1DF320.blast1, 1, 32, 32]
   - [0x1DF71A] # 6 bytes
   - [0x1DF720, blast, 1DF720.blast1, 1, 16, 16]
   - [0x1DF8EC] # 4 bytes
-  - [0x1DF8F0, blast, 1DF8F0.blast1, 1, 32, 32]
+  - [0x1DF8F0, blast, 1DF8F0.blast1, 1, 16, 64]
   - [0x1DFE9E] # 2 bytes
   - [0x1DFEA0, blast, 1DFEA0.blast1, 1, 32, 4]
   - [0x1DFF28, blast, 1DFF28.blast1, 1, 32, 32]
   - [0x1E02EE] # 2 bytes
-  - [0x1E02F0, blast, 1E02F0.blast1, 1, 16, 32]
+  - [0x1E02F0, blast, 1E02F0.blast1, 1, 32, 16]
   - [0x1E05D8, blast, 1E05D8.blast1, 1, 32, 32]
   - [0x1E0A4A] # 6 bytes
   - [0x1E0A50, blast, 1E0A50.blast1, 1, 32, 32]
@@ -3072,10 +3519,10 @@ segments:
   - [0x1E5E00, blast, 1E5E00.blast5, 5, 32, 32]
   - [0x1E620E] # 2 bytes
   - [0x1E6210, blast, 1E6210.blast5, 5, 32, 32]
-  - [0x1E6558, blast, 1E6558.blast1, 1, 32, 32]
-  - [0x1E6958, blast, 1E6958.blast1, 1, 32, 32]
+  - [0x1E6558, blast, 1E6558.blast1, 1, 64, 16]
+  - [0x1E6958, blast, 1E6958.blast1, 1, 64, 16]
   - [0x1E6E4C] # 4 bytes
-  - [0x1E6E50, blast, 1E6E50.blast1, 1, 32, 32]
+  - [0x1E6E50, blast, 1E6E50.blast1, 1, 64, 16]
   - [0x1E729C] # 4 bytes
   - [0x1E72A0, blast, 1E72A0.blast1, 1, 32, 32]
   - [0x1E773C] # 4 bytes
@@ -3102,16 +3549,24 @@ segments:
   - [0x1EA14C] # 4 bytes
   - [0x1EA150, blast, 1EA150.blast1, 1, 32, 4]
   - [0x1EA19A] # 6 bytes
-  - [0x1EA1A0, blast, 1EA1A0.blast1, 1, 32, 42]
+  - name:  1EA1A0.blast1
+    type:  blast
+    start: 0x1EA1A0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x1EA680, blast, 1EA680.blast1, 1, 32, 2]
   - [0x1EA6F8, blast, 1EA6F8.blast1, 1, 32, 32]
   - [0x1EAB8C] # 4 bytes
   - [0x1EAB90, blast, 1EAB90.blast1, 1, 64, 32]
-  - [0x1EB618, blast, 1EB618.blast1, 1, 64, 32]
+  - [0x1EB618, blast, 1EB618.blast1, 1, 32, 64]
   - [0x1EB9EC] # 4 bytes
-  - [0x1EB9F0, blast, 1EB9F0.blast1, 1, 64, 32]
+  - [0x1EB9F0, blast, 1EB9F0.blast1, 1, 32, 64]
   - [0x1EBDCA] # 6 bytes
-  - [0x1EBDD0, blast, 1EBDD0.blast1, 1, 64, 32]
+  - [0x1EBDD0, blast, 1EBDD0.blast1, 1, 32, 64]
   - [0x1EC4B0, blast, 1EC4B0.blast5, 5, 32, 32]
   - [0x1EC7B4] # 4 bytes
   - [0x1EC7B8, blast, 1EC7B8.blast5, 5, 32, 32]
@@ -3127,9 +3582,9 @@ segments:
   - [0x1F0496] # 2 bytes
   - [0x1F0498, blast, 1F0498.blast1, 1, 64, 32]
   - [0x1F0B58, bin, 1F0B58.lut128]
-  - [0x1F0BD8, blast, 1F0BD8.blast4, 4, 32, 64]
+  - [0x1F0BD8, blast, 1F0BD8.blast4, 4, 64, 32]
   - [0x1F11EC] # 4 bytes
-  - [0x1F11F0, blast, 1F11F0.blast4, 4, 32, 64]
+  - [0x1F11F0, blast, 1F11F0.blast4, 4, 64, 32]
   - [0x1F178C] # 4 bytes
   - [0x1F1790, bin, 1F1790.lut128]
   - [0x1F1810, bin, 1F1810.lut128]
@@ -3187,7 +3642,7 @@ segments:
   - [0x1FBEC2] # 6 bytes
   - [0x1FBEC8, blast, 1FBEC8.blast1, 1, 64, 32]
   - [0x1FC7B4] # 4 bytes
-  - [0x1FC7B8, blast, 1FC7B8.blast1, 1, 64, 32]
+  - [0x1FC7B8, blast, 1FC7B8.blast1, 1, 32, 64]
   - [0x1FD012] # 6 bytes
   - [0x1FD018, blast, 1FD018.blast1, 1, 64, 32]
   - [0x1FD77C] # 4 bytes
@@ -3200,10 +3655,10 @@ segments:
   - [0x1FFC28, blast, 1FFC28.blast1, 1, 64, 32]
   - [0x20046A] # 6 bytes
   - [0x200470, blast, 200470.blast1, 1, 32, 32]
-  - [0x200950, blast, 200950.blast1, 1, 64, 32]
+  - [0x200950, blast, 200950.blast1, 1, 32, 64]
   - [0x2011D8, blast, 2011D8.blast1, 1, 64, 32]
-  - [0x2018D0, blast, 2018D0.blast1, 1, 64, 32]
-  - [0x202538, blast, 202538.blast1, 1, 32, 7]
+  - [0x2018D0, blast, 2018D0.blast1, 1, 128, 16]
+  - [0x202538, blast, 202538.blast1, 1, 16, 14]
   - [0x202576] # 2 bytes
   - [0x202578, blast, 202578.blast1, 1, 32, 4]
   - [0x202652] # 6 bytes
@@ -3214,18 +3669,34 @@ segments:
     subsegments:
     - [0x000, 32, 32]
     - [0x800, 16, 16]
-    - [0xA00,  8,  8]
-    - [0xA80,  4,  4]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x202BF0, blast, 202BF0.blast1, 1, 32, 4]
   - [0x202CE4] # 4 bytes
   - [0x202CE8, blast, 202CE8.blast1, 1, 64, 32]
   - [0x203656] # 2 bytes
   - [0x203658, blast, 203658.blast1, 1, 32, 32]
   - [0x203AC4] # 4 bytes
-  - [0x203AC8, blast, 203AC8.blast1, 1, 32, 42]
+  - name:  203AC8.blast1
+    type:  blast
+    start: 0x203AC8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x20418C] # 4 bytes
   - [0x204190, blast, 204190.blast5, 5, 32, 32]
-  - [0x2044F0, blast, 2044F0.blast1, 1, 32, 42]
+  - name:  2044F0.blast1
+    type:  blast
+    start: 0x2044F0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x204B66] # 2 bytes
   - [0x204B68, bin, 204B68.lut256]
   - [0x204C68, blast, 204C68.blast5, 5, 32, 32]
@@ -3276,25 +3747,33 @@ segments:
   - [0x208CE6] # 2 bytes
   - [0x208CE8, blast, 208CE8.blast1, 1, 16, 32]
   - [0x208E9A] # 6 bytes
-  - [0x208EA0, blast, 208EA0.blast1, 1, 32, 32]
+  - [0x208EA0, blast, 208EA0.blast1, 1, 64, 16]
   - [0x209120, blast, 209120.blast1, 1, 32, 32]
   - [0x209614] # 4 bytes
   - [0x209618, blast, 209618.blast1, 1, 32, 32]
-  - [0x209B70, blast, 209B70.blast1, 1, 64, 32]
+  - [0x209B70, blast, 209B70.blast1, 1, 32, 64]
   - [0x20A04E] # 2 bytes
-  - [0x20A050, blast, 20A050.blast1, 1, 64, 32]
+  - [0x20A050, blast, 20A050.blast1, 1, 32, 64]
   - [0x20A3B4] # 4 bytes
   - [0x20A3B8, blast, 20A3B8.blast1, 1, 32, 32]
   - [0x20A89C] # 4 bytes
-  - [0x20A8A0, blast, 20A8A0.blast1, 1, 32, 42]
+  - name:  20A8A0.blast1
+    type:  blast
+    start: 0x20A8A0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x20AF9E] # 2 bytes
   - [0x20AFA0, blast, 20AFA0.blast1, 1, 64, 32]
   - [0x20B5D2] # 6 bytes
   - [0x20B5D8, blast, 20B5D8.blast1, 1, 64, 32]
   - [0x20B9CC] # 4 bytes
-  - [0x20B9D0, blast, 20B9D0.blast1, 1, 64, 32]
+  - [0x20B9D0, blast, 20B9D0.blast1, 1, 32, 64]
   - [0x20C232] # 6 bytes
-  - [0x20C238, blast, 20C238.blast1, 1, 64, 32]
+  - [0x20C238, blast, 20C238.blast1, 1, 32, 64]
   - [0x20C9DC] # 4 bytes
   - [0x20C9E0, blast, 20C9E0.blast2, 2, 16, 16]
   - [0x20CB80, blast, 20CB80.blast2, 2, 16, 16]
@@ -3333,17 +3812,25 @@ segments:
   - [0x216716] # 2 bytes
   - [0x216718, blast, 216718.blast1, 1, 40, 40]
   - [0x216FB4] # 4 bytes
-  - [0x216FB8, blast, 216FB8.blast1, 1, 32, 42]
+  - name:  216FB8.blast1
+    type:  blast
+    start: 0x216FB8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x21779A] # 6 bytes
-  - [0x2177A0, blast, 2177A0.blast1, 1, 64, 32]
+  - [0x2177A0, blast, 2177A0.blast1, 1, 32, 64]
   - [0x2183AC] # 4 bytes
-  - [0x2183B0, blast, 2183B0.blast1, 1, 64, 32]
+  - [0x2183B0, blast, 2183B0.blast1, 1, 32, 64]
   - [0x218ABC] # 4 bytes
   - [0x218AC0, blast, 218AC0.blast1, 1, 64, 32]
   - [0x21971A] # 6 bytes
   - [0x219720, blast, 219720.blast1, 1, 64, 32]
   - [0x21A324] # 4 bytes
-  - [0x21A328, blast, 21A328.blast1, 1, 64, 32]
+  - [0x21A328, blast, 21A328.blast1, 1, 32, 64]
   - [0x21AFB8, blast, 21AFB8.blast1, 1, 40, 40]
   - [0x21B894] # 4 bytes
   - [0x21B898, blast, 21B898.blast5, 5, 32, 32]
@@ -3422,20 +3909,84 @@ segments:
   - [0x227BF8, blast, 227BF8.blast5, 5, 32, 32]
   - [0x227F64] # 4 bytes
   - [0x227F68, blast, 227F68.blast5, 5, 32, 32]
-  - [0x228280, blast, 228280.blast1, 1, 32, 42]
+  - name:  228280.blast1
+    type:  blast
+    start: 0x228280
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x228876] # 2 bytes
-  - [0x228878, blast, 228878.blast1, 1, 32, 42]
+  - name:  228878.blast1
+    type:  blast
+    start: 0x228878
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x22901E] # 2 bytes
-  - [0x229020, blast, 229020.blast1, 1, 32, 42]
-  - [0x2298C0, blast, 2298C0.blast1, 1, 32, 42]
+  - name:  229020.blast1
+    type:  blast
+    start: 0x229020
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - name:  2298C0.blast1
+    type:  blast
+    start: 0x2298C0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x229EA4] # 4 bytes
-  - [0x229EA8, blast, 229EA8.blast1, 1, 32, 42]
+  - name:  229EA8.blast1
+    type:  blast
+    start: 0x229EA8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x22A544] # 4 bytes
-  - [0x22A548, blast, 22A548.blast1, 1, 32, 42]
+  - name:  22A548.blast1
+    type:  blast
+    start: 0x22A548
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x22AD56] # 2 bytes
-  - [0x22AD58, blast, 22AD58.blast1, 1, 32, 42]
+  - name:  22AD58.blast1
+    type:  blast
+    start: 0x22AD58
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x22B2DA] # 6 bytes
-  - [0x22B2E0, blast, 22B2E0.blast1, 1, 32, 42]
+  - name:  22B2E0.blast1
+    type:  blast
+    start: 0x22B2E0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x22BA14] # 4 bytes
   - [0x22BA18, blast, 22BA18.blast5, 5, 32, 32]
   - [0x22BE62] # 6 bytes
@@ -3450,14 +4001,14 @@ segments:
   - [0x22D220, blast, 22D220.blast5, 5, 32, 32]
   - [0x22D5D2] # 6 bytes
   - [0x22D5D8, blast, 22D5D8.blast1, 1, 64, 32]
-  - [0x22DC08, blast, 22DC08.blast1, 1, 64, 32]
+  - [0x22DC08, blast, 22DC08.blast1, 1, 32, 64]
   - [0x22E404] # 4 bytes
   - [0x22E408, blast, 22E408.blast1, 1, 64, 32]
   - [0x22EB48, blast, 22EB48.blast1, 1, 32, 32]
   - [0x22EE58, blast, 22EE58.blast1, 1, 32, 32]
   - [0x22F3E0, blast, 22F3E0.blast1, 1, 32, 32]
   - [0x22F8B6] # 2 bytes
-  - [0x22F8B8, blast, 22F8B8.blast1, 1, 16, 32]
+  - [0x22F8B8, blast, 22F8B8.blast1, 1, 32, 16]
   - [0x22FAD6] # 2 bytes
   - [0x22FAD8, blast, 22FAD8.blast1, 1, 32, 32]
   - [0x22FF7C] # 4 bytes
@@ -3465,9 +4016,9 @@ segments:
   - [0x2302A4] # 4 bytes
   - [0x2302A8, blast, 2302A8.blast1, 1, 32, 32]
   - [0x230676] # 2 bytes
-  - [0x230678, blast, 230678.blast1, 1, 32, 32]
+  - [0x230678, blast, 230678.blast1, 1, 64, 16]
   - [0x230A7A] # 6 bytes
-  - [0x230A80, blast, 230A80.blast1, 1, 32, 32]
+  - [0x230A80, blast, 230A80.blast1, 1, 64, 16]
   - [0x230EE0, blast, 230EE0.blast5, 5, 32, 32]
   - [0x2313A8, blast, 2313A8.blast5, 5, 32, 32]
   - [0x231870, blast, 231870.blast5, 5, 32, 32]
@@ -3508,10 +4059,10 @@ segments:
   - [0x233B5A] # 6 bytes
   - [0x233B60, blast, 233B60.blast5, 5, 32, 32]
   - [0x233ECA] # 6 bytes
-  - [0x233ED0, blast, 233ED0.blast1, 1, 64, 32]
+  - [0x233ED0, blast, 233ED0.blast1, 1, 32, 64]
   - [0x234B32] # 6 bytes
   - [0x234B38, blast, 234B38.blast5, 5, 32, 32]
-  - [0x234F88, blast, 234F88.blast1, 1, 64, 32]
+  - [0x234F88, blast, 234F88.blast1, 1, 32, 64]
   - [0x235AE6] # 2 bytes
   - [0x235AE8, blast, 235AE8.blast5, 5, 32, 32]
   - [0x235F84] # 4 bytes
@@ -3545,20 +4096,36 @@ segments:
   - [0x23A1D8, blast, 23A1D8.blast1, 1, 32, 32]
   - [0x23A43C] # 4 bytes
   - [0x23A440, blast, 23A440.blast5, 5, 32, 32]
-  - [0x23A880, blast, 23A880.blast1, 1, 64, 32]
+  - [0x23A880, blast, 23A880.blast1, 1, 128, 16]
   - [0x23AEE0, blast, 23AEE0.blast5, 5, 32, 32]
   - [0x23B2C8, blast, 23B2C8.blast5, 5, 32, 32]
   - [0x23B764] # 4 bytes
   - [0x23B768, blast, 23B768.blast5, 5, 32, 32]
   - [0x23BA8C] # 4 bytes
   - [0x23BA90, blast, 23BA90.blast5, 5, 32, 32]
-  - [0x23BEB0, blast, 23BEB0.blast1, 1, 32, 42]
+  - name:  23BEB0.blast1
+    type:  blast
+    start: 0x23BEB0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x23C570, blast, 23C570.blast5, 5, 32, 32]
   - [0x23C960, blast, 23C960.blast5, 5, 32, 32]
   - [0x23CDFA] # 6 bytes
   - [0x23CE00, blast, 23CE00.blast1, 1, 64, 32]
   - [0x23D494] # 4 bytes
-  - [0x23D498, blast, 23D498.blast1, 1, 32, 42]
+  - name:  23D498.blast1
+    type:  blast
+    start: 0x23D498
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x23DA56] # 2 bytes
   - [0x23DA58, blast, 23DA58.blast5, 5, 32, 32]
   - [0x23DD36] # 2 bytes
@@ -3572,7 +4139,15 @@ segments:
   - [0x24003E] # 2 bytes
   - [0x240040, blast, 240040.blast5, 5, 32, 32]
   - [0x24048C] # 4 bytes
-  - [0x240490, blast, 240490.blast1, 1, 32, 21]
+  - name:  240490.blast1
+    type:  blast
+    start: 0x240490
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x240790, blast, 240790.blast1, 1, 64, 32]
   - [0x240E54] # 4 bytes
   - [0x240E58, blast, 240E58.blast1, 1, 64, 32]
@@ -3621,12 +4196,12 @@ segments:
   - [0x2489F8, blast, 2489F8.blast1, 1, 32, 32]
   - [0x248C44] # 4 bytes
   - [0x248C48, blast, 248C48.blast1, 1, 64, 32]
-  - [0x249448, blast, 249448.blast1, 1, 64, 32]
+  - [0x249448, blast, 249448.blast1, 1, 32, 64]
   - [0x249F3E] # 2 bytes
-  - [0x249F40, blast, 249F40.blast1, 1, 32, 32]
+  - [0x249F40, blast, 249F40.blast1, 1, 64, 16]
   - [0x24A14C] # 4 bytes
-  - [0x24A150, blast, 24A150.blast1, 1, 64, 32]
-  - [0x24ACB8, blast, 24ACB8.blast1, 1, 64, 32]
+  - [0x24A150, blast, 24A150.blast1, 1, 32, 64]
+  - [0x24ACB8, blast, 24ACB8.blast1, 1, 128, 16]
   - [0x24B3D4] # 4 bytes
   - [0x24B3D8, blast, 24B3D8.blast1, 1, 64, 32]
   - [0x24C24C] # 4 bytes
@@ -3635,7 +4210,7 @@ segments:
   - [0x24CAA2] # 6 bytes
   - [0x24CAA8, blast, 24CAA8.blast5, 5, 32, 32]
   - [0x24CC52] # 6 bytes
-  - [0x24CC58, blast, 24CC58.blast1, 1, 16, 32]
+  - [0x24CC58, blast, 24CC58.blast1, 1, 32, 16]
   - [0x24CF62] # 6 bytes
   - [0x24CF68, blast, 24CF68.blast1, 1, 64, 32]
   - [0x24D7C2] # 6 bytes
@@ -3669,7 +4244,7 @@ segments:
   - [0x250422] # 6 bytes
   - [0x250428, blast, 250428.blast1, 1, 64, 32]
   - [0x250D58, blast, 250D58.blast1, 1, 32, 32]
-  - [0x251290, blast, 251290.blast1, 1, 16, 32]
+  - [0x251290, blast, 251290.blast1, 1, 64, 8]
   - [0x251458, blast, 251458.blast1, 1, 40, 40]
   - [0x251CB8, blast, 251CB8.blast1, 1, 40, 40]
   - [0x252512] # 6 bytes
@@ -3715,7 +4290,7 @@ segments:
   - [0x25BF08, blast, 25BF08.blast1, 1, 64, 32]
   - [0x25C358, blast, 25C358.blast1, 1, 32, 32]
   - [0x25C4FC] # 4 bytes
-  - [0x25C500, blast, 25C500.blast1, 1, 32, 32]
+  - [0x25C500, blast, 25C500.blast1, 1, 64, 16]
   - [0x25C8B0, blast, 25C8B0.blast1, 1, 64, 32]
   - [0x25CF18, blast, 25CF18.blast1, 1, 16, 32]
   - [0x25D162] # 6 bytes
@@ -3725,22 +4300,22 @@ segments:
   - [0x25DA7E] # 2 bytes
   - [0x25DA80, blast, 25DA80.blast1, 1, 64, 32]
   - [0x25E186] # 2 bytes
-  - [0x25E188, blast, 25E188.blast1, 1, 64, 32]
+  - [0x25E188, blast, 25E188.blast1, 1, 128, 16]
   - [0x25EC8C] # 4 bytes
-  - [0x25EC90, blast, 25EC90.blast1, 1, 64, 32]
+  - [0x25EC90, blast, 25EC90.blast1, 1, 128, 16]
   - [0x25F32E] # 2 bytes
-  - [0x25F330, blast, 25F330.blast1, 1, 64, 32]
+  - [0x25F330, blast, 25F330.blast1, 1, 128, 16]
   - [0x25F8FC] # 4 bytes
-  - [0x25F900, blast, 25F900.blast1, 1, 32, 32]
+  - [0x25F900, blast, 25F900.blast1, 1, 64, 16]
   - [0x25FACE] # 2 bytes
   - [0x25FAD0, blast, 25FAD0.blast1, 1, 32, 4]
-  - [0x25FB60, blast, 25FB60.blast1, 1, 16, 32]
+  - [0x25FB60, blast, 25FB60.blast1, 1, 64, 8]
   - [0x25FEF6] # 2 bytes
-  - [0x25FEF8, blast, 25FEF8.blast1, 1, 16, 32]
+  - [0x25FEF8, blast, 25FEF8.blast1, 1, 32, 16]
   - [0x26016A] # 6 bytes
   - [0x260170, blast, 260170.blast1, 1, 64, 32]
   - [0x260742] # 6 bytes
-  - [0x260748, blast, 260748.blast1, 1, 32, 32]
+  - [0x260748, blast, 260748.blast1, 1, 64, 16]
   - [0x260D6E] # 2 bytes
   - [0x260D70, blast, 260D70.blast1, 1, 32, 4]
   - [0x260E0A] # 6 bytes
@@ -3794,9 +4369,9 @@ segments:
   - [0x26D276] # 2 bytes
   - [0x26D278, blast, 26D278.blast1, 1, 40, 40]
   - [0x26DC18, blast, 26DC18.blast1, 1, 40, 40]
-  - [0x26E5E8, blast, 26E5E8.blast1, 1, 16, 32]
+  - [0x26E5E8, blast, 26E5E8.blast1, 1, 64, 8]
   - [0x26E762] # 6 bytes
-  - [0x26E768, blast, 26E768.blast1, 1, 16, 32]
+  - [0x26E768, blast, 26E768.blast1, 1, 64, 8]
   - [0x26E92A] # 6 bytes
   - [0x26E930, blast, 26E930.blast1, 1, 32, 32]
   - [0x26EE7A] # 6 bytes
@@ -3807,7 +4382,7 @@ segments:
   - [0x26F418, blast, 26F418.blast1, 1, 64, 32]
   - [0x26FE06] # 2 bytes
   - [0x26FE08, blast, 26FE08.blast1, 1, 16, 16]
-  - [0x26FEC0, blast, 26FEC0.blast1, 1, 16, 32]
+  - [0x26FEC0, blast, 26FEC0.blast1, 1, 32, 16]
   - [0x2700F8, blast, 2700F8.blast1, 1, 32, 32]
   - [0x27043C] # 4 bytes
   - [0x270440, blast, 270440.blast1, 1, 32, 32]
@@ -4004,26 +4579,26 @@ segments:
   - [0x286D76] # 2 bytes
   - [0x286D78, blast, 286D78.blast1, 1, 64, 32]
   - [0x287AAC] # 4 bytes
-  - [0x287AB0, blast, 287AB0.blast1, 1, 16, 32]
-  - [0x287D08, blast, 287D08.blast1, 1, 64, 32]
-  - [0x2884C8, blast, 2884C8.blast1, 1, 64, 32]
+  - [0x287AB0, blast, 287AB0.blast1, 1, 32, 16]
+  - [0x287D08, blast, 287D08.blast1, 1, 32, 64]
+  - [0x2884C8, blast, 2884C8.blast1, 1, 32, 64]
   - [0x288D82] # 6 bytes
   - [0x288D88, blast, 288D88.blast1, 1, 64, 32]
   - [0x28980E] # 2 bytes
   - [0x289810, blast, 289810.blast1, 1, 32, 32]
   - [0x289D2E] # 2 bytes
-  - [0x289D30, blast, 289D30.blast1, 1, 32, 32]
+  - [0x289D30, blast, 289D30.blast1, 1, 64, 16]
   - [0x28A14C] # 4 bytes
-  - [0x28A150, blast, 28A150.blast1, 1, 32, 32]
+  - [0x28A150, blast, 28A150.blast1, 1, 64, 16]
   - [0x28A5CE] # 2 bytes
   - [0x28A5D0, blast, 28A5D0.blast1, 1, 64, 32]
   - [0x28ACCE] # 2 bytes
-  - [0x28ACD0, blast, 28ACD0.blast1, 1, 32, 32]
+  - [0x28ACD0, blast, 28ACD0.blast1, 1, 64, 16]
   - [0x28B096] # 2 bytes
-  - [0x28B098, blast, 28B098.blast1, 1, 32, 32]
+  - [0x28B098, blast, 28B098.blast1, 1, 64, 16]
   - [0x28B554] # 4 bytes
   - [0x28B558, blast, 28B558.blast1, 1, 32, 32]
-  - [0x28BAF8, blast, 28BAF8.blast1, 1, 16, 32]
+  - [0x28BAF8, blast, 28BAF8.blast1, 1, 32, 16]
   - [0x28BDC4] # 4 bytes
   - [0x28BDC8, blast, 28BDC8.blast1, 1, 16, 32]
   - [0x28C014] # 4 bytes
@@ -4034,13 +4609,13 @@ segments:
   - [0x28C8E8, blast, 28C8E8.blast1, 1, 32, 32]
   - [0x28CCE0, blast, 28CCE0.blast1, 1, 32, 32]
   - [0x28D0F4] # 4 bytes
-  - [0x28D0F8, blast, 28D0F8.blast1, 1, 64, 32]
+  - [0x28D0F8, blast, 28D0F8.blast1, 1, 32, 64]
   - [0x28D714] # 4 bytes
-  - [0x28D718, blast, 28D718.blast1, 1, 32, 32]
+  - [0x28D718, blast, 28D718.blast1, 1, 64, 16]
   - [0x28DBDC] # 4 bytes
-  - [0x28DBE0, blast, 28DBE0.blast1, 1, 16, 16]
+  - [0x28DBE0, blast, 28DBE0.blast1, 1, 32, 8]
   - [0x28DD4C] # 4 bytes
-  - [0x28DD50, blast, 28DD50.blast1, 1, 32, 32]
+  - [0x28DD50, blast, 28DD50.blast1, 1, 64, 16]
   - [0x28E1F2] # 6 bytes
   - [0x28E1F8, blast, 28E1F8.blast5, 5, 32, 32]
   - [0x28E54E] # 2 bytes
@@ -4054,7 +4629,7 @@ segments:
   - [0x290134] # 4 bytes
   - [0x290138, blast, 290138.blast1, 1, 64, 32]
   - [0x290BFC] # 4 bytes
-  - [0x290C00, blast, 290C00.blast1, 1, 64, 32]
+  - [0x290C00, blast, 290C00.blast1, 1, 32, 64]
   - [0x290D92] # 6 bytes
   - [0x290D98, blast, 290D98.blast1, 1, 64, 32]
   - [0x291254] # 4 bytes
@@ -4062,12 +4637,20 @@ segments:
   - [0x29186C] # 4 bytes
   - [0x291870, blast, 291870.blast1, 1, 64, 32]
   - [0x29233E] # 2 bytes
-  - [0x292340, blast, 292340.blast1, 1, 64, 32]
+  - [0x292340, blast, 292340.blast1, 1, 128, 16]
   - [0x292A58, blast, 292A58.blast2, 2, 32, 32]
   - [0x293038, blast, 293038.blast2, 2, 32, 32]
   - [0x293630, blast, 293630.blast2, 2, 32, 32]
   - [0x293A6C] # 4 bytes
-  - [0x293A70, blast, 293A70.blast1, 1, 32, 42]
+  - name:  293A70.blast1
+    type:  blast
+    start: 0x293A70
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x293C4A] # 6 bytes
   - [0x293C50, blast, 293C50.blast1, 1, 64, 32]
   - [0x29438C] # 4 bytes
@@ -4075,13 +4658,13 @@ segments:
   - [0x294A76] # 2 bytes
   - [0x294A78, blast, 294A78.blast1, 1, 64, 32]
   - [0x29509A] # 6 bytes
-  - [0x2950A0, blast, 2950A0.blast1, 1, 64, 32]
+  - [0x2950A0, blast, 2950A0.blast1, 1, 32, 64]
   - [0x29569C] # 4 bytes
   - [0x2956A0, blast, 2956A0.blast1, 1, 64, 32]
   - [0x295D3E] # 2 bytes
   - [0x295D40, blast, 295D40.blast1, 1, 64, 32]
   - [0x2966A2] # 6 bytes
-  - [0x2966A8, blast, 2966A8.blast1, 1, 64, 32]
+  - [0x2966A8, blast, 2966A8.blast1, 1, 128, 16]
   - [0x296BEE] # 2 bytes
   - [0x296BF0, blast, 296BF0.blast1, 1, 32, 32]
   - [0x296D60, blast, 296D60.blast1, 1, 16, 16]
@@ -4099,74 +4682,74 @@ segments:
   - [0x29944C] # 4 bytes
   - [0x299450, blast, 299450.blast1, 1, 64, 32]
   - [0x29971A] # 6 bytes
-  - [0x299720, blast, 299720.blast1, 1, 32, 32]
+  - [0x299720, blast, 299720.blast1, 1, 16, 64]
   - [0x299BBA] # 6 bytes
-  - [0x299BC0, blast, 299BC0.blast1, 1, 64, 32]
+  - [0x299BC0, blast, 299BC0.blast1, 1, 32, 64]
   - [0x29A2AA] # 6 bytes
-  - [0x29A2B0, blast, 29A2B0.blast1, 1, 32, 32]
+  - [0x29A2B0, blast, 29A2B0.blast1, 1, 64, 16]
   - [0x29A4BC] # 4 bytes
   - [0x29A4C0, blast, 29A4C0.blast1, 1, 32, 32]
-  - [0x29A9F0, blast, 29A9F0.blast1, 1, 16, 16]
-  - [0x29AB58, blast, 29AB58.blast1, 1, 16, 32]
+  - [0x29A9F0, blast, 29A9F0.blast1, 1, 32, 8]
+  - [0x29AB58, blast, 29AB58.blast1, 1, 32, 16]
   - [0x29ADA6] # 2 bytes
   - [0x29ADA8, blast, 29ADA8.blast1, 1, 64, 32]
   - [0x29B672] # 6 bytes
-  - [0x29B678, blast, 29B678.blast1, 1, 32, 32]
-  - [0x29BC68, blast, 29BC68.blast1, 1, 64, 32]
+  - [0x29B678, blast, 29B678.blast1, 1, 16, 64]
+  - [0x29BC68, blast, 29BC68.blast1, 1, 32, 64]
   - [0x29C42A] # 6 bytes
-  - [0x29C430, blast, 29C430.blast1, 1, 64, 32]
+  - [0x29C430, blast, 29C430.blast1, 1, 32, 64]
   - [0x29CBB6] # 2 bytes
-  - [0x29CBB8, blast, 29CBB8.blast1, 1, 64, 32]
+  - [0x29CBB8, blast, 29CBB8.blast1, 1, 32, 64]
   - [0x29D6C8, blast, 29D6C8.blast1, 1, 32, 40]
   - [0x29DDBA] # 6 bytes
-  - [0x29DDC0, blast, 29DDC0.blast1, 1, 64, 32]
-  - [0x29E768, blast, 29E768.blast1, 1, 64, 32]
-  - [0x29EF78, blast, 29EF78.blast1, 1, 64, 32]
+  - [0x29DDC0, blast, 29DDC0.blast1, 1, 32, 64]
+  - [0x29E768, blast, 29E768.blast1, 1, 32, 64]
+  - [0x29EF78, blast, 29EF78.blast1, 1, 32, 64]
   - [0x29F93E] # 2 bytes
-  - [0x29F940, blast, 29F940.blast1, 1, 64, 32]
-  - [0x2A03A8, blast, 2A03A8.blast1, 1, 64, 32]
+  - [0x29F940, blast, 29F940.blast1, 1, 32, 64]
+  - [0x2A03A8, blast, 2A03A8.blast1, 1, 32, 64]
   - [0x2A0ABC] # 4 bytes
-  - [0x2A0AC0, blast, 2A0AC0.blast1, 1, 64, 32]
+  - [0x2A0AC0, blast, 2A0AC0.blast1, 1, 32, 64]
   - [0x2A11B0, blast, 2A11B0.blast1, 1, 64, 32]
-  - [0x2A1AD8, blast, 2A1AD8.blast1, 1, 32, 32]
+  - [0x2A1AD8, blast, 2A1AD8.blast1, 1, 64, 16]
   - [0x2A1F4E] # 2 bytes
   - [0x2A1F50, blast, 2A1F50.blast1, 1, 64, 32]
   - [0x2A27C4] # 4 bytes
   - [0x2A27C8, blast, 2A27C8.blast1, 1, 64, 32]
   - [0x2A309C] # 4 bytes
-  - [0x2A30A0, blast, 2A30A0.blast1, 1, 64, 32]
+  - [0x2A30A0, blast, 2A30A0.blast1, 1, 32, 64]
   - [0x2A3D00, blast, 2A3D00.blast1, 1, 32, 32]
   - [0x2A3F64] # 4 bytes
   - [0x2A3F68, blast, 2A3F68.blast1, 1, 32, 32]
   - [0x2A41D2] # 6 bytes
-  - [0x2A41D8, blast, 2A41D8.blast1, 1, 64, 32]
+  - [0x2A41D8, blast, 2A41D8.blast1, 1, 32, 64]
   - [0x2A4D3E] # 2 bytes
   - [0x2A4D40, blast, 2A4D40.blast1, 1, 32, 32]
   - [0x2A5076] # 2 bytes
   - [0x2A5078, blast, 2A5078.blast1, 1, 64, 32]
   - [0x2A570A] # 6 bytes
-  - [0x2A5710, blast, 2A5710.blast1, 1, 64, 32]
+  - [0x2A5710, blast, 2A5710.blast1, 1, 32, 64]
   - [0x2A5EA0, blast, 2A5EA0.blast1, 1, 64, 32]
   - [0x2A65CE] # 2 bytes
-  - [0x2A65D0, blast, 2A65D0.blast1, 1, 64, 32]
+  - [0x2A65D0, blast, 2A65D0.blast1, 1, 32, 64]
   - [0x2A715E] # 2 bytes
-  - [0x2A7160, blast, 2A7160.blast1, 1, 16, 32]
+  - [0x2A7160, blast, 2A7160.blast1, 1, 32, 16]
   - [0x2A746C] # 4 bytes
-  - [0x2A7470, blast, 2A7470.blast1, 1, 64, 32]
+  - [0x2A7470, blast, 2A7470.blast1, 1, 128, 16]
   - [0x2A78AA] # 6 bytes
-  - [0x2A78B0, blast, 2A78B0.blast1, 1, 16, 32]
+  - [0x2A78B0, blast, 2A78B0.blast1, 1, 32, 16]
   - [0x2A7AD4] # 4 bytes
   - [0x2A7AD8, blast, 2A7AD8.blast1, 1, 16, 32]
   - [0x2A7D46] # 2 bytes
-  - [0x2A7D48, blast, 2A7D48.blast1, 1, 32, 32]
-  - [0x2A8110, blast, 2A8110.blast1, 1, 64, 32]
+  - [0x2A7D48, blast, 2A7D48.blast1, 1, 64, 16]
+  - [0x2A8110, blast, 2A8110.blast1, 1, 128, 16]
   - [0x2A85FE] # 2 bytes
   - [0x2A8600, blast, 2A8600.blast1, 1, 16, 16]
   - [0x2A8638, blast, 2A8638.blast2, 2, 32, 32]
   - [0x2A89DC] # 4 bytes
   - [0x2A89E0, blast, 2A89E0.blast1, 1, 32, 32]
   - [0x2A8F84] # 4 bytes
-  - [0x2A8F88, blast, 2A8F88.blast1, 1, 64, 32]
+  - [0x2A8F88, blast, 2A8F88.blast1, 1, 32, 64]
   - [0x2A993A] # 6 bytes
   - [0x2A9940, blast, 2A9940.blast1, 1, 32, 32]
   - [0x2A9D46] # 2 bytes
@@ -4263,17 +4846,17 @@ segments:
   - [0x2B4D74] # 4 bytes
   - [0x2B4D78, blast, 2B4D78.blast1, 1, 64, 32]
   - [0x2B53E4] # 4 bytes
-  - [0x2B53E8, blast, 2B53E8.blast1, 1, 64, 32]
+  - [0x2B53E8, blast, 2B53E8.blast1, 1, 128, 16]
   - [0x2B5996] # 2 bytes
-  - [0x2B5998, blast, 2B5998.blast1, 1, 64, 32]
+  - [0x2B5998, blast, 2B5998.blast1, 1, 128, 16]
   - [0x2B5EFA] # 6 bytes
   - [0x2B5F00, blast, 2B5F00.blast1, 1, 16, 32]
   - [0x2B616E] # 2 bytes
-  - [0x2B6170, blast, 2B6170.blast1, 1, 64, 32]
+  - [0x2B6170, blast, 2B6170.blast1, 1, 32, 64]
   - [0x2B6D9A] # 6 bytes
-  - [0x2B6DA0, blast, 2B6DA0.blast1, 1, 64, 32]
+  - [0x2B6DA0, blast, 2B6DA0.blast1, 1, 32, 64]
   - [0x2B7812] # 6 bytes
-  - [0x2B7818, blast, 2B7818.blast1, 1, 16, 32]
+  - [0x2B7818, blast, 2B7818.blast1, 1, 32, 16]
   - [0x2B7B80, blast, 2B7B80.blast1, 1, 32, 32]
   - [0x2B7F70, blast, 2B7F70.blast5, 5, 32, 32]
   - [0x2B80BA] # 6 bytes
@@ -4333,7 +4916,7 @@ segments:
   - [0x2BFA88, blast, 2BFA88.blast5, 5, 32, 32]
   - [0x2BFB64] # 4 bytes
   - [0x2BFB68, blast, 2BFB68.blast1, 1, 16, 16]
-  - [0x2BFCE8, blast, 2BFCE8.blast1, 1, 16, 32]
+  - [0x2BFCE8, blast, 2BFCE8.blast1, 1, 32, 16]
   - [0x2BFE6A] # 6 bytes
   - [0x2BFE70, blast, 2BFE70.blast1, 1, 16, 16]
   - [0x2BFFF6] # 2 bytes
@@ -4343,20 +4926,76 @@ segments:
   - [0x2C0192] # 6 bytes
   - [0x2C0198, blast, 2C0198.blast1, 1, 16, 32]
   - [0x2C02B6] # 2 bytes
-  - [0x2C02B8, blast, 2C02B8.blast1, 1, 32, 21]
+  - name:  2C02B8.blast1
+    type:  blast
+    start: 0x2C02B8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x2C052A] # 6 bytes
   - [0x2C0530, blast, 2C0530.blast1, 1, 16, 16]
   - [0x2C060E] # 2 bytes
   - [0x2C0610, blast, 2C0610.blast1, 1, 64, 32]
   - [0x2C0962] # 6 bytes
-  - [0x2C0968, blast, 2C0968.blast1, 1, 32, 21]
+  - name:  2C0968.blast1
+    type:  blast
+    start: 0x2C0968
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x2C0CB6] # 2 bytes
-  - [0x2C0CB8, blast, 2C0CB8.blast1, 1, 32, 21]
-  - [0x2C0F10, blast, 2C0F10.blast1, 1, 32, 21]
-  - [0x2C1158, blast, 2C1158.blast1, 1, 32, 42]
+  - name:  2C0CB8.blast1
+    type:  blast
+    start: 0x2C0CB8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
+  - name:  2C0F10.blast1
+    type:  blast
+    start: 0x2C0F10
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
+  - name:  2C1158.blast1
+    type:  blast
+    start: 0x2C1158
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x2C1526] # 2 bytes
-  - [0x2C1528, blast, 2C1528.blast1, 1, 32, 21]
-  - [0x2C16F8, blast, 2C16F8.blast1, 1, 32, 21]
+  - name:  2C1528.blast1
+    type:  blast
+    start: 0x2C1528
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
+  - name:  2C16F8.blast1
+    type:  blast
+    start: 0x2C16F8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x2C196A] # 6 bytes
   - [0x2C1970, blast, 2C1970.blast1, 1, 32, 10]
   - [0x2C1B20, blast, 2C1B20.blast1, 1, 16, 16]
@@ -4378,7 +5017,7 @@ segments:
   - [0x2C31C8, blast, 2C31C8.blast1, 1, 64, 32]
   - [0x2C3AD8, blast, 2C3AD8.blast1, 1, 64, 32]
   - [0x2C463A] # 6 bytes
-  - [0x2C4640, blast, 2C4640.blast0, 0]
+  - [0x2C4640, blast, 2C4640.blast0, 0] # 1024 bytes
   - [0x2C4A40, blast, 2C4A40.blast1, 1, 64, 32]
   - [0x2C5136] # 2 bytes
   - [0x2C5138, blast, 2C5138.blast1, 1, 32, 32]
@@ -4392,20 +5031,68 @@ segments:
   - [0x2C5FD4] # 4 bytes
   - [0x2C5FD8, blast, 2C5FD8.blast5, 5, 32, 32]
   - [0x2C606A] # 6 bytes
-  - [0x2C6070, blast, 2C6070.blast1, 1, 32, 21]
+  - name:  2C6070.blast1
+    type:  blast
+    start: 0x2C6070
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x2C626E] # 2 bytes
-  - [0x2C6270, blast, 2C6270.blast1, 1, 32, 21]
+  - name:  2C6270.blast1
+    type:  blast
+    start: 0x2C6270
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x2C641C] # 4 bytes
-  - [0x2C6420, blast, 2C6420.blast1, 1, 32, 21]
+  - name:  2C6420.blast1
+    type:  blast
+    start: 0x2C6420
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x2C6674] # 4 bytes
   - [0x2C6678, blast, 2C6678.blast1, 1, 32, 10]
   - [0x2C67B4] # 4 bytes
-  - [0x2C67B8, blast, 2C67B8.blast1, 1, 32, 21]
-  - [0x2C6B98, blast, 2C6B98.blast1, 1, 32, 21]
+  - name:  2C67B8.blast1
+    type:  blast
+    start: 0x2C67B8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
+  - name:  2C6B98.blast1
+    type:  blast
+    start: 0x2C6B98
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x2C6EDC] # 4 bytes
-  - [0x2C6EE0, blast, 2C6EE0.blast1, 1, 32, 21]
+  - name:  2C6EE0.blast1
+    type:  blast
+    start: 0x2C6EE0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 16]
+    - [0x400, 16, 8]
+    - [0x480, 8, 4]
+    - [0x4A0, 4, 2]
   - [0x2C71E4] # 4 bytes
-  - [0x2C71E8, blast, 2C71E8.blast1, 1, 64, 32]
+  - [0x2C71E8, blast, 2C71E8.blast1, 1, 32, 64]
   - [0x2C7E9E] # 2 bytes
   - [0x2C7EA0, blast, 2C7EA0.blast1, 1, 64, 32]
   - [0x2C8C52] # 6 bytes
@@ -4419,13 +5106,13 @@ segments:
   - [0x2CABF0, blast, 2CABF0.blast1, 1, 64, 32]
   - [0x2CB940, blast, 2CB940.blast1, 1, 64, 32]
   - [0x2CC6D6] # 2 bytes
-  - [0x2CC6D8, blast, 2CC6D8.blast1, 1, 64, 32]
-  - [0x2CCE18, blast, 2CCE18.blast1, 1, 64, 32]
+  - [0x2CC6D8, blast, 2CC6D8.blast1, 1, 16, 128]
+  - [0x2CCE18, blast, 2CCE18.blast1, 1, 16, 128]
   - [0x2CDA38, blast, 2CDA38.blast1, 1, 32, 32]
   - [0x2CE084] # 4 bytes
-  - [0x2CE088, blast, 2CE088.blast1, 1, 64, 32]
+  - [0x2CE088, blast, 2CE088.blast1, 1, 32, 64]
   - [0x2CE7AA] # 6 bytes
-  - [0x2CE7B0, blast, 2CE7B0.blast1, 1, 64, 32]
+  - [0x2CE7B0, blast, 2CE7B0.blast1, 1, 32, 64]
   - [0x2CEF3A] # 6 bytes
   - [0x2CEF40, blast, 2CEF40.blast1, 1, 64, 32]
   - [0x2CF8CA] # 6 bytes
@@ -4436,28 +5123,28 @@ segments:
   - [0x2D1804] # 4 bytes
   - [0x2D1808, blast, 2D1808.blast1, 1, 64, 32]
   - [0x2D1FDC] # 4 bytes
-  - [0x2D1FE0, blast, 2D1FE0.blast1, 1, 64, 32]
+  - [0x2D1FE0, blast, 2D1FE0.blast1, 1, 128, 16]
   - [0x2D2878, blast, 2D2878.blast1, 1, 64, 32]
   - [0x2D3232] # 6 bytes
   - [0x2D3238, blast, 2D3238.blast1, 1, 16, 16]
   - [0x2D33A2] # 6 bytes
-  - [0x2D33A8, blast, 2D33A8.blast1, 1, 64, 32]
+  - [0x2D33A8, blast, 2D33A8.blast1, 1, 32, 64]
   - [0x2D3E98, blast, 2D3E98.blast1, 1, 32, 2]
-  - [0x2D3F10, blast, 2D3F10.blast1, 1, 64, 32]
+  - [0x2D3F10, blast, 2D3F10.blast1, 1, 32, 64]
   - [0x2D438A] # 6 bytes
-  - [0x2D4390, blast, 2D4390.blast1, 1, 64, 32]
+  - [0x2D4390, blast, 2D4390.blast1, 1, 32, 64]
   - [0x2D4954] # 4 bytes
   - [0x2D4958, blast, 2D4958.blast1, 1, 32, 34]
   - [0x2D4DB6] # 2 bytes
   - [0x2D4DB8, blast, 2D4DB8.blast1, 1, 32, 32]
   - [0x2D5482] # 6 bytes
-  - [0x2D5488, blast, 2D5488.blast1, 1, 32, 32]
+  - [0x2D5488, blast, 2D5488.blast1, 1, 64, 16]
   - [0x2D59F6] # 2 bytes
-  - [0x2D59F8, blast, 2D59F8.blast1, 1, 32, 32]
+  - [0x2D59F8, blast, 2D59F8.blast1, 1, 64, 16]
   - [0x2D6056] # 2 bytes
-  - [0x2D6058, blast, 2D6058.blast1, 1, 32, 32]
+  - [0x2D6058, blast, 2D6058.blast1, 1, 64, 16]
   - [0x2D667C] # 4 bytes
-  - [0x2D6680, blast, 2D6680.blast1, 1, 32, 32]
+  - [0x2D6680, blast, 2D6680.blast1, 1, 64, 16]
   - [0x2D6B50, blast, 2D6B50.blast1, 1, 32, 4]
   - [0x2D6BD4] # 4 bytes
   - [0x2D6BD8, blast, 2D6BD8.blast1, 1, 32, 2]
@@ -4477,18 +5164,74 @@ segments:
   - [0x2D8D60, blast, 2D8D60.blast1, 1, 64, 32]
   - [0x2D9750, blast, 2D9750.blast1, 1, 64, 32]
   - [0x2D9ECE] # 2 bytes
-  - [0x2D9ED0, blast, 2D9ED0.blast1, 1, 32, 42]
-  - [0x2DA670, blast, 2DA670.blast1, 1, 32, 42]
+  - name:  2D9ED0.blast1
+    type:  blast
+    start: 0x2D9ED0
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - name:  2DA670.blast1
+    type:  blast
+    start: 0x2DA670
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x2DA976] # 2 bytes
-  - [0x2DA978, blast, 2DA978.blast1, 1, 32, 42]
+  - name:  2DA978.blast1
+    type:  blast
+    start: 0x2DA978
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x2DB274] # 4 bytes
-  - [0x2DB278, blast, 2DB278.blast1, 1, 32, 42]
+  - name:  2DB278.blast1
+    type:  blast
+    start: 0x2DB278
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x2DBB44] # 4 bytes
-  - [0x2DBB48, blast, 2DBB48.blast1, 1, 32, 42]
-  - [0x2DC398, blast, 2DC398.blast1, 1, 32, 42]
+  - name:  2DBB48.blast1
+    type:  blast
+    start: 0x2DBB48
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - name:  2DC398.blast1
+    type:  blast
+    start: 0x2DC398
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x2DCCB4] # 4 bytes
-  - [0x2DCCB8, blast, 2DCCB8.blast1, 1, 32, 42]
-  - [0x2DD4B8, blast, 2DD4B8.blast1, 1, 64, 32]
+  - name:  2DCCB8.blast1
+    type:  blast
+    start: 0x2DCCB8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
+  - [0x2DD4B8, blast, 2DD4B8.blast1, 1, 128, 16]
   - [0x2DE058, blast, 2DE058.blast1, 1, 32, 32]
   - [0x2DE6D8, blast, 2DE6D8.blast1, 1, 32, 32]
   - [0x2DED5E] # 2 bytes
@@ -4496,7 +5239,15 @@ segments:
   - [0x2DF4F0, blast, 2DF4F0.blast1, 1, 32, 32]
   - [0x2DFC18, blast, 2DFC18.blast1, 1, 32, 32]
   - [0x2E02A4] # 4 bytes
-  - [0x2E02A8, blast, 2E02A8.blast1, 1, 32, 42]
+  - name:  2E02A8.blast1
+    type:  blast
+    start: 0x2E02A8
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00, 8, 8]
+    - [0xA80, 4, 4]
   - [0x2E0C94] # 4 bytes
   - [0x2E0C98, blast, 2E0C98.blast1, 1, 64, 32]
   - [0x2E168A] # 6 bytes
@@ -4521,7 +5272,7 @@ segments:
   - [0x2E50B4] # 4 bytes
   - [0x2E50B8, blast, 2E50B8.blast3, 3, 64, 64]
   - [0x2E5BB6] # 2 bytes
-  - [0x2E5BB8, blast, 2E5BB8.blast1, 1, 64, 32]
+  - [0x2E5BB8, blast, 2E5BB8.blast1, 1, 128, 16]
   - [0x2E6006] # 2 bytes
   - [0x2E6008, blast, 2E6008.blast1, 1, 64, 32]
   - [0x2E6438, blast, 2E6438.blast1, 1, 32, 32]
@@ -5350,8 +6101,8 @@ segments:
   - [0x32DC70, blast, 32DC70.blast5, 5, 32, 32]
   - [0x32DCE0, blast, 32DCE0.blast5, 5, 32, 32]
   - [0x32DD3A] # 6 bytes
-  - [0x32DD40, blast, 32DD40.blast1, 1, 64, 32]
-  - [0x32E218, blast, 32E218.blast1, 1, 32, 32]
+  - [0x32DD40, blast, 32DD40.blast1, 1, 128, 16]
+  - [0x32E218, blast, 32E218.blast1, 1, 64, 16]
   - [0x32E56C] # 4 bytes
   - [0x32E570, blast, 32E570.blast1, 1, 64, 32]
   - [0x32E712] # 6 bytes
@@ -5359,13 +6110,13 @@ segments:
   - [0x32E9E6] # 2 bytes
   - [0x32E9E8, blast, 32E9E8.blast1, 1, 32, 32]
   - [0x32EEEA] # 6 bytes
-  - [0x32EEF0, blast, 32EEF0.blast1, 1, 64, 32]
+  - [0x32EEF0, blast, 32EEF0.blast1, 1, 32, 64]
   - [0x32F4F2] # 6 bytes
-  - [0x32F4F8, blast, 32F4F8.blast1, 1, 64, 32]
+  - [0x32F4F8, blast, 32F4F8.blast1, 1, 32, 64]
   - [0x32FB24] # 4 bytes
-  - [0x32FB28, blast, 32FB28.blast1, 1, 32, 32]
+  - [0x32FB28, blast, 32FB28.blast1, 1, 64, 16]
   - [0x3301BC] # 4 bytes
-  - [0x3301C0, blast, 3301C0.blast1, 1, 32, 32]
+  - [0x3301C0, blast, 3301C0.blast1, 1, 64, 16]
   - [0x33053E] # 2 bytes
   - [0x330540, blast, 330540.blast6, 6, 16, 32]
   - [0x33055C] # 4 bytes
@@ -6349,41 +7100,197 @@ segments:
   - [0x350618, blast, 350618.blast1, 1, 32, 32]
   - [0x35084A] # 6 bytes
   - [0x350850, blast, 350850.blast3, 3, 64, 64]
-  - [0x350948, blast, 350948.blast0, 0]
-  - [0x358947]
-
+  - [0x350948, blast, 350948.blast0, 0] # 32767 bytes
+  - [0x358947] # 1238793 bytes
   - [0x487050, rzip, titlelogo_usa, rgba16, 280, 64]
   - [0x489E70, rzip, titlepicture_usa, rgba16, 156, 156]
   - [0x48F5A0, rzip, nink, ia8, 256, 32]
-  - [0x48F970, rzip, 64k, ia8,  40, 24]
+  - [0x48F970, rzip, 64k, ia8, 40, 24]
   - [0x48FA70, rzip, copyrightLogo, ia8, 256, 16]
   - [0x48FE90, rzip, scientist]
-  - [0x490191]
+  - [0x490191, rzip, scientist_dl]
+  - [0x4903C0, rzip, commpoint]
+  - [0x49084A, rzip, commpoint_dl]
+  - [0x490AC0, rzip, buggy]
+  - [0x49181C, rzip, buggy_dl]
+  - [0x491E00, rzip, driver]
+  - [0x4926D8, rzip, driver_dl]
+  - [0x4929D0, rzip, sideswipe]
+  - [0x493CE8, rzip, sideswipe_dl]
+  - [0x494390, rzip, magoo]
+  - [0x4962CC, rzip, magoo_dl]
+  - [0x496AD0, rzip, bulldozer]
+  - [0x49763A, rzip, bulldozer_dl]
+  - [0x497AF0, rzip, truck]
+  - [0x498553, rzip, truck_dl]
+  - [0x4989E0, rzip, chopper]
+  - [0x4992A1, rzip, chopper_dl]
+  - [0x499690, rzip, cmo]
+  - [0x49A65F, rzip, cmo_dl]
+  - [0x49AD20, rzip, crane]
+  - [0x49B375, rzip, crane_dl]
+  - [0x49B630, rzip, train]
+  - [0x49BAE1, rzip, train_dl]
+  - [0x49BCE0, rzip, hotrod]
+  - [0x49C1A0, rzip, hotrod_dl]
+  - [0x49C480, rzip, jetpack]
+  - [0x49E06C, rzip, jetpack_dl]
+  - [0x49E8E0, rzip, bike]
+  - [0x49F314, rzip, bike_dl]
+  - [0x49F7A0, rzip, barge]
+  - [0x49FCA5, rzip, barge_dl]
+  - [0x49FF70, rzip, police]
+  - [0x4A0406, rzip, police_dl]
+  - [0x4A0720, rzip, ateam]
+  - [0x4A0CEF, rzip, ateam_dl]
+  - [0x4A1000, rzip, starski]
+  - [0x4A13D6, rzip, starski_dl]
+  - [0x4A1690, rzip, minimagoo]
+  - [0x4A37E2, rzip, minimagoo_dl]
+  - [0x4A4120, rzip, shuttle]
+  - [0x4A4F6D, rzip, shuttle_dl]
+  - [0x4A5660, rzip, lagp]
+  - [0x4ABF91, rzip, lagp_dl]
+  - [0x4ACC10, rzip, chimp]
+  - [0x4B71AB, rzip, chimp_dl]
+  - [0x4B8960, rzip, valley]
+  - [0x4BEDE5, rzip, valley_dl]
+  - [0x4BFD60, rzip, fact]
+  - [0x4C3247, rzip, fact_dl]
+  - [0x4C3AC0, rzip, dip]
+  - [0x4D3B76, rzip, dip_dl]
+  - [0x4D5F90, rzip, beetle]
+  - [0x4E1838, rzip, beetle_dl]
+  - [0x4E2F70, rzip, bonus1]
+  - [0x4E48E4, rzip, bonus1_dl]
+  - [0x4E4E80, rzip, bonus2]
+  - [0x4E7458, rzip, bonus2_dl]
+  - [0x4E7C00, rzip, bonus3]
+  - [0x4E8BF7, rzip, bonus3_dl]
+  - [0x4E8F70, rzip, level9]
+  - [0x4F441E, rzip, level9_dl]
+  - [0x4F5C10, rzip, level10]
+  - [0x4FF4C1, rzip, level10_dl]
+  - [0x500520, rzip, level11]
+  - [0x506D73, rzip, level11_dl]
+  - [0x507E80, rzip, level12]
+  - [0x51014A, rzip, level12_dl]
+  - [0x511340, rzip, level13]
+  - [0x5213B7, rzip, level13_dl]
+  - [0x523080, rzip, level14]
+  - [0x52B974, rzip, level14_dl]
+  - [0x52CD00, rzip, level15]
+  - [0x531885, rzip, level15_dl]
+  - [0x532700, rzip, level16]
+  - [0x53D32E, rzip, level16_dl]
+  - [0x53E9B0, rzip, level17]
+  - [0x54909A, rzip, level17_dl]
+  - [0x54A820, rzip, level18]
+  - [0x551DAA, rzip, level18_dl]
+  - [0x552DE0, rzip, level19]
+  - [0x554A33, rzip, level19_dl]
+  - [0x555000, rzip, level20]
+  - [0x55F205, rzip, level20_dl]
+  - [0x560E90, rzip, level21]
+  - [0x5646CB, rzip, level21_dl]
+  - [0x5652D0, rzip, level22]
+  - [0x56E0F7, rzip, level22_dl]
+  - [0x56F3F0, rzip, level23]
+  - [0x571E88, rzip, level23_dl]
+  - [0x5721E0, rzip, level24]
+  - [0x573354, rzip, level24_dl]
+  - [0x5736E0, rzip, level25]
+  - [0x5795B8, rzip, level25_dl]
+  - [0x57A2C0, rzip, level26]
+  - [0x58005F, rzip, level26_dl]
+  - [0x580B60, rzip, level27]
+  - [0x587CA0, rzip, level27_dl]
+  - [0x588CE0, rzip, level28]
+  - [0x58B53D, rzip, level28_dl]
+  - [0x58BE80, rzip, level29]
+  - [0x596201, rzip, level29_dl]
+  - [0x597B80, rzip, level30]
+  - [0x59AEC7, rzip, level30_dl]
+  - [0x59B7D0, rzip, level31]
+  - [0x5A4451, rzip, level31_dl]
+  - [0x5A5840, rzip, level32]
+  - [0x5AF6C1, rzip, level32_dl]
+  - [0x5B0B10, rzip, level33]
+  - [0x5B4E60, rzip, level33_dl]
+  - [0x5B5A30, rzip, level34]
+  - [0x5B850E, rzip, level34_dl]
+  - [0x5B8BB0, rzip, level35]
+  - [0x5C366C, rzip, level35_dl]
+  - [0x5C4C80, rzip, level36]
+  - [0x5C9D2D, rzip, level36_dl]
+  - [0x5CA9C0, rzip, level37]
+  - [0x5CC86E, rzip, level37_dl]
+  - [0x5CCF50, rzip, level38]
+  - [0x5D07B8, rzip, level38_dl]
+  - [0x5D1060, rzip, level39]
+  - [0x5DB0FC, rzip, level39_dl]
+  - [0x5DC830, rzip, level40]
+  - [0x5E5B29, rzip, level40_dl]
+  - [0x5E6EE0, rzip, level41]
+  - [0x5EB4C8, rzip, level41_dl]
+  - [0x5EC800, rzip, level42]
+  - [0x5F2C67, rzip, level42_dl]
+  - [0x5F3A80, rzip, level43]
+  - [0x5FFF79, rzip, level43_dl]
+  - [0x6014B0, rzip, level44]
+  - [0x6095C1, rzip, level44_dl]
+  - [0x60A710, rzip, level45]
+  - [0x6126C5, rzip, level45_dl]
+  - [0x613AA0, rzip, level46]
+  - [0x61C88C, rzip, level46_dl]
+  - [0x61DD70, rzip, level47]
+  - [0x6211ED, rzip, level47_dl]
+  - [0x621AF0, rzip, level48]
+  - [0x625CAC, rzip, level48_dl]
+  - [0x6269E0, rzip, level49]
+  - [0x62F871, rzip, level49_dl]
+  - [0x630C30, rzip, level50]
+  - [0x634D35, rzip, level50_dl]
+  - [0x635700, rzip, level51]
+  - [0x63BD00, rzip, level51_dl]
+  - [0x63CA10, rzip, level52]
+  - [0x6416D6, rzip, level52_dl]
+  - [0x641F30, rzip, level53]
+  - [0x6440CC, rzip, level53_dl]
+  - [0x644810, rzip, level54]
+  - [0x645D55, rzip, level54_dl]
+  - [0x646080, rzip, level55]
+  - [0x6470B7, rzip, level55_dl]
+  - [0x647550, rzip, level56]
+  - [0x65362E, rzip, level56_dl]
+  - [0x654FC0, rzip, level57]
+  - [0x65F329, rzip, level57_dl]
+  - [0x660950, rzip, level58]
+  - [0x66550A, rzip, level58_dl]
+  - [0x665F80, rzip, level59]
+  - [0x66BB49, rzip, level59_dl]
   - name:  worldtextures
     type:  rzip
     start: 0x66C900
     subsegments:
-      #offset, type, depth,width,height
-      # many RGBA16 textures here, some might be 17x17, others smaller
-      - [0x00000, rgba16, 17, 17]
-      - [0x3C4B0, rgba16, 16, 16]
-      - [0x3C6B0, rgba16, 16, 16]
-      - [0x3C8B0, rgba16, 16, 16]
-      - [0x3CAB0, rgba32, 32, 32]
-      - [0x3DAB0, rgba32, 32, 32]
-      - [0x3EAB0, rgba32, 32, 32]
-      - [0x3FAB0, ia16, 32, 64]
-      - [0x40AB0, ia16, 32, 64]
-      - [0x41AB0, rgba32, 32, 32]
+    - [0x00000, rgba16, 17, 17]
+    - [0x3C4B0, rgba16, 16, 16]
+    - [0x3C6B0, rgba16, 16, 16]
+    - [0x3C8B0, rgba16, 16, 16]
+    - [0x3CAB0, rgba32, 32, 32]
+    - [0x3DAB0, rgba32, 32, 32]
+    - [0x3EAB0, rgba32, 32, 32]
+    - [0x3FAB0, ia16, 32, 64]
+    - [0x40AB0, ia16, 32, 64]
+    - [0x41AB0, rgba32, 32, 32]
   - name:  ambertextures
     type:  rzip
     start: 0x68B550
     subsegments:
-      - [0x00000, rgba16, 160, 120]
-      - [0x09600, rgba16, 160, 120]
-      - [0x12C00, rgba16, 160, 120]
-      - [0x1C200, rgba16, 160, 120]
-
+    - [0x00000, rgba16, 160, 120]
+    - [0x09600, rgba16, 160, 120]
+    - [0x12C00, rgba16, 160, 120]
+    - [0x1C200, rgba16, 160, 120]
   - name:  traffictextures
     type:  rzip
     start: 0x6A32B0
@@ -6398,10 +7305,592 @@ segments:
     start: 0x6A8DA0
     subsegments:
     - [0x00000, rgba16, 80, 80]
-    # might be some sort of IA here at 0x3200
-    - [0x034A0, rgba16, 24, 20] # not sure on starting address
-  - [0x6A9F10]
-
+    - [0x034A0, rgba16, 24, 20]
+  - [0x6A9F10, rzip, attract]
+  - [0x6AD3F0, bin, 6AD3F0.bin]
+  - [0x6E8980, rzip, usa_star]
+  - [0x6EA1FE, rzip, usa_star_dl]
+  - [0x6EA850, rzip, ninlogo]
+  - [0x6EAA25, rzip, ninlogo_dl]
+  - [0x6EAB90, rzip, reflectlogo]
+  - [0x6EBDD4, rzip, reflectlogo_dl]
+  - [0x6EC4B4, bin, 6EC4B4.bin]
+  - [0x6ECCC0, rzip, lamisc1]
+  - [0x6ED068, rzip, lamisc1_dl]
+  - [0x6ED1B8, rzip, lapetrol1]
+  - [0x6ED622, rzip, lapetrol1_dl]
+  - [0x6ED7A0, rzip, laburger1]
+  - [0x6EDB42, rzip, laburger1_dl]
+  - [0x6EDCAE, rzip, laorph6]
+  - [0x6EE3CC, rzip, laorph6_dl]
+  - [0x6EE647, rzip, lashop2]
+  - [0x6EEB0C, rzip, lashop2_dl]
+  - [0x6EECCB, rzip, lamisc2]
+  - [0x6EEEF1, rzip, lamisc2_dl]
+  - [0x6EEFE8, rzip, lagrage4]
+  - [0x6EF559, rzip, lagrage4_dl]
+  - [0x6EF7D5, rzip, lamisc4]
+  - [0x6EFAA4, rzip, lamisc4_dl]
+  - [0x6EFBF7, rzip, laflat5]
+  - [0x6F0594, rzip, laflat5_dl]
+  - [0x6F08A8, rzip, lawine5]
+  - [0x6F1116, rzip, lawine5_dl]
+  - [0x6F1407, rzip, lamisc5]
+  - [0x6F1583, rzip, lamisc5_dl]
+  - [0x6F1662, rzip, laflat3]
+  - [0x6F2161, rzip, laflat3_dl]
+  - [0x6F2570, rzip, lamisc3]
+  - [0x6F269E, rzip, lamisc3_dl]
+  - [0x6F2750, rzip, lashop8]
+  - [0x6F370C, rzip, lashop8_dl]
+  - [0x6F3BB5, rzip, laflat8]
+  - [0x6F424A, rzip, laflat8_dl]
+  - [0x6F4504, rzip, labigo7]
+  - [0x6F55BB, rzip, labigo7_dl]
+  - [0x6F5BCD, rzip, lanicl7]
+  - [0x6F5D45, rzip, lanicl7_dl]
+  - [0x6F5E2F, rzip, laflat7]
+  - [0x6F6749, rzip, laflat7_dl]
+  - [0x6F6A1D, rzip, laflat9]
+  - [0x6F6CE2, rzip, laflat9_dl]
+  - [0x6F6E23, rzip, laflt10]
+  - [0x6F76F4, rzip, laflt10_dl]
+  - [0x6F7A92, rzip, laflt11]
+  - [0x6F8353, rzip, laflt11_dl]
+  - [0x6F86EB, rzip, laorp12]
+  - [0x6F8FB0, rzip, laorp12_dl]
+  - [0x6F92B8, rzip, laflt13]
+  - [0x6F9CF2, rzip, laflt13_dl]
+  - [0x6FA122, rzip, laflt14]
+  - [0x6FAC6A, rzip, laflt14_dl]
+  - [0x6FB09B, rzip, lamsc14]
+  - [0x6FB1E0, rzip, lamsc14_dl]
+  - [0x6FB293, rzip, laflt15]
+  - [0x6FBCD1, rzip, laflt15_dl]
+  - [0x6FC0C8, rzip, lamsc16]
+  - [0x6FC3AB, rzip, lamsc16_dl]
+  - [0x6FC4DF, rzip, ladrm16]
+  - [0x6FC6FC, rzip, ladrm16_dl]
+  - [0x6FC7FB, rzip, laflt17]
+  - [0x6FC9D4, rzip, laflt17_dl]
+  - [0x6FCAE3, rzip, chrod17]
+  - [0x6FCF26, rzip, chrod17_dl]
+  - [0x6FD0FD, rzip, chlx7a]
+  - [0x6FD214, rzip, chlx7a_dl]
+  - [0x6FD2B5, rzip, chsta5]
+  - [0x6FD9C0, rzip, chsta5_dl]
+  - [0x6FDC41, rzip, chbar8]
+  - [0x6FEDC0, rzip, chbar8_dl]
+  - [0x6FF222, rzip, chmisc8]
+  - [0x6FF41E, rzip, chmisc8_dl]
+  - [0x6FF549, rzip, chwag8]
+  - [0x6FF80A, rzip, chwag8_dl]
+  - [0x6FF95A, rzip, chshd6]
+  - [0x6FFE4A, rzip, chshd6_dl]
+  - [0x6FFFA3, rzip, chbog9]
+  - [0x7001E0, rzip, chbog9_dl]
+  - [0x7002FF, rzip, chbat6]
+  - [0x7004D5, rzip, chbat6_dl]
+  - [0x7005C4, rzip, chmisc6]
+  - [0x7008D8, rzip, chmisc6_dl]
+  - [0x700A04, rzip, chwin5]
+  - [0x700C63, rzip, chwin5_dl]
+  - [0x700D92, rzip, chbur9]
+  - [0x70127C, rzip, chbur9_dl]
+  - [0x70145C, rzip, chmisc9]
+  - [0x70172D, rzip, chmisc9_dl]
+  - [0x7018B2, rzip, chhse3]
+  - [0x702314, rzip, chhse3_dl]
+  - [0x702662, rzip, chmisc3]
+  - [0x702878, rzip, chmisc3_dl]
+  - [0x702982, rzip, chlfa12]
+  - [0x7036F6, rzip, chlfa12_dl]
+  - [0x703A8E, rzip, chmsc12]
+  - [0x703EA0, rzip, chmsc12_dl]
+  - [0x70404B, rzip, chtra12]
+  - [0x704863, rzip, chtra12_dl]
+  - [0x704B87, rzip, chgin14]
+  - [0x70541A, rzip, chgin14_dl]
+  - [0x7056ED, rzip, chhar15]
+  - [0x706226, rzip, chhar15_dl]
+  - [0x7064D4, rzip, chhor10]
+  - [0x706D61, rzip, chhor10_dl]
+  - [0x70705C, rzip, lacar1]
+  - [0x7072CD, rzip, lacar1_dl]
+  - [0x70740E, rzip, docno1]
+  - [0x70766B, rzip, docno1_dl]
+  - [0x7077C9, rzip, docng1]
+  - [0x707A1A, rzip, docng1_dl]
+  - [0x707B8F, rzip, docnw1]
+  - [0x707E1F, rzip, docnw1_dl]
+  - [0x707FA7, rzip, moiron1]
+  - [0x708201, rzip, moiron1_dl]
+  - [0x70832E, rzip, truck4]
+  - [0x70919A, rzip, truck4_dl]
+  - [0x709612, rzip, trucker3US]
+  - [0x70A39E, rzip, trucker3US_dl]
+  - [0x70A78E, rzip, chgun16]
+  - [0x70B1BA, rzip, chgun16_dl]
+  - [0x70B4DE, rzip, chmsc16]
+  - [0x70B7AC, rzip, chmsc16_dl]
+  - [0x70B8BC, rzip, chhut16]
+  - [0x70BB7B, rzip, chhut16_dl]
+  - [0x70BCA7, rzip, chhse17]
+  - [0x70C4AD, rzip, chhse17_dl]
+  - [0x70C6FD, rzip, chgar17]
+  - [0x70C98F, rzip, chgar17_dl]
+  - [0x70CABD, rzip, chgas17]
+  - [0x70CFC1, rzip, chgas17_dl]
+  - [0x70D144, rzip, chhut17]
+  - [0x70D455, rzip, chhut17_dl]
+  - [0x70D582, rzip, chmsc17]
+  - [0x70D68B, rzip, chmsc17_dl]
+  - [0x70D72D, rzip, chsha18]
+  - [0x70DCD0, rzip, chsha18_dl]
+  - [0x70DE68, rzip, chmsc18]
+  - [0x70E06A, rzip, chmsc18_dl]
+  - [0x70E17E, rzip, chmsc19]
+  - [0x70E4A3, rzip, chmsc19_dl]
+  - [0x70E5E9, rzip, chhse18]
+  - [0x70F0AB, rzip, chhse18_dl]
+  - [0x70F3CF, rzip, chgar18]
+  - [0x70F636, rzip, chgar18_dl]
+  - [0x70F79D, rzip, chhse20]
+  - [0x710413, rzip, chhse20_dl]
+  - [0x710780, rzip, chmsc20]
+  - [0x710BDF, rzip, chmsc20_dl]
+  - [0x710D6F, rzip, chhse21]
+  - [0x711829, rzip, chhse21_dl]
+  - [0x711B30, rzip, chmsc21]
+  - [0x711CDD, rzip, chmsc21_dl]
+  - [0x711DE4, rzip, chhot22]
+  - [0x7126FF, rzip, chhot22_dl]
+  - [0x712905, rzip, chmsc22]
+  - [0x712AAA, rzip, chmsc22_dl]
+  - [0x712BAD, rzip, chhse23]
+  - [0x713695, rzip, chhse23_dl]
+  - [0x71397B, rzip, chmsc23]
+  - [0x713B24, rzip, chmsc23_dl]
+  - [0x713C2C, rzip, chhse24]
+  - [0x7146F0, rzip, chhse24_dl]
+  - [0x7149CF, rzip, chbar25]
+  - [0x715777, rzip, chbar25_dl]
+  - [0x715AF2, rzip, chmsc25]
+  - [0x715EC2, rzip, chmsc25_dl]
+  - [0x716012, rzip, chmsc26]
+  - [0x7161DD, rzip, chmsc26_dl]
+  - [0x7162E4, rzip, chhut26]
+  - [0x7169D0, rzip, chhut26_dl]
+  - [0x716C27, rzip, chmsc27]
+  - [0x716EFD, rzip, chmsc27_dl]
+  - [0x717035, rzip, chhut27]
+  - [0x71758E, rzip, chhut27_dl]
+  - [0x717778, rzip, chmsc28]
+  - [0x7179FE, rzip, chmsc28_dl]
+  - [0x717B16, rzip, chhse29]
+  - [0x7182CF, rzip, chhse29_dl]
+  - [0x718539, rzip, chhut30]
+  - [0x7189C4, rzip, chhut30_dl]
+  - [0x718B96, rzip, chhse30]
+  - [0x7196B5, rzip, chhse30_dl]
+  - [0x7199BE, rzip, chmsc30]
+  - [0x719C4E, rzip, chmsc30_dl]
+  - [0x719D66, rzip, chhse31]
+  - [0x71A711, rzip, chhse31_dl]
+  - [0x71A9EA, rzip, chmsc31]
+  - [0x71ADAF, rzip, chmsc31_dl]
+  - [0x71AF19, rzip, chhse32]
+  - [0x71BB89, rzip, chhse32_dl]
+  - [0x71BEB8, rzip, chmsc32]
+  - [0x71C0C2, rzip, chmsc32_dl]
+  - [0x71C1D1, rzip, chhse33]
+  - [0x71CCB5, rzip, chhse33_dl]
+  - [0x71CFEF, rzip, chtreel]
+  - [0x71D1BC, rzip, chtreel_dl]
+  - [0x71D29A, rzip, chtrees]
+  - [0x71D46A, rzip, chtrees_dl]
+  - [0x71D545, rzip, labigo2]
+  - [0x71E5FC, rzip, labigo2_dl]
+  - [0x71EC0E, rzip, movan1]
+  - [0x71F689, rzip, movan1_dl]
+  - [0x71FA92, rzip, mocono1]
+  - [0x71FC2F, rzip, mocono1_dl]
+  - [0x71FD4D, rzip, moconr1]
+  - [0x71FED7, rzip, moconr1_dl]
+  - [0x71FFE7, rzip, moconw1]
+  - [0x72016C, rzip, moconw1_dl]
+  - [0x72027C, rzip, mocong1]
+  - [0x72041A, rzip, mocong1_dl]
+  - [0x720538, rzip, mocrat1]
+  - [0x7206A3, rzip, mocrat1_dl]
+  - [0x7207DE, rzip, mogas1]
+  - [0x720B31, rzip, mogas1_dl]
+  - [0x720D26, rzip, mogas2]
+  - [0x721432, rzip, mogas2_dl]
+  - [0x721734, rzip, moconr2]
+  - [0x7218D0, rzip, moconr2_dl]
+  - [0x7219F2, rzip, moconb2]
+  - [0x721B76, rzip, moconb2_dl]
+  - [0x721C86, rzip, moconw2]
+  - [0x721E13, rzip, moconw2_dl]
+  - [0x721F22, rzip, mocono2]
+  - [0x7220C0, rzip, mocono2_dl]
+  - [0x7221DD, rzip, mocong2]
+  - [0x72237C, rzip, mocong2_dl]
+  - [0x722499, rzip, mowhwr1]
+  - [0x72288A, rzip, mowhwr1_dl]
+  - [0x722A82, rzip, mowhbo1]
+  - [0x722E59, rzip, mowhbo1_dl]
+  - [0x723035, rzip, mowhrr1]
+  - [0x723417, rzip, mowhrr1_dl]
+  - [0x7235E7, rzip, mowhwo1]
+  - [0x7239DC, rzip, mowhwo1_dl]
+  - [0x723BDC, rzip, mowhwb2]
+  - [0x723FD7, rzip, mowhwb2_dl]
+  - [0x7241D4, rzip, mosid1l]
+  - [0x7245A3, rzip, mosid1l_dl]
+  - [0x724769, rzip, mosid1r]
+  - [0x724B8C, rzip, mosid1r_dl]
+  - [0x724D31, rzip, mostep1]
+  - [0x72590B, rzip, mostep1_dl]
+  - [0x725D4C, rzip, mosky1]
+  - [0x7266A6, rzip, mosky1_dl]
+  - [0x7269E1, rzip, mosky2]
+  - [0x727424, rzip, mosky2_dl]
+  - [0x7277B6, rzip, mosky3]
+  - [0x728855, rzip, mosky3_dl]
+  - [0x728D44, rzip, mosky4]
+  - [0x729871, rzip, mosky4_dl]
+  - [0x729C8A, rzip, mosky5]
+  - [0x72A85D, rzip, mosky5_dl]
+  - [0x72AC7A, rzip, mosky6]
+  - [0x72B83E, rzip, mosky6_dl]
+  - [0x72BC25, rzip, mosky7]
+  - [0x72CA1A, rzip, mosky7_dl]
+  - [0x72CED1, rzip, mosky8]
+  - [0x72D928, rzip, mosky8_dl]
+  - [0x72DCFE, rzip, mosky9]
+  - [0x72EA9D, rzip, mosky9_dl]
+  - [0x72EF4F, rzip, mosky10]
+  - [0x72F9D3, rzip, mosky10_dl]
+  - [0x72FDE4, rzip, mosky11]
+  - [0x73084A, rzip, mosky11_dl]
+  - [0x730C57, rzip, mosky12]
+  - [0x731416, rzip, mosky12_dl]
+  - [0x731815, rzip, chfact1]
+  - [0x73240C, rzip, chfact1_dl]
+  - [0x7327A6, rzip, chwhse1]
+  - [0x732B04, rzip, chwhse1_dl]
+  - [0x732C58, rzip, chwhse2]
+  - [0x732FF4, rzip, chwhse2_dl]
+  - [0x733142, rzip, chwhse3]
+  - [0x7334EB, rzip, chwhse3_dl]
+  - [0x73362E, rzip, chconc1]
+  - [0x7343C4, rzip, chconc1_dl]
+  - [0x734858, rzip, chsilo1]
+  - [0x7350F6, rzip, chsilo1_dl]
+  - [0x735326, rzip, laorphx]
+  - [0x7359A4, rzip, laorphx_dl]
+  - [0x735C1F, rzip, lapcab1]
+  - [0x73601F, rzip, lapcab1_dl]
+  - [0x7361BA, rzip, laslid1]
+  - [0x736F27, rzip, laslid1_dl]
+  - [0x737366, rzip, laconc1]
+  - [0x7385D3, rzip, laconc1_dl]
+  - [0x738987, rzip, labuil1]
+  - [0x738E49, rzip, labuil1_dl]
+  - [0x739009, rzip, lastor1]
+  - [0x739445, rzip, lastor1_dl]
+  - [0x739598, rzip, lamscf]
+  - [0x739932, rzip, lamscf_dl]
+  - [0x739A7B, rzip, chpost1]
+  - [0x739BED, rzip, chpost1_dl]
+  - [0x739CBB, rzip, chdes3]
+  - [0x73AAF7, rzip, chdes3_dl]
+  - [0x73B033, rzip, modam2]
+  - [0x73B189, rzip, modam2_dl]
+  - [0x73B282, rzip, dsout1]
+  - [0x73B52E, rzip, dsout1_dl]
+  - [0x73B642, rzip, dspylo1]
+  - [0x73B843, rzip, dspylo1_dl]
+  - [0x73B94E, rzip, laft15b]
+  - [0x73BF48, rzip, laft15b_dl]
+  - [0x73C0E3, rzip, mocons1]
+  - [0x73CB47, rzip, mocons1_dl]
+  - [0x73CE8D, rzip, mocons2]
+  - [0x73D8E7, rzip, mocons2_dl]
+  - [0x73DBD3, rzip, mocons3]
+  - [0x73E535, rzip, mocons3_dl]
+  - [0x73E7EC, rzip, mocons4]
+  - [0x73F1F6, rzip, mocons4_dl]
+  - [0x73F54F, rzip, mocons5]
+  - [0x73FF14, rzip, mocons5_dl]
+  - [0x74022D, rzip, mocons6]
+  - [0x740B56, rzip, mocons6_dl]
+  - [0x740E11, rzip, moboat1]
+  - [0x741890, rzip, moboat1_dl]
+  - [0x741BF0, rzip, mosid2t]
+  - [0x742118, rzip, mosid2t_dl]
+  - [0x7423B3, rzip, mosid2b]
+  - [0x7427DE, rzip, mosid2b_dl]
+  - [0x7429C9, rzip, mosid3l]
+  - [0x742E38, rzip, mosid3l_dl]
+  - [0x742FFC, rzip, mosid3r]
+  - [0x743520, rzip, mosid3r_dl]
+  - [0x74379D, rzip, mosid5t]
+  - [0x7440ED, rzip, mosid5t_dl]
+  - [0x74440C, rzip, mosid5b]
+  - [0x744B77, rzip, mosid5b_dl]
+  - [0x744DDB, rzip, mosid6t]
+  - [0x7451FD, rzip, mosid6t_dl]
+  - [0x7453B8, rzip, mosid6b]
+  - [0x7457CF, rzip, mosid6b_dl]
+  - [0x7459AA, rzip, mocast2]
+  - [0x746661, rzip, mocast2_dl]
+  - [0x746AA1, rzip, mocran1]
+  - [0x7475A3, rzip, mocran1_dl]
+  - [0x74799D, rzip, mocran2]
+  - [0x7484CB, rzip, mocran2_dl]
+  - [0x7488C5, rzip, moboat2]
+  - [0x74937E, rzip, moboat2_dl]
+  - [0x749744, rzip, labigox]
+  - [0x749B54, rzip, labigox_dl]
+  - [0x749D89, rzip, chhseb]
+  - [0x74A807, rzip, chhseb_dl]
+  - [0x74AB6C, rzip, lasup1]
+  - [0x74AD05, rzip, lasup1_dl]
+  - [0x74AE00, rzip, lamsc10]
+  - [0x74AFF6, rzip, lamsc10_dl]
+  - [0x74B0F1, rzip, chvalfm]
+  - [0x74B46F, rzip, chvalfm_dl]
+  - [0x74B587, rzip, mohot1]
+  - [0x74C2F1, rzip, mohot1_dl]
+  - [0x74C7F7, rzip, mohot2]
+  - [0x74D2DE, rzip, mohot2_dl]
+  - [0x74D746, rzip, mohot3]
+  - [0x74E53B, rzip, mohot3_dl]
+  - [0x74E8DA, rzip, chhse40]
+  - [0x74F480, rzip, chhse40_dl]
+  - [0x74F770, rzip, chhse41]
+  - [0x7503FC, rzip, chhse41_dl]
+  - [0x75075C, rzip, la2gsx]
+  - [0x750BC2, rzip, la2gsx_dl]
+  - [0x750DC3, rzip, mohot4]
+  - [0x751DCA, rzip, mohot4_dl]
+  - [0x7522EE, rzip, mohot5]
+  - [0x75335C, rzip, mohot5_dl]
+  - [0x75390C, rzip, token1]
+  - [0x753E5C, rzip, token1_dl]
+  - [0x754084, rzip, moart1]
+  - [0x754284, rzip, moart1_dl]
+  - [0x7543E5, rzip, larock1]
+  - [0x754DB1, rzip, larock1_dl]
+  - [0x7550B2, rzip, larock2]
+  - [0x7559DA, rzip, larock2_dl]
+  - [0x755CBB, rzip, ball1]
+  - [0x756688, rzip, ball1_dl]
+  - [0x756956, rzip, ball2]
+  - [0x757750, rzip, ball2_dl]
+  - [0x757AC6, rzip, ball3]
+  - [0x758770, rzip, ball3_dl]
+  - [0x758A31, rzip, float1]
+  - [0x758DF3, rzip, float1_dl]
+  - [0x758FBD, rzip, cohse1]
+  - [0x759860, rzip, cohse1_dl]
+  - [0x759A85, rzip, cohse2]
+  - [0x75A090, rzip, cohse2_dl]
+  - [0x75A301, rzip, lablk1]
+  - [0x75A541, rzip, lablk1_dl]
+  - [0x75A6C5, rzip, stbac1]
+  - [0x75B065, rzip, stbac1_dl]
+  - [0x75B3CA, rzip, stbar1]
+  - [0x75B603, rzip, stbar1_dl]
+  - [0x75B73C, rzip, stdnut1]
+  - [0x75BBFA, rzip, stdnut1_dl]
+  - [0x75BDEB, rzip, stgls1]
+  - [0x75C450, rzip, stgls1_dl]
+  - [0x75C6B6, rzip, stncp1]
+  - [0x75D237, rzip, stncp1_dl]
+  - [0x75D607, rzip, ststat1]
+  - [0x75DC9C, rzip, ststat1_dl]
+  - [0x75DEE6, rzip, cochim1]
+  - [0x75E345, rzip, cochim1_dl]
+  - [0x75E500, rzip, cohut1]
+  - [0x75E9CF, rzip, cohut1_dl]
+  - [0x75EBC5, rzip, copit1]
+  - [0x75EFDF, rzip, copit1_dl]
+  - [0x75F183, rzip, palite2]
+  - [0x75FBB7, rzip, palite2_dl]
+  - [0x75FE51, rzip, pacran1]
+  - [0x7606F7, rzip, pacran1_dl]
+  - [0x760AF1, rzip, lafire3]
+  - [0x7614BF, rzip, lafire3_dl]
+  - [0x761856, rzip, lafire4]
+  - [0x761F2D, rzip, lafire4_dl]
+  - [0x762225, rzip, lanewf3]
+  - [0x762C21, rzip, lanewf3_dl]
+  - [0x76307C, rzip, lasky1]
+  - [0x763AE7, rzip, lasky1_dl]
+  - [0x763EAD, rzip, lasky2]
+  - [0x7648F5, rzip, lasky2_dl]
+  - [0x764CC0, rzip, door1]
+  - [0x764D7F, rzip, door1_dl]
+  - [0x764E1D, rzip, door2]
+  - [0x764EDC, rzip, door2_dl]
+  - [0x764F7A, rzip, mohot1a]
+  - [0x76549B, rzip, mohot1a_dl]
+  - [0x765771, rzip, mohot1b]
+  - [0x765B5F, rzip, mohot1b_dl]
+  - [0x765DCD, rzip, mohot1c]
+  - [0x7660FD, rzip, mohot1c_dl]
+  - [0x7662FC, rzip, mohot1d]
+  - [0x7665E6, rzip, mohot1d_dl]
+  - [0x7667B2, rzip, mohot2a]
+  - [0x766A3C, rzip, mohot2a_dl]
+  - [0x766BB9, rzip, mohot2b]
+  - [0x766F3E, rzip, mohot2b_dl]
+  - [0x767164, rzip, mohot2c]
+  - [0x7673F1, rzip, mohot2c_dl]
+  - [0x76757A, rzip, mohot2d]
+  - [0x76790B, rzip, mohot2d_dl]
+  - [0x767B64, rzip, mohot3a]
+  - [0x767F90, rzip, mohot3a_dl]
+  - [0x7681FA, rzip, mohot3b]
+  - [0x768539, rzip, mohot3b_dl]
+  - [0x768714, rzip, mohot3c]
+  - [0x768AF7, rzip, mohot3c_dl]
+  - [0x768D0C, rzip, mohot3d]
+  - [0x768F8B, rzip, mohot3d_dl]
+  - [0x7690D7, rzip, head1]
+  - [0x76A05E, rzip, head1_dl]
+  - [0x76A5EE, rzip, head2]
+  - [0x76B6B2, rzip, head2_dl]
+  - [0x76BD7C, rzip, head3]
+  - [0x76CD43, rzip, head3_dl]
+  - [0x76D2FA, rzip, head4]
+  - [0x76DD11, rzip, head4_dl]
+  - [0x76E2E5, rzip, mostat1]
+  - [0x76F1A6, rzip, mostat1_dl]
+  - [0x76F5EE, rzip, cork1]
+  - [0x76F751, rzip, cork1_dl]
+  - [0x76F81D, rzip, ghdig1]
+  - [0x7700CC, rzip, ghdig1_dl]
+  - [0x7703AE, rzip, mocrat2]
+  - [0x770518, rzip, mocrat2_dl]
+  - [0x770653, rzip, ghdig2]
+  - [0x770F0A, rzip, ghdig2_dl]
+  - [0x7711FD, rzip, ghdig3]
+  - [0x771B86, rzip, ghdig3_dl]
+  - [0x771E6E, rzip, ghdig4]
+  - [0x7727D4, rzip, ghdig4_dl]
+  - [0x772ACB, rzip, modam3]
+  - [0x772FBF, rzip, modam3_dl]
+  - [0x7731C6, rzip, cohse3]
+  - [0x773A65, rzip, cohse3_dl]
+  - [0x773C8A, rzip, cohse4]
+  - [0x7749AC, rzip, cohse4_dl]
+  - [0x774CAF, rzip, cohse5]
+  - [0x775410, rzip, cohse5_dl]
+  - [0x775635, rzip, cohse6]
+  - [0x7761B5, rzip, cohse6_dl]
+  - [0x7764B8, rzip, cosqr1]
+  - [0x776E9F, rzip, cosqr1_dl]
+  - [0x77719A, rzip, coshd1]
+  - [0x7774F7, rzip, coshd1_dl]
+  - [0x77762D, rzip, cohut1]
+  - [0x777AFC, rzip, cohut1_dl]
+  - [0x777CF2, rzip, costor2]
+  - [0x778061, rzip, costor2_dl]
+  - [0x778200, rzip, colong2]
+  - [0x778616, rzip, colong2_dl]
+  - [0x77879F, rzip, cochim2]
+  - [0x778A2B, rzip, cochim2_dl]
+  - [0x778B71, rzip, copit2]
+  - [0x778FEB, rzip, copit2_dl]
+  - [0x7791E9, rzip, cosid4]
+  - [0x779830, rzip, cosid4_dl]
+  - [0x779ABE, rzip, cofact2]
+  - [0x77A5A2, rzip, cofact2_dl]
+  - [0x77A936, rzip, corail2]
+  - [0x77AB75, rzip, corail2_dl]
+  - [0x77AC95, rzip, spcen1]
+  - [0x77B755, rzip, spcen1_dl]
+  - [0x77BB06, rzip, sparmn1]
+  - [0x77BEC4, rzip, sparmn1_dl]
+  - [0x77C0D8, rzip, sparme1]
+  - [0x77C49B, rzip, sparme1_dl]
+  - [0x77C6AF, rzip, sparmw1]
+  - [0x77CA6B, rzip, sparmw1_dl]
+  - [0x77CC81, rzip, sparms1]
+  - [0x77D027, rzip, sparms1_dl]
+  - [0x77D23D, rzip, spbox1]
+  - [0x77DAD0, rzip, spbox1_dl]
+  - [0x77DDFB, rzip, spsola1]
+  - [0x77E101, rzip, spsola1_dl]
+  - [0x77E278, rzip, spsola2]
+  - [0x77E589, rzip, spsola2_dl]
+  - [0x77E701, rzip, spsola3]
+  - [0x77E9C9, rzip, spsola3_dl]
+  - [0x77EB40, rzip, spcons1]
+  - [0x77EF51, rzip, spcons1_dl]
+  - [0x77F0C1, rzip, spcons2]
+  - [0x77F81B, rzip, spcons2_dl]
+  - [0x77FA70, rzip, spcons3]
+  - [0x77FF6E, rzip, spcons3_dl]
+  - [0x78011C, rzip, spflt1]
+  - [0x7814A5, rzip, spflt1_dl]
+  - [0x78192C, rzip, shnob1]
+  - [0x781EC0, rzip, shnob1_dl]
+  - [0x782142, rzip, desflt1]
+  - [0x782381, rzip, desflt1_dl]
+  - [0x7824FB, rzip, desflt2]
+  - [0x782798, rzip, desflt2_dl]
+  - [0x782934, rzip, desnew1]
+  - [0x782AD0, rzip, desnew1_dl]
+  - [0x782BCE, rzip, desnew2]
+  - [0x782D78, rzip, desnew2_dl]
+  - [0x782E7A, rzip, desnew3]
+  - [0x783BC0, rzip, desnew3_dl]
+  - [0x784093, rzip, desnew4]
+  - [0x784327, rzip, desnew4_dl]
+  - [0x7844CD, rzip, destow1]
+  - [0x784789, rzip, destow1_dl]
+  - [0x784928, rzip, laezflt]
+  - [0x7851E9, rzip, laezflt_dl]
+  - [0x78552E, rzip, lapump1]
+  - [0x7856BC, rzip, lapump1_dl]
+  - [0x78577D, rzip, chpump1]
+  - [0x785933, rzip, chpump1_dl]
+  - [0x785A0A, rzip, endsid1]
+  - [0x785EC4, rzip, endsid1_dl]
+  - [0x786042, rzip, endsid2]
+  - [0x786556, rzip, endsid2_dl]
+  - [0x786702, rzip, endsid3]
+  - [0x786DDC, rzip, endsid3_dl]
+  - [0x786FAD, rzip, endsid4]
+  - [0x7875A2, rzip, endsid4_dl]
+  - [0x78776F, rzip, endsid5]
+  - [0x787D6F, rzip, endsid5_dl]
+  - [0x787F37, bin, 787F37.bin]
+  - [0x787FD0, rzip, hd_code_text]
+  - name:  hd_code_data
+    type:  rzip
+    start: 0x7D73B4
+    subsegments:
+    - [0x10E30, rgba32, 16, 16]
+    - [0x11230, rgba32, 16, 16]
+    - [0x12180, rgba32, 32, 30]
+    - [0x142E0, rgba16, 32, 32]
+    - [0x16B68, ia16, 32, 32]
+  - [0x7E3AD0, rzip, hd_front_end_text]
+  - name:  hd_front_end_data
+    type:  rzip
+    start: 0x7F63A1
+    subsegments:
+    - [0x004B0, rgba16, 32, 32]
+    - [0x00FE8, rgba16, 32, 32]
+    - [0x01B1E, rgba16, 32, 32]
+    - [0x02658, rgba16, 32, 32]
   - [0x7F9BDD, bin]                            # zero padding
   - [0x7F9BE0, bin, trailer]                   # 0xff to end
   - [0x800000]
