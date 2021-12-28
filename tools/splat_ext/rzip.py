@@ -28,25 +28,31 @@ class N64SegRzip(N64Segment):
     def out_path(self) -> Optional[Path]:
         return options.get_asset_path() / self.dir / f"{self.name}.gz"
 
+    def write_png(self, type_str: str, width: int, height: int, decompressed_file_name: str, image_bytes: bytes):
+        writer_class = get_png_writer(type_str)
+        png_writer = writer_class.get_writer(width, height)
+
+        png_name = decompressed_file_name.replace("raw", "png")
+        png_file_path = options.get_asset_path() / self.dir / png_name
+
+        with open(png_file_path, "wb") as f:
+            match type_str:
+                case "ia16":
+                    png_writer.write_array(f, image_bytes)
+                case _:
+                    png_writer.write_array(f, writer_class.parse_image(image_bytes, width, height, False, False))
+
     def split(self, rom_bytes):
         gz_path = self.out_path()
 
         # Write compressed
-        compressed_bytes = rom_bytes[self.rom_start : self.rom_end]
+        compressed_bytes = rom_bytes[self.rom_start: self.rom_end]
         with open(gz_path, "wb") as f:
             f.write(compressed_bytes)
         self.log(f"Wrote {self.name} to {gz_path}")
 
         # Decompressed
         subprocess.call(["gzip", "-d", "-k", "-N", "-f", gz_path])
-        """
-        import gzip
-        # TODO: No way to get file name and timestamp from gzip module??
-        decompress_path = options.get_asset_path() / self.dir / f"{self.name}.python.raw"
-        decompressed = gzip.decompress(compressed_bytes)
-        with open(decompress_path, 'wb') as f:
-          f.write(decompressed)
-        """
 
         # Write PNG
         if len(self.yaml) == 6:
@@ -62,16 +68,7 @@ class N64SegRzip(N64Segment):
             width = self.yaml[4]
             height = self.yaml[5]
 
-            writer_class = get_png_writer(type_str)
-            png_writer = writer_class.get_writer(width, height)
+            self.write_png(type_str, width, height, decompressed_file_name, image_bytes)
 
-            png_name = decompressed_file_name.replace("raw", "png")
-            png_file_path = options.get_asset_path() / self.dir / png_name
 
-            with open(png_file_path, "wb") as f:
-                match type_str:
-                    case "ia16":
-                        png_writer.write_array(f, image_bytes)
-                    case _:
-                        png_writer.write_array(f, writer_class.parse_image(image_bytes, width, height, False, False))
 
