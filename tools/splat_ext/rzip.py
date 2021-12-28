@@ -3,8 +3,6 @@ from segtypes.n64.rgba32 import N64SegRgba32
 from segtypes.n64.ia8 import N64SegIa8
 from segtypes.n64.ia16 import N64SegIa16
 from segtypes.n64.img import N64SegImg
-from pathlib import Path
-from typing import Optional
 from segtypes.n64.segment import N64Segment
 from util import options
 import subprocess
@@ -40,15 +38,14 @@ def get_png_writer(file_type: str) -> N64SegImg:
 
 
 class N64SegRzip(N64Segment):
-    def out_path(self) -> Optional[Path]:
-        return options.get_asset_path() / self.dir / f"{self.name}.gz"
-
     def write_png(self, type_str: str, width: int, height: int, decompressed_file_name: str, image_bytes: bytes):
         writer_class = get_png_writer(type_str)
         png_writer = writer_class.get_writer(width, height)
 
         png_name = decompressed_file_name.replace("raw", "png")
-        png_file_path = options.get_asset_path() / self.dir / png_name
+        png_dir_path = options.get_asset_path() / self.dir / "png" / "rzip"
+        png_dir_path.mkdir(exist_ok=True, parents=True)
+        png_file_path = png_dir_path / png_name
 
         with open(png_file_path, "wb") as f:
             match type_str:
@@ -72,7 +69,9 @@ class N64SegRzip(N64Segment):
             png_writer = writer_class.get_writer(width, height)
 
             png_name = decompressed_file_name.replace("raw", f"{i}.png")
-            png_file_path = options.get_asset_path() / self.dir / png_name
+            png_dir_path = options.get_asset_path() / self.dir / "png" / "rzip"
+            png_dir_path.mkdir(exist_ok=True, parents=True)
+            png_file_path = png_dir_path / png_name
 
             with open(png_file_path, "wb") as f:
                 match type_str:
@@ -83,23 +82,24 @@ class N64SegRzip(N64Segment):
                                                                            width, height, False, False))
 
     def split(self, rom_bytes):
-        gz_path = self.out_path()
+        split_dir_path = options.get_asset_path() / self.dir / "split"
+        split_dir_path.mkdir(exist_ok=True, parents=True)
+        gz_file_path = split_dir_path / f"{self.name}.gz"
 
         # Write compressed
         compressed_bytes = rom_bytes[self.rom_start: self.rom_end]
-        with open(gz_path, "wb") as f:
+        with open(gz_file_path, "wb") as f:
             f.write(compressed_bytes)
-        self.log(f"Wrote {self.name} to {gz_path}")
 
         # Decompressed
-        subprocess.call(["gzip", "-d", "-k", "-N", "-f", gz_path])
+        subprocess.call(["gzip", "-d", "-k", "-N", "-f", gz_file_path])
 
         # Write PNG
         if len(self.yaml) == 6 or isinstance(self.yaml, dict):
-            gzip_info = subprocess.check_output(["gzip", "-N", "-l", gz_path])
+            gzip_info = subprocess.check_output(["gzip", "-N", "-l", gz_file_path])
 
             decompressed_file_name = gzip_info.decode().splitlines()[-1].split()[-1].split("/")[-1]
-            decompressed_file_path = options.get_asset_path() / self.dir / decompressed_file_name
+            decompressed_file_path = options.get_asset_path() / self.dir / "split" / decompressed_file_name
 
             with open(decompressed_file_path, "rb") as f:
                 image_bytes = f.read()
