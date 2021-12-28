@@ -7273,6 +7273,7 @@ segments:
     type:  rzip
     start: 0x66C900
     subsegments:
+    # many RGBA16 textures here, some might be 17x17, others smaller
     - [0x00000, rgba16, 17, 17]
     - [0x3C4B0, rgba16, 16, 16]
     - [0x3C6B0, rgba16, 16, 16]
@@ -7305,7 +7306,8 @@ segments:
     start: 0x6A8DA0
     subsegments:
     - [0x00000, rgba16, 80, 80]
-    - [0x034A0, rgba16, 24, 20]
+    # might be some sort of IA here at 0x3200
+    - [0x034A0, rgba16, 24, 20] # not sure on starting address
   - [0x6A9F10, rzip, attract]
   - [0x6AD3F0, bin, 6AD3F0.bin]
   - [0x6E8980, rzip, usa_star]
@@ -7877,6 +7879,7 @@ segments:
     type:  rzip
     start: 0x7D73B4
     subsegments:
+    # TODO: many of these are just guesses
     - [0x10E30, rgba32, 16, 16]
     - [0x11230, rgba32, 16, 16]
     - [0x12180, rgba32, 32, 30]
@@ -7887,6 +7890,7 @@ segments:
     type:  rzip
     start: 0x7F63A1
     subsegments:
+    # TODO: many of these are just guesses
     - [0x004B0, rgba16, 32, 32]
     - [0x00FE8, rgba16, 32, 32]
     - [0x01B1E, rgba16, 32, 32]
