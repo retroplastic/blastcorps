@@ -84,7 +84,23 @@ def main():
             }
             segments[-1]["subsegments"].append(subsegment)
 
-    pprint.pprint(segments)
+    # pprint.pprint(segments)
+
+    for segment in segments:
+        if segment["type"] == "rzip":
+            if len(segment["subsegments"]) == 0:
+                print(f"  - [{segment['start']}, rzip, {segment['name']}]")
+            elif len(segment["subsegments"]) == 1:
+                seg_str = f"  - [{segment['start']}, rzip, {segment['name']}, {segment['subsegments'][0]['type']},"\
+                          f" {segment['subsegments'][0]['width']}, {segment['subsegments'][0]['height']}]"
+                print(seg_str)
+            elif len(segment["subsegments"]) > 1:
+                print(f"  - name:  {segment['name']}")
+                print(f"    type:  rzip")
+                print(f"    start: {segment['start']}")
+                print(f"    subsegments:")
+                for subsegment in segment["subsegments"]:
+                    print(f"    - [{subsegment['start']}, {subsegment['type']}, {subsegment['width']}, {subsegment['height']}]")
 
 
 main()
