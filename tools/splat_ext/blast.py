@@ -230,6 +230,23 @@ def decode_blast_lookup(blast_type: Blast, encoded: bytes, lut: bytes) -> bytes:
             return decode_blast5(encoded, lut)
 
 
+def split_segment_bytes(subsegments, decoded_bytes: bytes):
+    segment_bytes = []
+    separators = []
+    for segment in subsegments:
+        separators.append(segment[0])
+    separators.append(len(decoded_bytes))
+
+    assert 0 in separators
+
+    for i in range(len(subsegments)):
+        from_slice = separators[i]
+        to_slice = separators[i + 1]
+        segment_bytes.append(decoded_bytes[from_slice:to_slice])
+
+    return segment_bytes
+
+
 class N64SegBlast(N64Segment):
     def get_latest_lut256(self):
         lut_dir_path = options.get_asset_path() / self.dir
@@ -265,23 +282,6 @@ class N64SegBlast(N64Segment):
         decoded_file_path = options.get_asset_path() / self.dir / f"{name}.{decoded_ext}"
         with open(decoded_file_path, 'wb') as f:
             f.write(decoded_bytes)
-
-    @staticmethod
-    def split_segment_bytes(subsegments, decoded_bytes: bytes):
-        segment_bytes = []
-        separators = []
-        for segment in subsegments:
-            separators.append(segment[0])
-        separators.append(len(decoded_bytes))
-
-        assert 0 in separators
-
-        for i in range(len(subsegments)):
-            from_slice = separators[i]
-            to_slice = separators[i + 1]
-            segment_bytes.append(decoded_bytes[from_slice:to_slice])
-
-        return segment_bytes
 
     def write_decoded_segments(self, blast_type: Blast, address: str, segment_bytes_list):
         for i in range(len(segment_bytes_list)):
@@ -348,7 +348,7 @@ class N64SegBlast(N64Segment):
         decoded_bytes = self.decode(blast_type, encoded_bytes)
 
         if subsegments:
-            segment_bytes = self.split_segment_bytes(subsegments, decoded_bytes)
+            segment_bytes = split_segment_bytes(subsegments, decoded_bytes)
             self.write_decoded_segments(blast_type, address, segment_bytes)
             self.write_png_segments(blast_type, address, subsegments, segment_bytes)
         else:

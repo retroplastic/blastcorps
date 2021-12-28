@@ -6352,7 +6352,55 @@ segments:
   - [0x350948, blast, 350948.blast0, 0]
   - [0x358947]
 
-  - [0x487050, bin, titlelogo_usa.raw]
+  - [0x487050, rzip, titlelogo_usa, rgba16, 280, 64]
+  - [0x489E70, rzip, titlepicture_usa, rgba16, 156, 156]
+  - [0x48F5A0, rzip, nink, ia8, 256, 32]
+  - [0x48F970, rzip, 64k, ia8,  40, 24]
+  - [0x48FA70, rzip, copyrightLogo, ia8, 256, 16]
+  - [0x48FE90, rzip, scientist]
+  - [0x490191]
+  - name:  worldtextures
+    type:  rzip
+    start: 0x66C900
+    subsegments:
+      #offset, type, depth,width,height
+      # many RGBA16 textures here, some might be 17x17, others smaller
+      - [0x00000, rgba16, 17, 17]
+      - [0x3C4B0, rgba16, 16, 16]
+      - [0x3C6B0, rgba16, 16, 16]
+      - [0x3C8B0, rgba16, 16, 16]
+      - [0x3CAB0, rgba32, 32, 32]
+      - [0x3DAB0, rgba32, 32, 32]
+      - [0x3EAB0, rgba32, 32, 32]
+      - [0x3FAB0, ia16, 32, 64]
+      - [0x40AB0, ia16, 32, 64]
+      - [0x41AB0, rgba32, 32, 32]
+  - name:  ambertextures
+    type:  rzip
+    start: 0x68B550
+    subsegments:
+      - [0x00000, rgba16, 160, 120]
+      - [0x09600, rgba16, 160, 120]
+      - [0x12C00, rgba16, 160, 120]
+      - [0x1C200, rgba16, 160, 120]
+
+  - name:  traffictextures
+    type:  rzip
+    start: 0x6A32B0
+    subsegments:
+    - [0x00000, rgba16, 256, 64]
+    - [0x08000, rgba16, 256, 64]
+    - [0x10000, rgba16, 256, 64]
+    - [0x18000, rgba16, 256, 64]
+    - [0x20000, rgba16, 256, 64]
+  - name:  controllertextures
+    type:  rzip
+    start: 0x6A8DA0
+    subsegments:
+    - [0x00000, rgba16, 80, 80]
+    # might be some sort of IA here at 0x3200
+    - [0x034A0, rgba16, 24, 20] # not sure on starting address
+  - [0x6A9F10]
 
   - [0x7F9BDD, bin]                            # zero padding
   - [0x7F9BE0, bin, trailer]                   # 0xff to end

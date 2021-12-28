@@ -10,6 +10,21 @@ from util import options
 import subprocess
 
 
+def split_segment_bytes(subsegments, decoded_bytes: bytes):
+    segment_bytes = []
+    separators = []
+    for segment in subsegments:
+        separators.append(segment[0])
+    separators.append(len(decoded_bytes))
+
+    for i in range(len(subsegments)):
+        from_slice = separators[i]
+        to_slice = separators[i + 1]
+        segment_bytes.append(decoded_bytes[from_slice:to_slice])
+
+    return segment_bytes
+
+
 def get_png_writer(file_type: str) -> N64SegImg:
     match file_type:
         case "rgba16":
@@ -42,6 +57,31 @@ class N64SegRzip(N64Segment):
                 case _:
                     png_writer.write_array(f, writer_class.parse_image(image_bytes, width, height, False, False))
 
+    def write_png_segments(self, decompressed_file_name: str, segment_bytes: list[bytes], subsegments):
+        assert len(segment_bytes) == len(subsegments)
+
+        for i in range(len(segment_bytes)):
+
+            assert len(subsegments[i]) == 4
+
+            type_str = subsegments[i][1]
+            width = subsegments[i][2]
+            height = subsegments[i][3]
+
+            writer_class = get_png_writer(type_str)
+            png_writer = writer_class.get_writer(width, height)
+
+            png_name = decompressed_file_name.replace("raw", f"{i}.png")
+            png_file_path = options.get_asset_path() / self.dir / png_name
+
+            with open(png_file_path, "wb") as f:
+                match type_str:
+                    case "ia16":
+                        png_writer.write_array(f, segment_bytes[i])
+                    case _:
+                        png_writer.write_array(f, writer_class.parse_image(segment_bytes[i],
+                                                                           width, height, False, False))
+
     def split(self, rom_bytes):
         gz_path = self.out_path()
 
@@ -55,7 +95,7 @@ class N64SegRzip(N64Segment):
         subprocess.call(["gzip", "-d", "-k", "-N", "-f", gz_path])
 
         # Write PNG
-        if len(self.yaml) == 6:
+        if len(self.yaml) == 6 or isinstance(self.yaml, dict):
             gzip_info = subprocess.check_output(["gzip", "-N", "-l", gz_path])
 
             decompressed_file_name = gzip_info.decode().splitlines()[-1].split()[-1].split("/")[-1]
@@ -64,11 +104,13 @@ class N64SegRzip(N64Segment):
             with open(decompressed_file_path, "rb") as f:
                 image_bytes = f.read()
 
-            type_str = self.yaml[3]
-            width = self.yaml[4]
-            height = self.yaml[5]
-
-            self.write_png(type_str, width, height, decompressed_file_name, image_bytes)
-
-
-
+            if isinstance(self.yaml, list):
+                # Single segment
+                type_str = self.yaml[3]
+                width = self.yaml[4]
+                height = self.yaml[5]
+                self.write_png(type_str, width, height, decompressed_file_name, image_bytes)
+            elif isinstance(self.yaml, dict):
+                subsegments = self.yaml["subsegments"]
+                segment_bytes = split_segment_bytes(subsegments, image_bytes)
+                self.write_png_segments(decompressed_file_name, segment_bytes, subsegments)
