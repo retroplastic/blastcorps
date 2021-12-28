@@ -255,7 +255,9 @@ class N64SegBlast(N64Segment):
         return lut_files[-1]
 
     def write_encoded_file(self, blast_type: Blast, address: str, encoded_bytes: bytes):
-        encoded_file_path = options.get_asset_path() / self.dir / f"{address}.blast{blast_type.value}"
+        encoded_dir_path = options.get_asset_path() / self.dir / "split"
+        encoded_dir_path.mkdir(exist_ok=True, parents=True)
+        encoded_file_path = encoded_dir_path / f"{address}.blast{blast_type.value}"
         with open(encoded_file_path, 'wb') as f:
             f.write(encoded_bytes)
 
@@ -278,8 +280,10 @@ class N64SegBlast(N64Segment):
                 return decode_blast(blast_type, encoded_bytes)
 
     def write_decoded_file(self, blast_type: Blast, name: str, decoded_bytes: bytes):
+        decoded_dir_path = options.get_asset_path() / self.dir / "uncompressed"
+        decoded_dir_path.mkdir(exist_ok=True, parents=True)
         decoded_ext = blast_get_decoded_extension(blast_type)
-        decoded_file_path = options.get_asset_path() / self.dir / f"{name}.{decoded_ext}"
+        decoded_file_path = decoded_dir_path / f"{name}.{decoded_ext}"
         with open(decoded_file_path, 'wb') as f:
             f.write(decoded_bytes)
 
@@ -290,8 +294,8 @@ class N64SegBlast(N64Segment):
     def write_png(self, blast_type: Blast, address: str, width: int, height: int, decoded_bytes: bytes):
         writer_class = blast_get_png_writer(blast_type)
         png_writer = writer_class.get_writer(width, height)
-        png_dir_path = options.get_asset_path() / self.dir / f"blast{blast_type.value}"
-        png_dir_path.mkdir(exist_ok=True)
+        png_dir_path = options.get_asset_path() / self.dir / "png" / f"blast{blast_type.value}"
+        png_dir_path.mkdir(exist_ok=True, parents=True)
         png_file_path = png_dir_path / f"{address}.png"
         with open(png_file_path, "wb") as f:
             match blast_type:
@@ -302,8 +306,8 @@ class N64SegBlast(N64Segment):
 
     def write_png_segments(self, blast_type: Blast, address: str, subsegments, segment_bytes):
         writer_class = blast_get_png_writer(blast_type)
-        png_dir_path = options.get_asset_path() / self.dir / f"blast{blast_type.value}"
-        png_dir_path.mkdir(exist_ok=True)
+        png_dir_path = options.get_asset_path() / self.dir / "png" / f"blast{blast_type.value}"
+        png_dir_path.mkdir(exist_ok=True, parents=True)
 
         assert len(segment_bytes) == len(subsegments)
 
