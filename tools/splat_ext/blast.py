@@ -260,11 +260,32 @@ class N64SegBlast(N64Segment):
             case _:
                 return decode_blast(blast_type, encoded_bytes)
 
-    def write_decoded_file(self, blast_type: Blast, address: str, decoded_bytes: bytes):
+    def write_decoded_file(self, blast_type: Blast, name: str, decoded_bytes: bytes):
         decoded_ext = blast_get_decoded_extension(blast_type)
-        decoded_file_path = options.get_asset_path() / self.dir / f"{address}.{decoded_ext}"
+        decoded_file_path = options.get_asset_path() / self.dir / f"{name}.{decoded_ext}"
         with open(decoded_file_path, 'wb') as f:
             f.write(decoded_bytes)
+
+    @staticmethod
+    def split_segment_bytes(subsegments, decoded_bytes: bytes):
+        segment_bytes = []
+        separators = []
+        for segment in subsegments:
+            separators.append(segment[0])
+        separators.append(len(decoded_bytes))
+
+        assert 0 in separators
+
+        for i in range(len(subsegments)):
+            from_slice = separators[i]
+            to_slice = separators[i + 1]
+            segment_bytes.append(decoded_bytes[from_slice:to_slice])
+
+        return segment_bytes
+
+    def write_decoded_segments(self, blast_type: Blast, address: str, segment_bytes_list):
+        for i in range(len(segment_bytes_list)):
+            self.write_decoded_file(blast_type, f"{address}.{i}", segment_bytes_list[i])
 
     def write_png(self, blast_type: Blast, address: str, width: int, height: int, decoded_bytes: bytes):
         writer_class = blast_get_png_writer(blast_type)
@@ -279,15 +300,44 @@ class N64SegBlast(N64Segment):
                 case _:
                     png_writer.write_array(f, writer_class.parse_image(decoded_bytes, width, height, False, True))
 
+    def write_png_segments(self, blast_type: Blast, address: str, subsegments, segment_bytes):
+        writer_class = blast_get_png_writer(blast_type)
+        png_dir_path = options.get_asset_path() / self.dir / f"blast{blast_type.value}"
+        png_dir_path.mkdir(exist_ok=True)
+
+        assert len(segment_bytes) == len(subsegments)
+
+        for i in range(len(segment_bytes)):
+            width = subsegments[i][1]
+            height = subsegments[i][2]
+            png_writer = writer_class.get_writer(width, height)
+
+            png_file_path = png_dir_path / f"{address}.{i}.png"
+            with open(png_file_path, "wb") as f:
+                match blast_type:
+                    case Blast.BLAST4_IA16:
+                        png_writer.write_array(f, segment_bytes[i])
+                    case _:
+                        png_writer.write_array(f, writer_class.parse_image(segment_bytes[i],
+                                                                           width, height, False, True))
+
     def split(self, rom_bytes):
-        address = "%06X" % self.yaml[0]
-        blast_type = Blast(self.yaml[3])
-        if len(self.yaml) == 6:
-            width = self.yaml[4]
-            height = self.yaml[5]
+        width = 0
+        height = 0
+        subsegments = []
+
+        if isinstance(self.yaml, list):
+            address = "%06X" % self.yaml[0]
+            blast_type = Blast(self.yaml[3])
+            if len(self.yaml) == 6:
+                width = self.yaml[4]
+                height = self.yaml[5]
+        elif isinstance(self.yaml, dict):
+            address = "%06X" % self.yaml["start"]
+            blast_type = Blast(self.yaml["blast"])
+            subsegments = self.yaml["subsegments"]
         else:
-            width = 0
-            height = 0
+            raise Exception("Unsupported yaml.")
 
         encoded_bytes = rom_bytes[self.rom_start: self.rom_end]
 
@@ -297,11 +347,11 @@ class N64SegBlast(N64Segment):
         # Decode
         decoded_bytes = self.decode(blast_type, encoded_bytes)
 
-        # Write decoded file
-        self.write_decoded_file(blast_type, address, decoded_bytes)
-
-        if blast_type == Blast.BLAST0:
-            return
-
-        # Write PNG
-        self.write_png(blast_type, address, width, height, decoded_bytes)
+        if subsegments:
+            segment_bytes = self.split_segment_bytes(subsegments, decoded_bytes)
+            self.write_decoded_segments(blast_type, address, segment_bytes)
+            self.write_png_segments(blast_type, address, subsegments, segment_bytes)
+        else:
+            self.write_decoded_file(blast_type, address, decoded_bytes)
+            if blast_type != Blast.BLAST0:
+                self.write_png(blast_type, address, width, height, decoded_bytes)

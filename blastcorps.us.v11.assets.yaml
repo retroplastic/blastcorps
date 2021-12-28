@@ -3207,7 +3207,15 @@ segments:
   - [0x202576] # 2 bytes
   - [0x202578, blast, 202578.blast1, 1, 32, 4]
   - [0x202652] # 6 bytes
-  - [0x202658, blast, 202658.blast1, 1, 32, 42]
+  - name:  202658.blast1
+    type:  blast
+    start: 0x202658
+    blast: 1
+    subsegments:
+    - [0x000, 32, 32]
+    - [0x800, 16, 16]
+    - [0xA00,  8,  8]
+    - [0xA80,  4,  4]
   - [0x202BF0, blast, 202BF0.blast1, 1, 32, 4]
   - [0x202CE4] # 4 bytes
   - [0x202CE8, blast, 202CE8.blast1, 1, 64, 32]
@@ -6343,6 +6351,8 @@ segments:
   - [0x350850, blast, 350850.blast3, 3, 64, 64]
   - [0x350948, blast, 350948.blast0, 0]
   - [0x358947]
+
+  - [0x487050, bin, titlelogo_usa.raw]
 
   - [0x7F9BDD, bin]                            # zero padding
   - [0x7F9BE0, bin, trailer]                   # 0xff to end
