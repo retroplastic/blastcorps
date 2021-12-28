@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import pprint
 import sys
 
 
@@ -7,6 +6,20 @@ def print_usage():
     print("Usage:")
     print("Convert sm64tools yaml config to splat yaml config.")
     print(f"{sys.argv[0]} <in.yaml> <out.yaml>")
+
+
+def blast_get_format(blast_type: int) -> str:
+    match blast_type:
+        case 1:
+            return "rgba16"
+        case (2 | 5):
+            return "rgba32"
+        case (3 | 6):
+            return "ia8"
+        case 4:
+            return "ia16"
+        case _:
+            return ""
 
 
 def main():
@@ -70,7 +83,7 @@ def main():
                         "start": clean_line[0],
                         "end": clean_line[1],
                         "type": "blast",
-                        "blast": clean_line[2],
+                        "blast": int(clean_line[3]),
                         "subsegments": []
                     }
                     segments.append(segment)
@@ -83,8 +96,6 @@ def main():
                 "height": int(clean_line[4])
             }
             segments[-1]["subsegments"].append(subsegment)
-
-    # pprint.pprint(segments)
 
     for segment in segments:
         if segment["type"] == "rzip":
@@ -101,6 +112,31 @@ def main():
                 print(f"    subsegments:")
                 for subsegment in segment["subsegments"]:
                     print(f"    - [{subsegment['start']}, {subsegment['type']}, {subsegment['width']}, {subsegment['height']}]")
+        elif segment["type"] == "blast":
+            assert len(segment["subsegments"]) > 0
+
+            if len(segment["subsegments"]) == 1:
+
+                short_address = "%06X" % int(segment['start'], 16)
+                file_name = f"{short_address}.blast{segment['blast']}"
+
+                w = segment['subsegments'][0]['width']
+                h = segment['subsegments'][0]['height']
+
+                print(f"  - [{segment['start']}, blast, {file_name}, {segment['blast']}, {w}, {h}]")
+            elif len(segment["subsegments"]) > 1:
+                short_address = "%06X" % int(segment['start'], 16)
+                file_name = f"{short_address}.blast{segment['blast']}"
+
+                print(f"  - name:  {file_name}")
+                print(f"    type:  blast")
+                print(f"    start: {segment['start']}")
+                print(f"    blast: {segment['blast']}")
+                print(f"    subsegments:")
+                for subsegment in segment["subsegments"]:
+                    assert subsegment['type'] == blast_get_format(segment['blast'])
+
+                    print(f"    - [{subsegment['start']}, {subsegment['width']}, {subsegment['height']}]")
 
 
 main()
