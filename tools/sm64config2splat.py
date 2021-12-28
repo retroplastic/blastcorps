@@ -5,7 +5,7 @@ import sys
 def print_usage():
     print("Usage:")
     print("Convert sm64tools yaml config to splat yaml config.")
-    print(f"{sys.argv[0]} <in.yaml> <out.yaml>")
+    print(f"{sys.argv[0]} <in.yaml>")
 
 
 def blast_get_format(blast_type: int) -> str:
@@ -23,7 +23,7 @@ def blast_get_format(blast_type: int) -> str:
 
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 2:
         print_usage()
         return
 
@@ -65,8 +65,6 @@ def main():
         for element in split_line:
             clean_line.append(element.replace('"', "").strip())
 
-        # print(is_sub_segment, clean_line)
-
         if not is_sub_segment:
             match clean_line[2]:
                 case "gzip":
@@ -77,7 +75,6 @@ def main():
                         "name": clean_line[3].replace(".raw", ""),
                         "subsegments": []
                     }
-                    segments.append(segment)
                 case "blast":
                     segment = {
                         "start": clean_line[0],
@@ -86,7 +83,13 @@ def main():
                         "blast": int(clean_line[3]),
                         "subsegments": []
                     }
-                    segments.append(segment)
+                case _:
+                    segment = {
+                        "start": clean_line[0],
+                        "end": clean_line[1],
+                        "type": "bin"
+                    }
+            segments.append(segment)
         else:
             assert len(clean_line) == 5
             subsegment = {
@@ -97,13 +100,22 @@ def main():
             }
             segments[-1]["subsegments"].append(subsegment)
 
+    last_end = ""
+
     for segment in segments:
+        if last_end and last_end != segment["start"]:
+            unknown_size = int(segment["start"], 16) - int(last_end, 16)
+            print(f"  - [{last_end}] # {unknown_size} bytes")
+        last_end = segment["end"]
+
         if segment["type"] == "rzip":
             if len(segment["subsegments"]) == 0:
                 print(f"  - [{segment['start']}, rzip, {segment['name']}]")
             elif len(segment["subsegments"]) == 1:
-                seg_str = f"  - [{segment['start']}, rzip, {segment['name']}, {segment['subsegments'][0]['type']},"\
-                          f" {segment['subsegments'][0]['width']}, {segment['subsegments'][0]['height']}]"
+                t = segment['subsegments'][0]['type']
+                w = segment['subsegments'][0]['width']
+                h = segment['subsegments'][0]['height']
+                seg_str = f"  - [{segment['start']}, rzip, {segment['name']}, {t}, {w}, {h}]"
                 print(seg_str)
             elif len(segment["subsegments"]) > 1:
                 print(f"  - name:  {segment['name']}")
@@ -111,7 +123,11 @@ def main():
                 print(f"    start: {segment['start']}")
                 print(f"    subsegments:")
                 for subsegment in segment["subsegments"]:
-                    print(f"    - [{subsegment['start']}, {subsegment['type']}, {subsegment['width']}, {subsegment['height']}]")
+                    s = subsegment['start']
+                    t = subsegment['type']
+                    w = subsegment['width']
+                    h = subsegment['height']
+                    print(f"    - [{s}, {t}, {w}, {h}]")
         elif segment["type"] == "blast":
             assert len(segment["subsegments"]) > 0
 
@@ -120,11 +136,22 @@ def main():
                 short_address = "%06X" % int(segment['start'], 16)
                 file_name = f"{short_address}.blast{segment['blast']}"
 
-                w = segment['subsegments'][0]['width']
-                h = segment['subsegments'][0]['height']
-
-                print(f"  - [{segment['start']}, blast, {file_name}, {segment['blast']}, {w}, {h}]")
+                if segment['blast'] == 0:
+                    segment_size = int(segment["end"], 16) - int(segment["start"], 16)
+                    match segment_size:
+                        case 128:
+                            print(f"  - [{segment['start']}, bin, {short_address}.lut128]")
+                        case 256:
+                            print(f"  - [{segment['start']}, bin, {short_address}.lut256]")
+                        case _:
+                            print(f"  - [{segment['start']}, blast, {file_name}, {segment['blast']}] # {segment_size} bytes")
+                else:
+                    w = segment['subsegments'][0]['width']
+                    h = segment['subsegments'][0]['height']
+                    print(f"  - [{segment['start']}, blast, {file_name}, {segment['blast']}, {w}, {h}]")
             elif len(segment["subsegments"]) > 1:
+                assert segment["blast"] != 0
+
                 short_address = "%06X" % int(segment['start'], 16)
                 file_name = f"{short_address}.blast{segment['blast']}"
 
@@ -135,8 +162,10 @@ def main():
                 print(f"    subsegments:")
                 for subsegment in segment["subsegments"]:
                     assert subsegment['type'] == blast_get_format(segment['blast'])
-
                     print(f"    - [{subsegment['start']}, {subsegment['width']}, {subsegment['height']}]")
+        elif segment["type"] == "bin":
+            short_address = "%06X" % int(segment['start'], 16)
+            print(f"  - [{segment['start']}, bin, {short_address}.bin]")
 
 
 main()
