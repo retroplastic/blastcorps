@@ -1,3 +1,5 @@
+import os
+
 from segtypes.n64.rgba16 import N64SegRgba16
 from segtypes.n64.rgba32 import N64SegRgba32
 from segtypes.n64.ia8 import N64SegIa8
@@ -94,14 +96,22 @@ class N64SegRzip(N64Segment):
         # Decompressed
         subprocess.call(["gzip", "-d", "-k", "-N", "-f", gz_file_path])
 
+        gzip_info = subprocess.check_output(["gzip", "-N", "-l", gz_file_path])
+        decompressed_file_name = gzip_info.decode().splitlines()[-1].split()[-1].split("/")[-1]
+        decompressed_file_path = options.get_asset_path() / self.dir / "split" / decompressed_file_name
+
+        decoded_dir_path = options.get_asset_path() / self.dir / "uncompressed"
+        decoded_dir_path.mkdir(exist_ok=True, parents=True)
+
+        new_decompressed_file_path = decoded_dir_path / decompressed_file_name
+
+        # Move result to uncompressed folder
+        os.rename(decompressed_file_path, new_decompressed_file_path)
+
         # Write PNG
         if len(self.yaml) == 6 or isinstance(self.yaml, dict):
-            gzip_info = subprocess.check_output(["gzip", "-N", "-l", gz_file_path])
 
-            decompressed_file_name = gzip_info.decode().splitlines()[-1].split()[-1].split("/")[-1]
-            decompressed_file_path = options.get_asset_path() / self.dir / "split" / decompressed_file_name
-
-            with open(decompressed_file_path, "rb") as f:
+            with open(new_decompressed_file_path, "rb") as f:
                 image_bytes = f.read()
 
             if isinstance(self.yaml, list):
