@@ -237,25 +237,18 @@ class N64SegBlast(N64Segment):
         lut_files.sort()
         return lut_files[-1]
 
-    def split(self, rom_bytes):
-        address = "%06X" % self.yaml[0]
-
-        # Write encoded file
-        encoded_ext = "blast%d" % self.yaml[3]
-        encoded_file_path = options.get_asset_path() / self.dir / f"{address}.{encoded_ext}"
-        encoded_bytes = rom_bytes[self.rom_start: self.rom_end]
+    def write_encoded_file(self, blast_type: Blast, address: str, encoded_bytes: bytes):
+        encoded_file_path = options.get_asset_path() / self.dir / f"{address}.blast{blast_type.value}"
         with open(encoded_file_path, 'wb') as f:
             f.write(encoded_bytes)
 
-        # Decode
-        blast_type = Blast(self.yaml[3])
-
+    def decode(self, blast_type: Blast, encoded_bytes: bytes) -> bytes:
         match blast_type:
             case Blast.BLAST4_IA16:
                 lut_path = options.get_asset_path() / self.dir / "047480.lut128.bin"
                 with open(lut_path, 'rb') as f:
                     lut = f.read()
-                decoded_bytes = decode_blast_lookup(blast_type, encoded_bytes, lut)
+                return decode_blast_lookup(blast_type, encoded_bytes, lut)
             case Blast.BLAST5_RGBA32:
                 # TODO: Figure out proper LUT assignment
                 lut_path = options.get_asset_path() / self.dir / "152970.lut256.bin"
@@ -263,26 +256,20 @@ class N64SegBlast(N64Segment):
                     lut_path = self.get_latest_lut256()
                 with open(lut_path, 'rb') as f:
                     lut = f.read()
-                decoded_bytes = decode_blast_lookup(blast_type, encoded_bytes, lut)
+                return decode_blast_lookup(blast_type, encoded_bytes, lut)
             case _:
-                decoded_bytes = decode_blast(blast_type, encoded_bytes)
+                return decode_blast(blast_type, encoded_bytes)
 
-        # Write decoded file
+    def write_decoded_file(self, blast_type: Blast, address: str, decoded_bytes: bytes):
         decoded_ext = blast_get_decoded_extension(blast_type)
         decoded_file_path = options.get_asset_path() / self.dir / f"{address}.{decoded_ext}"
         with open(decoded_file_path, 'wb') as f:
             f.write(decoded_bytes)
 
-        if blast_type == Blast.BLAST0:
-            return
-
-        # Write PNG
-        width = self.yaml[4]
-        height = self.yaml[5]
-
+    def write_png(self, blast_type: Blast, address: str, width: int, height: int, decoded_bytes: bytes):
         writer_class = blast_get_png_writer(blast_type)
         png_writer = writer_class.get_writer(width, height)
-        png_dir_path = options.get_asset_path() / self.dir / f"blast{self.yaml[3]}"
+        png_dir_path = options.get_asset_path() / self.dir / f"blast{blast_type.value}"
         png_dir_path.mkdir(exist_ok=True)
         png_file_path = png_dir_path / f"{address}.png"
         with open(png_file_path, "wb") as f:
@@ -291,3 +278,30 @@ class N64SegBlast(N64Segment):
                     png_writer.write_array(f, decoded_bytes)
                 case _:
                     png_writer.write_array(f, writer_class.parse_image(decoded_bytes, width, height, False, True))
+
+    def split(self, rom_bytes):
+        address = "%06X" % self.yaml[0]
+        blast_type = Blast(self.yaml[3])
+        if len(self.yaml) == 6:
+            width = self.yaml[4]
+            height = self.yaml[5]
+        else:
+            width = 0
+            height = 0
+
+        encoded_bytes = rom_bytes[self.rom_start: self.rom_end]
+
+        # Write encoded file
+        self.write_encoded_file(blast_type, address, encoded_bytes)
+
+        # Decode
+        decoded_bytes = self.decode(blast_type, encoded_bytes)
+
+        # Write decoded file
+        self.write_decoded_file(blast_type, address, decoded_bytes)
+
+        if blast_type == Blast.BLAST0:
+            return
+
+        # Write PNG
+        self.write_png(blast_type, address, width, height, decoded_bytes)
